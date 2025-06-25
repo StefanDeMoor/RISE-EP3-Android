@@ -4,44 +4,24 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import com.example.riseep3.ui.screens.HomeScreen
 import com.example.riseep3.ui.theme.RISEEP3Theme
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            RISEEP3Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+class MainActivity : ComponentActivity() { // De hoofdactiviteit van de app
+    override fun onCreate(savedInstanceState: Bundle?) { // Wordt aangeroepen wanneer de activiteit wordt gestart
+        super.onCreate(savedInstanceState) // Roept de onCreate van de superclass aan
+        enableEdgeToEdge() // Zorgt ervoor dat de UI de volledige schermruimte kan gebruiken, inclusief onder status/navigation bar
+        setContent { // Zet de inhoud van het scherm met Jetpack Compose
+            RISEEP3Theme { // Past de app-thema toe (kleuren, typografie, etc.)
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding -> // Layoutstructuur met standaard Material elementen
+                    HomeScreen(modifier = Modifier.padding(innerPadding)) // Roept je HomeScreen composable aan, met de juiste padding
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    RISEEP3Theme {
-        Greeting("Android")
-    }
-}
