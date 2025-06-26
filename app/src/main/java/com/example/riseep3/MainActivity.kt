@@ -7,7 +7,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.ui.Modifier
-import com.example.riseep3.ui.screens.HomeScreen
+import com.example.riseep3.ui.screens.category.CategoryScreen
+import com.example.riseep3.ui.screens.category.CategoryViewModel
+import com.example.riseep3.ui.screens.home.HomeScreen
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.riseep3.ui.theme.RISEEP3Theme
 
 class MainActivity : ComponentActivity() { // De hoofdactiviteit van de app
@@ -17,7 +20,11 @@ class MainActivity : ComponentActivity() { // De hoofdactiviteit van de app
         setContent { // Zet de inhoud van het scherm met Jetpack Compose
             RISEEP3Theme { // Past de app-thema toe (kleuren, typografie, etc.)
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding -> // Layoutstructuur met standaard Material elementen
-                    HomeScreen(modifier = Modifier.padding(innerPadding)) // Roept je HomeScreen composable aan, met de juiste padding
+                    val categoryViewModel: CategoryViewModel = viewModel()
+                    CategoryScreen(
+                        modifier = Modifier.padding(innerPadding),
+                        viewModel = categoryViewModel
+                    ) // Roept je HomeScreen composable aan, met de juiste padding
                 }
             }
         }
