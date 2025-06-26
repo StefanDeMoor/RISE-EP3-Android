@@ -12,42 +12,36 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
-    Column( // Verticale layout voor de elementen
-        modifier = modifier // Past de opgegeven modifier toe
-            .fillMaxSize() // Laat de column de volledige ruimte innemen
-            .padding(24.dp), // Voegt 24dp marge toe aan alle kanten
-        verticalArrangement = Arrangement.Center, // Centreert items verticaal
-        horizontalAlignment = Alignment.CenterHorizontally // Centreert items horizontaal
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    onCreateClick: () -> Unit
+) {
+    Column(
+        modifier = modifier.fillMaxSize().padding(24.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Welcome!", style = MaterialTheme.typography.headlineLarge) // Toont grote tekst 'Welcome!'
-        Spacer(modifier = Modifier.height(32.dp)) // Voegt 32dp ruimte toe onder de tekst
-        Row( // Horizontale layout voor de knoppen
-            horizontalArrangement = Arrangement.spacedBy(24.dp), // 24dp ruimte tussen de knoppen
-            verticalAlignment = Alignment.CenterVertically // Centreert de knoppen verticaal binnen de row
-        ) {
-            IconButton( // Eerste knop met icoon
-                onClick = { /* TODO: Handle login */ }, // Actie bij klikken (nog te implementeren)
-                modifier = Modifier
-                    .size(96.dp) // Grootte van 96dp
-                    .aspectRatio(1f) // Zorgt ervoor dat het vierkant blijft
+        Text(text = "Welcome!", style = MaterialTheme.typography.headlineLarge)
+        Spacer(modifier = Modifier.height(32.dp))
+        Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
+            IconButton(
+                onClick = onCreateClick,
+                modifier = Modifier.size(96.dp).aspectRatio(1f)
             ) {
-                Icon(Icons.Default.Create, contentDescription = "Create", modifier = Modifier.fillMaxSize(0.6f)) // Icoon voor 'Create' in de knop, iets kleiner dan knopgrootte
+                Icon(Icons.Default.Create, contentDescription = "Create", modifier = Modifier.fillMaxSize(0.6f))
             }
-            IconButton( // Tweede knop met icoon
-                onClick = { /* TODO: Handle sign up */ }, // Actie bij klikken (nog te implementeren)
-                modifier = Modifier
-                    .size(96.dp) // Grootte van 96dp
-                    .aspectRatio(1f) // Houdt de knop vierkant
+            IconButton(
+                onClick = { /* Profile actie */ },
+                modifier = Modifier.size(96.dp).aspectRatio(1f)
             ) {
-                Icon(Icons.Default.Face, contentDescription = "Profile", modifier = Modifier.fillMaxSize(0.6f)) // Icoon voor 'Profile' in de knop, iets kleiner dan knopgrootte
+                Icon(Icons.Default.Face, contentDescription = "Profile", modifier = Modifier.fillMaxSize(0.6f))
             }
         }
     }
 }
 
-@Preview(showBackground = true) // Zorgt dat de composable zichtbaar is in de preview
+@Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen()
+    HomeScreen(onCreateClick = {})
 }
