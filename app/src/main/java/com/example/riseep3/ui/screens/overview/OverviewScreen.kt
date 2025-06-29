@@ -49,19 +49,77 @@ fun OverviewScreen(
                 )
             )
         } else {
-            Text(
-                text = "Totaal Inkomen: €${state.income}",
-                style = MaterialTheme.typography.bodyLarge
-            )
+            Column {
+                Text(
+                    text = "Totaal Inkomen: €${state.income}",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                if (!state.isAdjusting) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Button(onClick = { viewModel.onAdjustmentStart(false) }) { Text("-") }
+                        Button(onClick = { viewModel.onAdjustmentStart(true) }) { Text("+") }
+                    }
+                } else {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        OutlinedTextField(
+                            value = state.amountName,
+                            onValueChange = { viewModel.onAmountNameChange(it) },
+                            label = { Text("Naam") },
+                            singleLine = true
+                        )
+                        OutlinedTextField(
+                            value = state.amountInput,
+                            onValueChange = { viewModel.onAmountChange(it) },
+                            label = { Text("Amount") },
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                            keyboardActions = KeyboardActions(
+                                onDone = {
+                                    viewModel.onAmountConfirm()
+                                    keyboardController?.hide()
+                                }
+                            )
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                state.adjustments.forEach { (name, value) ->
+                    Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+                        Text(text = name)
+                        Text(text = "${if (value >= 0) "+" else "-"}€${kotlin.math.abs(value)}")
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = "Resultaat: €${state.income}",
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
         }
     }
 }
 
 
+
 @Preview(showBackground = true)
 @Composable
 fun OverviewScreenPreview() {
-    val dummyState = OverviewState(income = "2500", isIncomeSet = true)
+    val dummyState = OverviewState(
+        income = "2500",
+        isIncomeSet = true,
+        isAdjusting = false,
+        adjustments = listOf(
+            "Boodschappen" to -200,
+            "Extra werk" to 100
+        )
+    )
 
     MaterialTheme {
         Column(
@@ -71,10 +129,38 @@ fun OverviewScreenPreview() {
         ) {
             Text("Overzicht", style = MaterialTheme.typography.headlineMedium)
             Spacer(modifier = Modifier.height(16.dp))
-            Text("Totaal Inkomen: €${dummyState.income}")
+
+            Column {
+                Text("Totaal Inkomen: €${dummyState.income}", style = MaterialTheme.typography.bodyLarge)
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Button(onClick = { }) { Text("-") }
+                    Button(onClick = { }) { Text("+") }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                dummyState.adjustments.forEach { (name, adj) ->
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(name)
+                        Text("${if (adj >= 0) "+" else "-"}€${kotlin.math.abs(adj)}")
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+                val result = dummyState.income.toInt() + dummyState.adjustments.sumOf { it.second }
+                Text("Resultaat: €$result", style = MaterialTheme.typography.bodyLarge)
+            }
         }
     }
 }
+
+
+
 
 
 
