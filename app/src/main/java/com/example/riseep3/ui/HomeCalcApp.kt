@@ -31,7 +31,7 @@ fun HomeCalcApp() {
             "overview/{categoryName}",
             arguments = listOf(navArgument("categoryName") { type = NavType.StringType })
         ) { backStackEntry ->
-            val categoryName = backStackEntry.arguments?.getString("categoryName") ?: "Unknown"
+            val categoryName = backStackEntry.arguments?.getString("categoryName") ?: "Onbekend"
             OverviewScreen(categoryName = categoryName)
         }
     }
