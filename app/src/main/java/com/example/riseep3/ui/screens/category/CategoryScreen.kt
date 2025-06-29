@@ -11,7 +11,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 @Composable
 fun CategoryScreen(
     modifier: Modifier = Modifier,
-    viewModel: CategoryViewModel = viewModel()
+    viewModel: CategoryViewModel = viewModel(),
+    onCategoryClick: (String) -> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsState()
 
@@ -28,7 +29,9 @@ fun CategoryScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         state.categories.forEach { category ->
-            Text(text = category, style = MaterialTheme.typography.bodyLarge)
+            TextButton(onClick = { onCategoryClick(category) }) {
+                Text(text = category, style = MaterialTheme.typography.bodyLarge)
+            }
             Spacer(modifier = Modifier.height(8.dp))
         }
 
