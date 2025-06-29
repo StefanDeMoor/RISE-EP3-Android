@@ -7,5 +7,7 @@ data class OverviewState(
     val isAddition: Boolean? = null,
     val amountInput: String = "",
     val amountName: String = "",
-    val adjustments: List<Pair<String, Int>> = emptyList()
+    val adjustments: List<Pair<String, Int>> = emptyList(),
+    val editIndex: Int? = null
 )
+

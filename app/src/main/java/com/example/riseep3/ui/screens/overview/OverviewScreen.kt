@@ -3,6 +3,9 @@ package com.example.riseep3.ui.screens.overview
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -37,7 +40,7 @@ fun OverviewScreen(
         if (!state.isIncomeSet) {
             OutlinedTextField(
                 value = state.income,
-                onValueChange = { viewModel.onIncomeChange(it) },
+                onValueChange = viewModel::onIncomeChange,
                 label = { Text("Totaal Inkomen") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
@@ -50,10 +53,33 @@ fun OverviewScreen(
             )
         } else {
             Column {
-                Text(
-                    text = "Totaal Inkomen: €${state.income}",
-                    style = MaterialTheme.typography.bodyLarge
-                )
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "Totaal Inkomen: €${state.income}",
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                        Row {
+                            IconButton(onClick = {
+                                viewModel.onIncomeEditStart()
+                            }) {
+                                Icon(Icons.Default.Edit, contentDescription = "Inkomen bewerken")
+                            }
+                            IconButton(onClick = {
+                                viewModel.onIncomeDelete()
+                            }) {
+                                Icon(Icons.Default.Delete, contentDescription = "Inkomen verwijderen")
+                            }
+                        }
+                    }
+
+                }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -66,13 +92,13 @@ fun OverviewScreen(
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         OutlinedTextField(
                             value = state.amountName,
-                            onValueChange = { viewModel.onAmountNameChange(it) },
+                            onValueChange = viewModel::onAmountNameChange,
                             label = { Text("Naam") },
                             singleLine = true
                         )
                         OutlinedTextField(
                             value = state.amountInput,
-                            onValueChange = { viewModel.onAmountChange(it) },
+                            onValueChange = viewModel::onAmountChange,
                             label = { Text("Amount") },
                             singleLine = true,
                             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
@@ -88,23 +114,39 @@ fun OverviewScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                state.adjustments.forEach { (name, value) ->
-                    Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                        Text(text = name)
-                        Text(text = "${if (value >= 0) "+" else "-"}€${kotlin.math.abs(value)}")
+                state.adjustments.forEachIndexed { index, (name, value) ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(name)
+                        Row {
+                            Text("${if (value >= 0) "+" else "-"}€${kotlin.math.abs(value)}")
+                            Spacer(modifier = Modifier.width(8.dp))
+                            IconButton(onClick = { viewModel.onEditStart(index) }) {
+                                Icon(Icons.Default.Edit, contentDescription = "Bewerk")
+                            }
+                            IconButton(onClick = { viewModel.onDeleteAdjustment(index) }) {
+                                Icon(Icons.Default.Delete, contentDescription = "Verwijder")
+                            }
+                        }
                     }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                val result = state.income.toIntOrNull() ?: 0
                 Text(
-                    text = "Resultaat: €${state.income}",
+                    text = "Resultaat: €$result",
                     style = MaterialTheme.typography.titleMedium
                 )
             }
         }
     }
 }
+
 
 
 
@@ -131,7 +173,22 @@ fun OverviewScreenPreview() {
             Spacer(modifier = Modifier.height(16.dp))
 
             Column {
-                Text("Totaal Inkomen: €${dummyState.income}", style = MaterialTheme.typography.bodyLarge)
+                // Totaal Inkomen + iconen
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text("Totaal Inkomen: €${dummyState.income}", style = MaterialTheme.typography.bodyLarge)
+                    Row {
+                        IconButton(onClick = { /* Bewerken voorbeeld */ }) {
+                            Icon(Icons.Default.Edit, contentDescription = "Bewerk Inkomen")
+                        }
+                        IconButton(onClick = { /* Verwijderen voorbeeld */ }) {
+                            Icon(Icons.Default.Delete, contentDescription = "Verwijder Inkomen")
+                        }
+                    }
+                }
+
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -143,11 +200,22 @@ fun OverviewScreenPreview() {
 
                 dummyState.adjustments.forEach { (name, adj) ->
                     Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(name)
-                        Text("${if (adj >= 0) "+" else "-"}€${kotlin.math.abs(adj)}")
+                        Row {
+                            Text("${if (adj >= 0) "+" else "-"}€${kotlin.math.abs(adj)}")
+                            Spacer(modifier = Modifier.width(8.dp))
+                            IconButton(onClick = { /* Bewerken voorbeeld */ }) {
+                                Icon(Icons.Default.Edit, contentDescription = "Bewerk")
+                            }
+                            IconButton(onClick = { /* Verwijderen voorbeeld */ }) {
+                                Icon(Icons.Default.Delete, contentDescription = "Verwijder")
+                            }
+                        }
                     }
                 }
 
@@ -158,6 +226,7 @@ fun OverviewScreenPreview() {
         }
     }
 }
+
 
 
 
