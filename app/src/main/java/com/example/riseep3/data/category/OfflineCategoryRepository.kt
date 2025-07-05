@@ -3,6 +3,7 @@ package com.example.riseep3.data.category
 import kotlinx.coroutines.flow.Flow
 
 class OfflineCategoryRepository(private val categoryDao: CategoryDao) : CategoryRepository {
+
     override fun getAllCategories(): Flow<List<CategoryEntity>> {
         return categoryDao.getAllCategories()
     }
@@ -12,7 +13,9 @@ class OfflineCategoryRepository(private val categoryDao: CategoryDao) : Category
     }
 
     override suspend fun insertAll(categories: Flow<List<CategoryEntity>>) {
-        categoryDao.insertAll(categories)
+        categories.collect { categoryList ->
+            categoryDao.insertAll(categoryList)
+        }
     }
 
     override suspend fun delete(category: CategoryEntity) {
@@ -22,5 +25,4 @@ class OfflineCategoryRepository(private val categoryDao: CategoryDao) : Category
     override suspend fun update(category: CategoryEntity) {
         categoryDao.update(category)
     }
-
 }

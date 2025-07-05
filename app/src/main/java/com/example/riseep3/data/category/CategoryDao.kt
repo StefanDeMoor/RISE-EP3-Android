@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CategoryDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertAll(categories: Flow<List<CategoryEntity>>)
+    suspend fun insertAll(categories: List<CategoryEntity>)
 
     @Update
     suspend fun update(category: CategoryEntity)

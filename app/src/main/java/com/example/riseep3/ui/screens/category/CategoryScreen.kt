@@ -11,7 +11,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 @Composable
 fun CategoryScreen(
     modifier: Modifier = Modifier,
-    viewModel: CategoryViewModel = viewModel(),
+    viewModel: CategoryViewModel = viewModel(factory = CategoryViewModel.Factory),
     onCategoryClick: (String) -> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -29,8 +29,8 @@ fun CategoryScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         state.categories.forEach { category ->
-            TextButton(onClick = { onCategoryClick(category) }) {
-                Text(text = category, style = MaterialTheme.typography.bodyLarge)
+            TextButton(onClick = { onCategoryClick(category.name) }) {
+                Text(text = category.name, style = MaterialTheme.typography.bodyLarge)
             }
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -61,18 +61,19 @@ fun CategoryScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun CategoryScreenPreview() {
-    val fakeViewModel = object : CategoryViewModel() {
-        init {
-            _uiState.value = CategoryState(
-                categories = listOf("Books", "Groceries"),
-                newCategoryName = "",
-                isDialogOpen = false
-            )
-        }
-    }
-    CategoryScreen(viewModel = fakeViewModel)
-}
+
+//@Preview(showBackground = true)
+//@Composable
+//fun CategoryScreenPreview() {
+//    val fakeViewModel = object : CategoryViewModel() {
+//        init {
+//            _uiState.value = CategoryState(
+//                categories = listOf("Books", "Groceries"),
+//                newCategoryName = "",
+//                isDialogOpen = false
+//            )
+//        }
+//    }
+//    CategoryScreen(viewModel = fakeViewModel)
+//}
 
