@@ -1,6 +1,7 @@
 package com.example.riseep3.ui.screens.home
 
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
@@ -8,6 +9,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -31,7 +34,10 @@ fun HomeScreen(
     isDarkTheme: Boolean,
     onToggleTheme: () -> Unit
 ) {
-    Box(modifier = modifier.fillMaxSize()) {
+    Box(modifier = modifier
+        .fillMaxSize()
+        .background(MaterialTheme.colorScheme.background)
+    ) {
         ThemeToggleButton(
             isDark = isDarkTheme,
             onToggle = onToggleTheme,
@@ -49,8 +55,8 @@ fun HomeScreen(
         ) {
             Text(
                 text = "Welcome to",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    color = MaterialTheme.colorScheme.secondary,
+                style = MaterialTheme.typography.headlineSmall.copy(
+                    color = MaterialTheme.colorScheme.tertiary,
                     letterSpacing = 1.sp
                 )
             )
@@ -71,26 +77,53 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(48.dp))
 
-            Row(horizontalArrangement = Arrangement.spacedBy(50.dp)) {
-                FancyIconButton(
-                    icon = Icons.Default.Create,
-                    contentDescription = "Create",
-                    onClick = onCreateClick,
-                )
-                FancyIconButton(
-                    icon = Icons.Default.Face,
-                    contentDescription = "Profile",
-                    onClick = { /* TODO: Profile action */ },
-                )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row(horizontalArrangement = Arrangement.spacedBy(50.dp)) {
+                    FancyIconButton(
+                        icon = Icons.Default.Create,
+                        contentDescription = "Create",
+                        onClick = onCreateClick,
+                    )
+                    FancyIconButton(
+                        icon = Icons.Default.Face,
+                        contentDescription = "Profile",
+                        onClick = { /* TODO: Profile action */ },
+                    )
+                }
+                Row(horizontalArrangement = Arrangement.spacedBy(50.dp)) {
+                    FancyIconButton(
+                        icon = Icons.Default.ShoppingCart,
+                        contentDescription = "Sales",
+                        onClick = { /* TODO: Profile action */ },
+                    )
+                    FancyIconButton(
+                        icon = Icons.Default.Menu,
+                        contentDescription = "Products",
+                        onClick = { /* TODO: Profile action */ },
+                    )
+                }
             }
+
 
             Spacer(modifier = Modifier.height(48.dp))
 
             Text(
-                text = "Calculate your happiness!",
+                text = "Calculate at home!",
                 style = MaterialTheme.typography.bodyLarge.copy(
-                    color = MaterialTheme.colorScheme.secondary,
+                    color = MaterialTheme.colorScheme.tertiary,
                     letterSpacing = 1.sp
+                )
+            )
+
+            Text(
+                text = "For yourself or for your business!",
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    color = MaterialTheme.colorScheme.tertiary,
+                    letterSpacing = 1.sp,
+                    lineHeight = 44.sp
                 )
             )
         }
@@ -114,7 +147,7 @@ fun FancyIconButton(
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(24.dp),
-        color = colorResource(R.color.teal_700),
+        color = MaterialTheme.colorScheme.secondary,
         modifier = Modifier
             .size(85.dp)
             .scale(scale),
@@ -129,7 +162,7 @@ fun FancyIconButton(
             Icon(
                 imageVector = icon,
                 contentDescription = contentDescription,
-                tint = Color.White,
+                tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.fillMaxSize(0.6f)
             )
         }
@@ -138,10 +171,20 @@ fun FancyIconButton(
 
 @Preview(showBackground = true)
 @Composable
-fun HomeScreenPreview() {
+fun HomeScreenPreview_light() {
     HomeScreen(
         onCreateClick = {},
         isDarkTheme = false,
+        onToggleTheme = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HomeScreenPreview_dark() {
+    HomeScreen(
+        onCreateClick = {},
+        isDarkTheme = true,
         onToggleTheme = {}
     )
 }
