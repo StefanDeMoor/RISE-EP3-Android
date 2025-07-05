@@ -11,13 +11,18 @@ import com.example.riseep3.ui.screens.home.HomeScreen
 import com.example.riseep3.ui.screens.overview.OverviewScreen
 
 @Composable
-fun HomeCalcApp() {
+fun HomeCalcApp(
+    isDarkTheme: Boolean,
+    onToggleTheme: () -> Unit
+) {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = "home") {
         composable("home") {
             HomeScreen(
-                onCreateClick = { navController.navigate("category") }
+                onCreateClick = { navController.navigate("category") },
+                isDarkTheme = isDarkTheme,
+                onToggleTheme = onToggleTheme
             )
         }
         composable("category") {
