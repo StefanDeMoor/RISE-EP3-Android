@@ -1,6 +1,7 @@
 package com.example.riseep3.ui.screens.home
 
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -136,24 +137,32 @@ fun FancyIconButton(
     contentDescription: String,
     onClick: () -> Unit,
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-    val isPressed by interactionSource.collectIsPressedAsState()
-
+    var clicked by remember { mutableStateOf(false) }
     val scale by animateFloatAsState(
-        targetValue = if (isPressed) 0.9f else 1f,
+        targetValue = if (clicked) 0.9f else 1f,
+        animationSpec = tween(durationMillis = 150),
+        finishedListener = {
+            if (clicked) {
+                onClick()
+                clicked = false
+            }
+        },
         label = "buttonScale"
     )
 
     Surface(
-        onClick = onClick,
+        onClick = {
+            if (!clicked) {
+                clicked = true
+            }
+        },
         shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.secondary,
+        color = MaterialTheme.colorScheme.onBackground,
         modifier = Modifier
             .size(85.dp)
             .scale(scale),
         tonalElevation = 6.dp,
         shadowElevation = 8.dp,
-        interactionSource = interactionSource
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -168,6 +177,7 @@ fun FancyIconButton(
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable

@@ -1,17 +1,24 @@
 package com.example.riseep3.ui.componenten.home
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.riseep3.R
@@ -22,11 +29,30 @@ fun ThemeToggleButton(
     onToggle: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var clicked by remember { mutableStateOf(false) }
+    val scale by animateFloatAsState(
+        targetValue = if (clicked) 0.9f else 1f,
+        animationSpec = tween(durationMillis = 150),
+        finishedListener = {
+            if (clicked) {
+                onToggle()
+                clicked = false
+            }
+        },
+        label = "toggleButtonScale"
+    )
+
     Surface(
-        modifier = modifier.size(48.dp),
+        modifier = modifier
+            .size(48.dp)
+            .scale(scale),
         shape = CircleShape,
-        color =  if (isDark) colorResource(R.color.teal_700) else colorResource(R.color.fancy_blue),
-        onClick = onToggle,
+        color = MaterialTheme.colorScheme.onBackground,
+        onClick = {
+            if (!clicked) {
+                clicked = true
+            }
+        },
         tonalElevation = 4.dp,
         shadowElevation = 6.dp,
     ) {
@@ -37,7 +63,7 @@ fun ThemeToggleButton(
                 .padding(8.dp)
         ) {
             androidx.compose.foundation.Image(
-                painter = painterResource(id = if (isDark) com.example.riseep3.R.drawable.sun_toggle else com.example.riseep3.R.drawable.moon_toggle),
+                painter = painterResource(id = if (isDark) R.drawable.sun_toggle else R.drawable.moon_toggle),
                 contentDescription = if (isDark) "Switch to light mode" else "Switch to dark mode",
             )
         }
