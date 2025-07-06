@@ -3,8 +3,6 @@ package com.example.riseep3.ui.screens.home
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -17,7 +15,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -26,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.riseep3.R
 import com.example.riseep3.ui.componenten.home.ThemeToggleButton
+import com.example.riseep3.ui.screens.rememberWindowInfo
 import com.example.riseep3.ui.theme.Montagu
 
 @Composable
@@ -35,9 +33,13 @@ fun HomeScreen(
     isDarkTheme: Boolean,
     onToggleTheme: () -> Unit
 ) {
-    Box(modifier = modifier
-        .fillMaxSize()
-        .background(MaterialTheme.colorScheme.background)
+    val windowInfo = rememberWindowInfo()
+    val isLandscape = windowInfo.isLandscape
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
     ) {
         ThemeToggleButton(
             isDark = isDarkTheme,
@@ -51,7 +53,7 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(24.dp),
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterVertically),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -61,8 +63,6 @@ fun HomeScreen(
                     letterSpacing = 1.sp
                 )
             )
-
-            Spacer(modifier = Modifier.height(8.dp))
 
             Text(
                 text = "HOMECALC",
@@ -76,66 +76,74 @@ fun HomeScreen(
                 )
             )
 
-            Spacer(modifier = Modifier.height(48.dp))
+            val buttons = listOf(
+                Triple(Icons.Default.Create, "Create") { onCreateClick() },
+                Triple(Icons.Default.Face, "Profile") {},
+                Triple(Icons.Default.ShoppingCart, "Sales") {},
+                Triple(Icons.Default.Menu, "Products") {}
+            )
 
-            Column(
-                verticalArrangement = Arrangement.spacedBy(24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Row(horizontalArrangement = Arrangement.spacedBy(50.dp)) {
-                    FancyIconButton(
-                        icon = Icons.Default.Create,
-                        contentDescription = "Create",
-                        onClick = onCreateClick,
-                    )
-                    FancyIconButton(
-                        icon = Icons.Default.Face,
-                        contentDescription = "Profile",
-                        onClick = { /* TODO: Profile action */ },
-                    )
+            if (isLandscape) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(24.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    buttons.forEach { (icon, desc, action) ->
+                        FancyIconButton(icon = icon, contentDescription = desc, onClick = action)
+                    }
                 }
-                Row(horizontalArrangement = Arrangement.spacedBy(50.dp)) {
-                    FancyIconButton(
-                        icon = Icons.Default.ShoppingCart,
-                        contentDescription = "Sales",
-                        onClick = { /* TODO: Profile action */ },
-                    )
-                    FancyIconButton(
-                        icon = Icons.Default.Menu,
-                        contentDescription = "Products",
-                        onClick = { /* TODO: Profile action */ },
-                    )
+            } else {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    buttons.chunked(2).forEach { rowItems ->
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(50.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            rowItems.forEach { (icon, desc, action) ->
+                                FancyIconButton(icon = icon, contentDescription = desc, onClick = action)
+                            }
+                        }
+                    }
                 }
             }
 
-
-            Spacer(modifier = Modifier.height(48.dp))
-
-            Text(
-                text = "Calculate at home!",
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    color = MaterialTheme.colorScheme.tertiary,
-                    letterSpacing = 1.sp
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Calculate at home!",
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = MaterialTheme.colorScheme.tertiary,
+                        letterSpacing = 1.sp
+                    )
                 )
-            )
 
-            Text(
-                text = "For yourself or for your business!",
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    color = MaterialTheme.colorScheme.tertiary,
-                    letterSpacing = 1.sp,
-                    lineHeight = 44.sp
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "For yourself or for your business!",
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = MaterialTheme.colorScheme.tertiary,
+                        letterSpacing = 1.sp,
+                        lineHeight = 44.sp
+                    )
                 )
-            )
+            }
+
         }
     }
 }
+
 
 @Composable
 fun FancyIconButton(
     icon: ImageVector,
     contentDescription: String,
-    onClick: () -> Unit,
+    onClick: () -> Unit
 ) {
     var clicked by remember { mutableStateOf(false) }
     val scale by animateFloatAsState(
@@ -162,7 +170,7 @@ fun FancyIconButton(
             .size(85.dp)
             .scale(scale),
         tonalElevation = 6.dp,
-        shadowElevation = 8.dp,
+        shadowElevation = 8.dp
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -177,7 +185,6 @@ fun FancyIconButton(
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
