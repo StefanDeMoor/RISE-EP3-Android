@@ -1,10 +1,7 @@
 package com.example.riseep3.ui.screens.home
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Face
@@ -14,25 +11,26 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.riseep3.R
-import com.example.riseep3.ui.componenten.home.ThemeToggleButton
+import com.example.riseep3.ui.componenten.ThemeToggleButton
+import com.example.riseep3.ui.componenten.home.FancyIconButton
 import com.example.riseep3.ui.screens.rememberWindowInfo
 import com.example.riseep3.ui.theme.Montagu
+import com.example.riseep3.ui.theme.RiseTheme
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
     onCreateClick: () -> Unit,
-    isDarkTheme: Boolean,
-    onToggleTheme: () -> Unit
+    viewModel: HomeViewModel = viewModel()
 ) {
+    val isDarkTheme by viewModel.isDarkTheme.collectAsState()
     val windowInfo = rememberWindowInfo()
     val isLandscape = windowInfo.isLandscape
 
@@ -43,7 +41,7 @@ fun HomeScreen(
     ) {
         ThemeToggleButton(
             isDark = isDarkTheme,
-            onToggle = onToggleTheme,
+            onToggle = viewModel::toggleTheme,
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(top = 36.dp, end = 16.dp)
@@ -138,70 +136,30 @@ fun HomeScreen(
     }
 }
 
-
 @Composable
-fun FancyIconButton(
-    icon: ImageVector,
-    contentDescription: String,
-    onClick: () -> Unit
-) {
-    var clicked by remember { mutableStateOf(false) }
-    val scale by animateFloatAsState(
-        targetValue = if (clicked) 0.9f else 1f,
-        animationSpec = tween(durationMillis = 150),
-        finishedListener = {
-            if (clicked) {
-                onClick()
-                clicked = false
-            }
-        },
-        label = "buttonScale"
-    )
-
-    Surface(
-        onClick = {
-            if (!clicked) {
-                clicked = true
-            }
-        },
-        shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.onBackground,
-        modifier = Modifier
-            .size(85.dp)
-            .scale(scale),
-        tonalElevation = 6.dp,
-        shadowElevation = 8.dp
-    ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = contentDescription,
-                tint = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.fillMaxSize(0.6f)
-            )
+fun PreviewHomeScreen(isDarkTheme: Boolean) {
+    val fakeViewModel = object : HomeViewModel() {
+        init {
+            _isDarkTheme.value = isDarkTheme
         }
+    }
+
+    RiseTheme(darkTheme = isDarkTheme) {
+        HomeScreen(
+            onCreateClick = {},
+            viewModel = fakeViewModel
+        )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview_light() {
-    HomeScreen(
-        onCreateClick = {},
-        isDarkTheme = false,
-        onToggleTheme = {}
-    )
+    PreviewHomeScreen(isDarkTheme = false)
 }
 
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview_dark() {
-    HomeScreen(
-        onCreateClick = {},
-        isDarkTheme = true,
-        onToggleTheme = {}
-    )
+    PreviewHomeScreen(isDarkTheme = true)
 }
