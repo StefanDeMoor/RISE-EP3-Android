@@ -7,9 +7,9 @@ import kotlinx.coroutines.flow.asStateFlow
 open class HomeViewModel : ViewModel() {
 
     val _isDarkTheme = MutableStateFlow(false)
-    val isDarkTheme = _isDarkTheme.asStateFlow()
+    open val isDarkTheme = _isDarkTheme.asStateFlow()
 
-    fun toggleTheme() {
+    open fun toggleTheme() {
         _isDarkTheme.value = !_isDarkTheme.value
     }
 }

@@ -28,6 +28,9 @@ import com.example.riseep3.ui.theme.RiseTheme
 fun HomeScreen(
     modifier: Modifier = Modifier,
     onCreateClick: () -> Unit,
+    onProfileClick: () -> Unit,
+    onSalesClick: () -> Unit,
+    onProductsClick: () -> Unit,
     viewModel: HomeViewModel = viewModel()
 ) {
     val isDarkTheme by viewModel.isDarkTheme.collectAsState()
@@ -76,9 +79,9 @@ fun HomeScreen(
 
             val buttons = listOf(
                 Triple(Icons.Default.Create, "Create") { onCreateClick() },
-                Triple(Icons.Default.Face, "Profile") {},
-                Triple(Icons.Default.ShoppingCart, "Sales") {},
-                Triple(Icons.Default.Menu, "Products") {}
+                Triple(Icons.Default.Face, "Profile") { onProfileClick() },
+                Triple(Icons.Default.ShoppingCart, "Sales") { onSalesClick() },
+                Triple(Icons.Default.Menu, "Products") { onProductsClick() }
             )
 
             if (isLandscape) {
@@ -147,6 +150,9 @@ fun PreviewHomeScreen(isDarkTheme: Boolean) {
     RiseTheme(darkTheme = isDarkTheme) {
         HomeScreen(
             onCreateClick = {},
+            onProfileClick = {},
+            onSalesClick = {},
+            onProductsClick = {},
             viewModel = fakeViewModel
         )
     }

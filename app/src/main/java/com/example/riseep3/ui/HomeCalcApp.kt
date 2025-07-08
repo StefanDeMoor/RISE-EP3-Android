@@ -3,6 +3,7 @@ package com.example.riseep3.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
@@ -12,13 +13,16 @@ import com.example.riseep3.ui.screens.category.CategoryScreen
 import com.example.riseep3.ui.screens.home.HomeScreen
 import com.example.riseep3.ui.screens.home.HomeViewModel
 import com.example.riseep3.ui.screens.overview.OverviewScreen
+import com.example.riseep3.ui.screens.products.ProductScreen
+import com.example.riseep3.ui.screens.profile.ProfileScreen
+import com.example.riseep3.ui.screens.sales.SalesScreen
 import com.example.riseep3.ui.theme.RiseTheme
 
 @Composable
 fun HomeCalcApp(
-    viewModel: HomeViewModel
+    viewModel: HomeViewModel,
+    navController: NavHostController = rememberNavController()
 ) {
-    val navController = rememberNavController()
     val isDarkTheme by viewModel.isDarkTheme.collectAsState()
 
     RiseTheme(darkTheme = isDarkTheme) {
@@ -26,6 +30,9 @@ fun HomeCalcApp(
             composable("home") {
                 HomeScreen(
                     onCreateClick = { navController.navigate("category") },
+                    onProfileClick = { navController.navigate("profile") },
+                    onSalesClick = { navController.navigate("sales") },
+                    onProductsClick = { navController.navigate("products") },
                     viewModel = viewModel
                 )
             }
@@ -42,6 +49,21 @@ fun HomeCalcApp(
             ) { backStackEntry ->
                 val categoryName = backStackEntry.arguments?.getString("categoryName") ?: "Onbekend"
                 OverviewScreen(categoryName = categoryName)
+            }
+            composable("profile") {
+                ProfileScreen(
+
+                )
+            }
+            composable("sales") {
+                SalesScreen(
+
+                )
+            }
+            composable("products") {
+                ProductScreen(
+
+                )
             }
         }
     }
