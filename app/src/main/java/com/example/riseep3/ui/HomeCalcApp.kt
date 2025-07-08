@@ -3,6 +3,7 @@ package com.example.riseep3.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
@@ -16,9 +17,9 @@ import com.example.riseep3.ui.theme.RiseTheme
 
 @Composable
 fun HomeCalcApp(
-    viewModel: HomeViewModel
+    viewModel: HomeViewModel,
+    navController: NavHostController = rememberNavController()
 ) {
-    val navController = rememberNavController()
     val isDarkTheme by viewModel.isDarkTheme.collectAsState()
 
     RiseTheme(darkTheme = isDarkTheme) {

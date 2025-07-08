@@ -5,16 +5,16 @@
       <SelectionState runConfigName="HomeCalcApp">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="homeScreen_displaysText()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="homeScreen_displaysCreateButton_andTriggersCallback()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="homeScreen_clickCreateButton_triggersCallback()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
       <SelectionState runConfigName="HomeScreenTest">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="homeScreen_isStartDestination()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="clickCreateButton_navigatesToCategory()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
