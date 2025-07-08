@@ -28,7 +28,12 @@ class HomeScreenTest {
         composeTestRule.setContent {
             var createClicked by remember { mutableStateOf(false) }
 
-            HomeScreen(onCreateClick = { createClicked = true })
+            HomeScreen(
+                onCreateClick = { createClicked = true },
+                onProfileClick = {},
+                onSalesClick = {},
+                onProductsClick = {}
+            )
 
             if (createClicked) {
                 Text("Clicked")
@@ -48,7 +53,12 @@ class HomeScreenTest {
     @Test
     fun homeScreen_displaysText() {
         composeTestRule.setContent {
-            HomeScreen(onCreateClick = {})
+            HomeScreen(
+                onCreateClick = {},
+                onProfileClick = {},
+                onSalesClick = {},
+                onProductsClick = {}
+            )
         }
 
         composeTestRule

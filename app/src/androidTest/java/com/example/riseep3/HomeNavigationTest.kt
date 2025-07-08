@@ -50,4 +50,25 @@ class HomeNavigationTest {
         composeTestRule.waitForIdle()
         navController.assertCurrentRouteName("category")
     }
+
+    @Test
+    fun clickProfileButton_navigatesToProfile() {
+        composeTestRule.onNodeWithContentDescription("Profile").performClick()
+        composeTestRule.waitForIdle()
+        navController.assertCurrentRouteName("profile")
+    }
+
+    @Test
+    fun clickSalesButton_navigatesToSales() {
+        composeTestRule.onNodeWithContentDescription("Sales").performClick()
+        composeTestRule.waitForIdle()
+        navController.assertCurrentRouteName("sales")
+    }
+
+    @Test
+    fun clickProductsButton_navigatesToProducts() {
+        composeTestRule.onNodeWithContentDescription("Products").performClick()
+        composeTestRule.waitForIdle()
+        navController.assertCurrentRouteName("products")
+    }
 }
