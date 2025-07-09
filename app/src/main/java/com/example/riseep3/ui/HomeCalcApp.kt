@@ -3,6 +3,7 @@ package com.example.riseep3.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.rememberNavController
@@ -20,10 +21,10 @@ import com.example.riseep3.ui.theme.RiseTheme
 
 @Composable
 fun HomeCalcApp(
-    viewModel: HomeViewModel,
     navController: NavHostController = rememberNavController()
 ) {
-    val isDarkTheme by viewModel.isDarkTheme.collectAsState()
+    val homeViewModel: HomeViewModel = viewModel()
+    val isDarkTheme by homeViewModel.isDarkTheme.collectAsState()
 
     RiseTheme(darkTheme = isDarkTheme) {
         NavHost(navController = navController, startDestination = "home") {
@@ -33,14 +34,15 @@ fun HomeCalcApp(
                     onProfileClick = { navController.navigate("profile") },
                     onSalesClick = { navController.navigate("sales") },
                     onProductsClick = { navController.navigate("products") },
-                    viewModel = viewModel
+                    viewModel = homeViewModel
                 )
             }
             composable("category") {
                 CategoryScreen(
                     onCategoryClick = { categoryName ->
                         navController.navigate("overview/${categoryName}")
-                    }
+                    },
+                    onNavigateBack = { navController.navigate("home") }
                 )
             }
             composable(
@@ -52,17 +54,17 @@ fun HomeCalcApp(
             }
             composable("profile") {
                 ProfileScreen(
-
+                    onNavigateBack = { navController.navigate("home") }
                 )
             }
             composable("sales") {
                 SalesScreen(
-
+                    onNavigateBack = { navController.navigate("home") }
                 )
             }
             composable("products") {
                 ProductScreen(
-
+                    onNavigateBack = { navController.navigate("home") }
                 )
             }
         }

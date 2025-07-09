@@ -15,12 +15,19 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class CategoryViewModel(
+open class CategoryViewModel(
     private val repository: CategoryRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(CategoryState())
+    val _uiState = MutableStateFlow(CategoryState())
     val uiState: StateFlow<CategoryState> = _uiState.asStateFlow()
+
+    val _isDarkTheme = MutableStateFlow(false)
+    open val isDarkTheme = _isDarkTheme.asStateFlow()
+
+    open fun toggleTheme() {
+        _isDarkTheme.value = !_isDarkTheme.value
+    }
 
     init {
         viewModelScope.launch {

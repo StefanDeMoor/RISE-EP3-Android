@@ -12,14 +12,9 @@ import com.example.riseep3.ui.theme.RiseTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
-            val viewModel: HomeViewModel = viewModel()
-            val isDarkTheme by viewModel.isDarkTheme.collectAsState()
-
-            RiseTheme(darkTheme = isDarkTheme) {
-                HomeCalcApp(viewModel = viewModel)
-            }
+            HomeCalcApp()
         }
     }
 }
+
