@@ -37,22 +37,27 @@ fun HomeScreen(
     val windowInfo = rememberWindowInfo()
     val isLandscape = windowInfo.isLandscape
 
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-    ) {
-        ThemeToggleButton(
-            isDark = isDarkTheme,
-            onToggle = viewModel::toggleTheme,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(top = 36.dp, end = 16.dp)
-        )
-
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 36.dp, end = 16.dp),
+                contentAlignment = Alignment.TopEnd
+            ) {
+                ThemeToggleButton(
+                    isDark = isDarkTheme,
+                    onToggle = viewModel::toggleTheme
+                )
+            }
+        }
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(innerPadding)
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterVertically),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -134,10 +139,10 @@ fun HomeScreen(
                     )
                 )
             }
-
         }
     }
 }
+
 
 @Composable
 fun PreviewHomeScreen(isDarkTheme: Boolean) {
