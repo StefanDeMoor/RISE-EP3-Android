@@ -22,13 +22,6 @@ open class CategoryViewModel(
     val _uiState = MutableStateFlow(CategoryState())
     val uiState: StateFlow<CategoryState> = _uiState.asStateFlow()
 
-    val _isDarkTheme = MutableStateFlow(false)
-    open val isDarkTheme = _isDarkTheme.asStateFlow()
-
-    open fun toggleTheme() {
-        _isDarkTheme.value = !_isDarkTheme.value
-    }
-
     init {
         viewModelScope.launch {
             repository.getAllCategories().collect { categories ->

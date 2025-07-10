@@ -1,8 +1,9 @@
 package com.example.riseep3.ui.screens.category
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -12,16 +13,18 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.riseep3.ui.componenten.ThemeToggleButton
 import com.example.riseep3.ui.theme.RiseTheme
+import com.example.riseep3.ui.theme.ThemeViewModel
 
 @Composable
 fun CategoryScreen(
     modifier: Modifier = Modifier,
     viewModel: CategoryViewModel = viewModel(factory = CategoryViewModel.Factory),
     onCategoryClick: (String) -> Unit = {},
+    themeViewModel: ThemeViewModel,
     onNavigateBack: () -> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsState()
-    val isDarkTheme by viewModel.isDarkTheme.collectAsState()
+    val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -37,14 +40,14 @@ fun CategoryScreen(
                     modifier = Modifier.align(Alignment.CenterStart)
                 ) {
                     Icon(
-                        imageVector = Icons.Default.ArrowBack,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back"
                     )
                 }
 
                 ThemeToggleButton(
                     isDark = isDarkTheme,
-                    onToggle = viewModel::toggleTheme,
+                    onToggle = themeViewModel::toggleTheme,
                     modifier = Modifier.align(Alignment.CenterEnd)
                 )
             }
@@ -98,32 +101,22 @@ fun CategoryScreen(
 }
 
 
-//@Composable
-//fun PreviewCategoryScreen(isDarkTheme: Boolean) {
-//    val fakeViewModel = object : CategoryViewModel() {
-//        init {
-//            _uiState.value = CategoryState(
-//                categories = listOf("Books", "Groceries"),
-//                newCategoryName = "",
-//                isDialogOpen = false
-//            )
-//            _isDarkTheme.value = isDarkTheme
-//        }
-//    }
-//
-//    RiseTheme(darkTheme = isDarkTheme) {
-//        CategoryScreen(viewModel = fakeViewModel)
-//    }
-//}
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun CategoryScreenPreview_Light() {
-//    PreviewCategoryScreen(isDarkTheme = false)
-//}
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun CategoryScreenPreview_Dark() {
-//    PreviewCategoryScreen(isDarkTheme = true)
-//}
+@SuppressLint("ViewModelConstructorInComposable")
+@Composable
+fun PreviewCategoryScreen(isDarkTheme: Boolean) {
+    RiseTheme(darkTheme = isDarkTheme) {
+        CategoryScreen(themeViewModel = ThemeViewModel())
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CategoryScreenPreview_Light() {
+    PreviewCategoryScreen(isDarkTheme = false)
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CategoryScreenPreview_Dark() {
+    PreviewCategoryScreen(isDarkTheme = true)
+}

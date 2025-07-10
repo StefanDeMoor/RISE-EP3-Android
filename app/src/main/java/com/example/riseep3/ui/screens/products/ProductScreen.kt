@@ -3,23 +3,23 @@ package com.example.riseep3.ui.screens.products
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.riseep3.ui.componenten.ThemeToggleButton
 import com.example.riseep3.ui.theme.RiseTheme
+import com.example.riseep3.ui.theme.ThemeViewModel
 
 @Composable
 fun ProductScreen(
-    viewModel: ProductViewModel = viewModel(),
+    themeViewModel: ThemeViewModel,
     onNavigateBack: () -> Unit = {}
 ) {
-    val isDarkTheme by viewModel.isDarkTheme.collectAsState()
+    val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -33,12 +33,12 @@ fun ProductScreen(
                     onClick = onNavigateBack,
                     modifier = Modifier.align(Alignment.CenterStart)
                 ) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                 }
 
                 ThemeToggleButton(
                     isDark = isDarkTheme,
-                    onToggle = viewModel::toggleTheme,
+                    onToggle = themeViewModel::toggleTheme,
                     modifier = Modifier.align(Alignment.CenterEnd)
                 )
             }
@@ -59,10 +59,7 @@ fun ProductScreen(
 @Preview
 @Composable
 fun ProductScreenPreview() {
-    val previewViewModel = ProductViewModel().apply {
-        _isDarkTheme.value = false
-    }
     RiseTheme {
-        ProductScreen(viewModel = previewViewModel)
+        ProductScreen(themeViewModel = ThemeViewModel())
     }
 }

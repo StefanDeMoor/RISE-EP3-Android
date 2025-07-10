@@ -12,19 +12,19 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.riseep3.ui.screens.category.CategoryScreen
 import com.example.riseep3.ui.screens.home.HomeScreen
-import com.example.riseep3.ui.screens.home.HomeViewModel
 import com.example.riseep3.ui.screens.overview.OverviewScreen
 import com.example.riseep3.ui.screens.products.ProductScreen
 import com.example.riseep3.ui.screens.profile.ProfileScreen
 import com.example.riseep3.ui.screens.sales.SalesScreen
 import com.example.riseep3.ui.theme.RiseTheme
+import com.example.riseep3.ui.theme.ThemeViewModel
 
 @Composable
 fun HomeCalcApp(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    themeViewModel: ThemeViewModel = viewModel()
 ) {
-    val homeViewModel: HomeViewModel = viewModel()
-    val isDarkTheme by homeViewModel.isDarkTheme.collectAsState()
+    val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
 
     RiseTheme(darkTheme = isDarkTheme) {
         NavHost(navController = navController, startDestination = "home") {
@@ -34,7 +34,7 @@ fun HomeCalcApp(
                     onProfileClick = { navController.navigate("profile") },
                     onSalesClick = { navController.navigate("sales") },
                     onProductsClick = { navController.navigate("products") },
-                    viewModel = homeViewModel
+                    themeViewModel = themeViewModel
                 )
             }
             composable("category") {
@@ -42,7 +42,8 @@ fun HomeCalcApp(
                     onCategoryClick = { categoryName ->
                         navController.navigate("overview/${categoryName}")
                     },
-                    onNavigateBack = { navController.navigate("home") }
+                    onNavigateBack = { navController.navigate("home") },
+                    themeViewModel =  themeViewModel,
                 )
             }
             composable(
@@ -54,17 +55,20 @@ fun HomeCalcApp(
             }
             composable("profile") {
                 ProfileScreen(
-                    onNavigateBack = { navController.navigate("home") }
+                    onNavigateBack = { navController.navigate("home") },
+                    themeViewModel =  themeViewModel,
                 )
             }
             composable("sales") {
                 SalesScreen(
-                    onNavigateBack = { navController.navigate("home") }
+                    onNavigateBack = { navController.navigate("home") },
+                    themeViewModel =  themeViewModel,
                 )
             }
             composable("products") {
                 ProductScreen(
-                    onNavigateBack = { navController.navigate("home") }
+                    onNavigateBack = { navController.navigate("home") },
+                    themeViewModel =  themeViewModel,
                 )
             }
         }
