@@ -1,6 +1,6 @@
 package com.example.riseep3.ui.screens.home
 
-import androidx.compose.foundation.background
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
@@ -16,13 +16,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.riseep3.R
 import com.example.riseep3.ui.componenten.ThemeToggleButton
 import com.example.riseep3.ui.componenten.home.FancyIconButton
 import com.example.riseep3.ui.screens.rememberWindowInfo
 import com.example.riseep3.ui.theme.Montagu
 import com.example.riseep3.ui.theme.RiseTheme
+import com.example.riseep3.ui.theme.ThemeViewModel
 
 @Composable
 fun HomeScreen(
@@ -31,28 +31,34 @@ fun HomeScreen(
     onProfileClick: () -> Unit,
     onSalesClick: () -> Unit,
     onProductsClick: () -> Unit,
-    viewModel: HomeViewModel = viewModel()
+    themeViewModel: ThemeViewModel
 ) {
-    val isDarkTheme by viewModel.isDarkTheme.collectAsState()
+    val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
+
     val windowInfo = rememberWindowInfo()
     val isLandscape = windowInfo.isLandscape
 
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-    ) {
-        ThemeToggleButton(
-            isDark = isDarkTheme,
-            onToggle = viewModel::toggleTheme,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(top = 36.dp, end = 16.dp)
-        )
-
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 36.dp, end = 16.dp),
+                contentAlignment = Alignment.TopEnd
+            ) {
+                ThemeToggleButton(
+                    isDark = isDarkTheme,
+                    onToggle = themeViewModel::toggleTheme
+                )
+            }
+        }
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(innerPadding)
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterVertically),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -134,26 +140,21 @@ fun HomeScreen(
                     )
                 )
             }
-
         }
     }
 }
 
+
+@SuppressLint("ViewModelConstructorInComposable")
 @Composable
 fun PreviewHomeScreen(isDarkTheme: Boolean) {
-    val fakeViewModel = object : HomeViewModel() {
-        init {
-            _isDarkTheme.value = isDarkTheme
-        }
-    }
-
     RiseTheme(darkTheme = isDarkTheme) {
         HomeScreen(
             onCreateClick = {},
             onProfileClick = {},
             onSalesClick = {},
             onProductsClick = {},
-            viewModel = fakeViewModel
+            themeViewModel = ThemeViewModel()
         )
     }
 }

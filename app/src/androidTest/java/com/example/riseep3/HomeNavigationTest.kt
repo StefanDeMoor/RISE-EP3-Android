@@ -1,18 +1,14 @@
 package com.example.riseep3
 
 import android.annotation.SuppressLint
-import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
-import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.riseep3.ui.HomeCalcApp
-import com.example.riseep3.ui.screens.home.FakeHomeViewModel
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -33,7 +29,6 @@ class HomeNavigationTest {
             navController = TestNavHostController(LocalContext.current)
             navController.navigatorProvider.addNavigator(ComposeNavigator())
             HomeCalcApp(
-                viewModel = FakeHomeViewModel(),
                 navController = navController
             )
         }

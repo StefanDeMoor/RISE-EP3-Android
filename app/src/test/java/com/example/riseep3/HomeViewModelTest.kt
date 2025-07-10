@@ -1,6 +1,6 @@
 package com.example.riseep3
 
-import com.example.riseep3.ui.screens.home.HomeViewModel
+import com.example.riseep3.ui.theme.ThemeViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
@@ -10,7 +10,7 @@ class HomeViewModelTest {
 
     @Test
     fun toggleTheme_changesThemeValue() = runBlocking {
-        val viewModel = HomeViewModel()
+        val viewModel = ThemeViewModel()
 
         val initialTheme = viewModel.isDarkTheme.first()
         viewModel.toggleTheme()
