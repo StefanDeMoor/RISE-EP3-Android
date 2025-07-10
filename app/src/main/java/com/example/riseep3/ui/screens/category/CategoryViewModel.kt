@@ -20,7 +20,7 @@ open class CategoryViewModel(
 ) : ViewModel() {
 
     val _uiState = MutableStateFlow(CategoryState())
-    val uiState: StateFlow<CategoryState> = _uiState.asStateFlow()
+    open val uiState: StateFlow<CategoryState> = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
