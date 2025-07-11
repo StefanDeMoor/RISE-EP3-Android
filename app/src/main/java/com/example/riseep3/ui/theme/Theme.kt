@@ -24,7 +24,7 @@ private val DarkColorScheme = darkColorScheme(
     onSecondary = Color(0xFF000000), // black
     background = Color(0xFF25466C), // fancy_blue
     onBackground = Color(0xFFFFFFFF), // white
-    surface = Color(0xFF1F1F1F),
+    surface = Color(0xFF25466C),
     onSurface = Color(0xFFFFFFFF),
     tertiary = Color(0xFFFFFFFF), // white
 )

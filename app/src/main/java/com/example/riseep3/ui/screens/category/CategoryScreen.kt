@@ -1,6 +1,8 @@
 package com.example.riseep3.ui.screens.category
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -12,6 +14,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -79,7 +82,6 @@ fun CategoryScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            // Title
             Text(
                 text = "Categories",
                 style = MaterialTheme.typography.headlineLarge.copy(
@@ -91,7 +93,6 @@ fun CategoryScreen(
                 )
             )
 
-            // Styled Dropdown
             ExposedDropdownMenuBox(
                 expanded = expanded,
                 onExpandedChange = { expanded = !expanded },
@@ -121,24 +122,37 @@ fun CategoryScreen(
                         .fillMaxWidth()
                 )
 
-                ExposedDropdownMenu(
+                DropdownMenu(
                     expanded = expanded,
                     onDismissRequest = { expanded = false },
                     modifier = Modifier
+                        .exposedDropdownSize()
                         .border(
                             width = 1.dp,
                             color = MaterialTheme.colorScheme.onSurface,
-                            shape = MaterialTheme.shapes.medium
                         )
-                        .background(MaterialTheme.colorScheme.surface)
+                        .background(MaterialTheme.colorScheme.background)
                 ) {
                     state.categories.forEach { category ->
                         DropdownMenuItem(
                             text = {
-                                Text(
-                                    category.name,
-                                    color = MaterialTheme.colorScheme.onBackground
-                                )
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = category.name,
+                                        color = MaterialTheme.colorScheme.onBackground
+                                    )
+                                    if (category.name.equals("Overview", ignoreCase = true)) {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.overview),
+                                            contentDescription = "Overview Icon",
+                                            tint = MaterialTheme.colorScheme.onBackground
+                                        )
+                                    }
+                                }
                             },
                             onClick = {
                                 selectedCategory = category.name
@@ -148,7 +162,6 @@ fun CategoryScreen(
                         )
                     }
                 }
-
             }
 
             // Created items
@@ -157,13 +170,31 @@ fun CategoryScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 createdItems.forEach { (itemName, categoryName) ->
+                    var clicked by remember { mutableStateOf(false) }
+                    val scale by animateFloatAsState(
+                        targetValue = if (clicked) 0.9f else 1f,
+                        animationSpec = tween(durationMillis = 150),
+                        finishedListener = {
+                            if (clicked) {
+                                onCategoryClick(categoryName)
+                                clicked = false
+                            }
+                        },
+                        label = "cardScale"
+                    )
+
                     Card(
-                        onClick = { onCategoryClick(categoryName) },
-                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            if (!clicked) clicked = true
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .scale(scale),
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.onBackground
                         ),
-                        shape = MaterialTheme.shapes.medium
+                        shape = MaterialTheme.shapes.medium,
+                        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
                     ) {
                         Row(
                             modifier = Modifier
@@ -188,7 +219,6 @@ fun CategoryScreen(
                         }
                     }
                 }
-
             }
 
             // Dialog
@@ -232,6 +262,7 @@ fun CategoryScreen(
         }
     }
 }
+
 
 
 
