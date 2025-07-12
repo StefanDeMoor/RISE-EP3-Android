@@ -129,9 +129,9 @@ fun CategoryScreen(
                         .exposedDropdownSize()
                         .border(
                             width = 1.dp,
-                            color = MaterialTheme.colorScheme.onSurface,
+                            color = MaterialTheme.colorScheme.surface,
                         )
-                        .background(MaterialTheme.colorScheme.background)
+                        .background(MaterialTheme.colorScheme.onBackground)
                 ) {
                     state.categories.forEach { category ->
                         DropdownMenuItem(
@@ -143,13 +143,13 @@ fun CategoryScreen(
                                 ) {
                                     Text(
                                         text = category.name,
-                                        color = MaterialTheme.colorScheme.onBackground
+                                        color = MaterialTheme.colorScheme.background
                                     )
                                     if (category.name.equals("Overview", ignoreCase = true)) {
                                         Icon(
                                             painter = painterResource(id = R.drawable.overview),
                                             contentDescription = "Overview Icon",
-                                            tint = MaterialTheme.colorScheme.onBackground
+                                            tint = MaterialTheme.colorScheme.background
                                         )
                                     }
                                 }
