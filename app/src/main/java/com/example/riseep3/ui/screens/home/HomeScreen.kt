@@ -2,6 +2,8 @@ package com.example.riseep3.ui.screens.home
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Face
@@ -11,6 +13,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,9 +37,12 @@ fun HomeScreen(
     themeViewModel: ThemeViewModel
 ) {
     val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
-
     val windowInfo = rememberWindowInfo()
     val isLandscape = windowInfo.isLandscape
+
+    val headingFontSize = if (isLandscape) 28.sp else 40.sp
+    val headingLineHeight = if (isLandscape) 32.sp else 44.sp
+    val rowSpacing = if (isLandscape) 24.dp else 50.dp
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -58,6 +64,7 @@ fun HomeScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .padding(innerPadding)
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterVertically),
@@ -76,10 +83,10 @@ fun HomeScreen(
                 style = MaterialTheme.typography.headlineLarge.copy(
                     color = colorResource(R.color.gold),
                     letterSpacing = 2.sp,
-                    fontSize = 40.sp,
+                    fontSize = headingFontSize,
                     fontFamily = Montagu,
                     fontWeight = FontWeight.SemiBold,
-                    lineHeight = 44.sp
+                    lineHeight = headingLineHeight
                 )
             )
 
@@ -92,7 +99,7 @@ fun HomeScreen(
 
             if (isLandscape) {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(24.dp),
+                    horizontalArrangement = Arrangement.spacedBy(rowSpacing),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     buttons.forEach { (icon, desc, action) ->
@@ -106,7 +113,7 @@ fun HomeScreen(
                 ) {
                     buttons.chunked(2).forEach { rowItems ->
                         Row(
-                            horizontalArrangement = Arrangement.spacedBy(50.dp),
+                            horizontalArrangement = Arrangement.spacedBy(rowSpacing),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             rowItems.forEach { (icon, desc, action) ->
@@ -136,14 +143,13 @@ fun HomeScreen(
                     style = MaterialTheme.typography.bodyLarge.copy(
                         color = MaterialTheme.colorScheme.tertiary,
                         letterSpacing = 1.sp,
-                        lineHeight = 44.sp
+                        lineHeight = if (isLandscape) 28.sp else 44.sp
                     )
                 )
             }
         }
     }
 }
-
 
 @SuppressLint("ViewModelConstructorInComposable")
 @Composable

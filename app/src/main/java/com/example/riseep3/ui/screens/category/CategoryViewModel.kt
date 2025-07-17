@@ -20,15 +20,22 @@ open class CategoryViewModel(
 ) : ViewModel() {
 
     val _uiState = MutableStateFlow(CategoryState())
-    val uiState: StateFlow<CategoryState> = _uiState.asStateFlow()
+    open val uiState: StateFlow<CategoryState> = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
             repository.getAllCategories().collect { categories ->
                 _uiState.update { it.copy(categories = categories) }
+
+                if (categories.none { it.name == "Overview" }) {
+                    val newId = categories.maxOfOrNull { it.id }?.plus(1) ?: 1
+                    val overviewCategory = CategoryEntity(id = newId, name = "Overview")
+                    repository.insertAll(flowOf(listOf(overviewCategory)))
+                }
             }
         }
     }
+
 
     fun onCategoryNameChange(newName: String) {
         _uiState.update { it.copy(newCategoryName = newName) }
