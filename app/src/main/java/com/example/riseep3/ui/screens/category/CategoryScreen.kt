@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.riseep3.R
 import com.example.riseep3.ui.componenten.ThemeToggleButton
+import com.example.riseep3.ui.componenten.category.NewItemDialog
 import com.example.riseep3.ui.theme.Montagu
 import com.example.riseep3.ui.theme.RiseTheme
 import com.example.riseep3.ui.theme.ThemeViewModel
@@ -221,51 +222,28 @@ fun CategoryScreen(
                 }
             }
 
-            // Dialog
             if (showNewItemDialog) {
-                AlertDialog(
-                    onDismissRequest = {
-                        newItemName = ""
-                        showNewItemDialog = false
-                    },
-                    confirmButton = {
-                        TextButton(onClick = {
-                            if (newItemName.isNotBlank() && selectedCategory != null) {
-                                createdItems.add(newItemName to selectedCategory!!)
-                                newItemName = ""
-                                showNewItemDialog = false
-                            }
-                        }) {
-                            Text("Create")
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(onClick = {
+                NewItemDialog(
+                    itemName = newItemName,
+                    onNameChange = { newItemName = it },
+                    onConfirm = {
+                        if (newItemName.isNotBlank() && selectedCategory != null) {
+                            createdItems.add(newItemName to selectedCategory!!)
                             newItemName = ""
                             showNewItemDialog = false
-                        }) {
-                            Text("Cancel")
                         }
                     },
-                    title = { Text("New Entry") },
-                    text = {
-                        OutlinedTextField(
-                            value = newItemName,
-                            onValueChange = { newItemName = it },
-                            label = { Text("Item Name") },
-                            singleLine = true,
-                            modifier = Modifier.fillMaxWidth()
-                        )
+                    onDismiss = {
+                        newItemName = ""
+                        showNewItemDialog = false
                     }
                 )
             }
+
+
         }
     }
 }
-
-
-
-
 
 //@SuppressLint("ViewModelConstructorInComposable")
 //@Preview(showBackground = true)
