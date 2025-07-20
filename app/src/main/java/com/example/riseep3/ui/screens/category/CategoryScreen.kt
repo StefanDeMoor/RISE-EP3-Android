@@ -1,6 +1,5 @@
 package com.example.riseep3.ui.screens.category
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -22,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.riseep3.R
+import com.example.riseep3.ui.componenten.SuccessDialog
 import com.example.riseep3.ui.componenten.ThemeToggleButton
 import com.example.riseep3.ui.componenten.category.NewItemDialog
 import com.example.riseep3.ui.theme.Montagu
@@ -43,6 +43,7 @@ fun CategoryScreen(
     var expanded by remember { mutableStateOf(false) }
     var selectedCategory by remember { mutableStateOf<String?>(null) }
     var showNewItemDialog by remember { mutableStateOf(false) }
+    var showSuccessDialog by remember { mutableStateOf(false) }
     var newItemName by remember { mutableStateOf("") }
     val createdItems = remember { mutableStateListOf<Pair<String, String>>() }
 
@@ -94,6 +95,7 @@ fun CategoryScreen(
                 )
             )
 
+            // Dropdown
             ExposedDropdownMenuBox(
                 expanded = expanded,
                 onExpandedChange = { expanded = !expanded },
@@ -231,6 +233,7 @@ fun CategoryScreen(
                             createdItems.add(newItemName to selectedCategory!!)
                             newItemName = ""
                             showNewItemDialog = false
+                            showSuccessDialog = true
                         }
                     },
                     onDismiss = {
@@ -240,10 +243,15 @@ fun CategoryScreen(
                 )
             }
 
-
+            if (showSuccessDialog) {
+                SuccessDialog(onDismiss = {
+                    showSuccessDialog = false
+                })
+            }
         }
     }
 }
+
 
 //@SuppressLint("ViewModelConstructorInComposable")
 //@Preview(showBackground = true)

@@ -23,7 +23,6 @@ fun NewItemDialog(
         containerColor = MaterialTheme.colorScheme.onBackground,
         titleContentColor = MaterialTheme.colorScheme.surface,
         textContentColor = MaterialTheme.colorScheme.surface,
-
         onDismissRequest = onDismiss,
 
         confirmButton = {
@@ -64,6 +63,7 @@ fun NewItemDialog(
         }
     )
 }
+
 
 @Preview(showBackground = true)
 @Composable
