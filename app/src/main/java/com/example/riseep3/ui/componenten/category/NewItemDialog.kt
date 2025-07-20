@@ -27,26 +27,10 @@ fun NewItemDialog(
         onDismissRequest = onDismiss,
 
         confirmButton = {
-            Button(
-                onClick = onConfirm,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                    contentColor = MaterialTheme.colorScheme.onSurface
-                )
-            ) {
-                Text("Create")
-            }
+            AnimatedDialogButton(text = "Create", onClick = onConfirm)
         },
         dismissButton = {
-            Button(
-                onClick = onDismiss,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                    contentColor = MaterialTheme.colorScheme.onSurface
-                )
-            ) {
-                Text("Cancel")
-            }
+            AnimatedDialogButton(text = "Cancel", onClick = onDismiss)
         },
         title = {
             Text(
