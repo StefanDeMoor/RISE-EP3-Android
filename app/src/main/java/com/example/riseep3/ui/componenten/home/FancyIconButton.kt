@@ -1,5 +1,6 @@
 package com.example.riseep3.ui.componenten.home
 
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
@@ -19,13 +20,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun FancyIconButton(
-    icon: ImageVector,
+    @DrawableRes icon: Int,
     contentDescription: String,
     onClick: () -> Unit
 ) {
@@ -62,7 +64,7 @@ fun FancyIconButton(
             modifier = Modifier.fillMaxSize()
         ) {
             Icon(
-                imageVector = icon,
+                painter = painterResource(id = icon),
                 contentDescription = contentDescription,
                 tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
