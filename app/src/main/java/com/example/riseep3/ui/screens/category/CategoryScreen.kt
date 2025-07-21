@@ -1,6 +1,5 @@
 package com.example.riseep3.ui.screens.category
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -22,7 +21,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.riseep3.R
+import com.example.riseep3.ui.componenten.SuccessDialog
 import com.example.riseep3.ui.componenten.ThemeToggleButton
+import com.example.riseep3.ui.componenten.category.NewItemDialog
 import com.example.riseep3.ui.theme.Montagu
 import com.example.riseep3.ui.theme.RiseTheme
 import com.example.riseep3.ui.theme.ThemeViewModel
@@ -42,6 +43,7 @@ fun CategoryScreen(
     var expanded by remember { mutableStateOf(false) }
     var selectedCategory by remember { mutableStateOf<String?>(null) }
     var showNewItemDialog by remember { mutableStateOf(false) }
+    var showSuccessDialog by remember { mutableStateOf(false) }
     var newItemName by remember { mutableStateOf("") }
     val createdItems = remember { mutableStateListOf<Pair<String, String>>() }
 
@@ -93,6 +95,7 @@ fun CategoryScreen(
                 )
             )
 
+            // Dropdown
             ExposedDropdownMenuBox(
                 expanded = expanded,
                 onExpandedChange = { expanded = !expanded },
@@ -221,50 +224,33 @@ fun CategoryScreen(
                 }
             }
 
-            // Dialog
             if (showNewItemDialog) {
-                AlertDialog(
-                    onDismissRequest = {
-                        newItemName = ""
-                        showNewItemDialog = false
-                    },
-                    confirmButton = {
-                        TextButton(onClick = {
-                            if (newItemName.isNotBlank() && selectedCategory != null) {
-                                createdItems.add(newItemName to selectedCategory!!)
-                                newItemName = ""
-                                showNewItemDialog = false
-                            }
-                        }) {
-                            Text("Create")
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(onClick = {
+                NewItemDialog(
+                    itemName = newItemName,
+                    onNameChange = { newItemName = it },
+                    onConfirm = {
+                        if (newItemName.isNotBlank() && selectedCategory != null) {
+                            createdItems.add(newItemName to selectedCategory!!)
                             newItemName = ""
                             showNewItemDialog = false
-                        }) {
-                            Text("Cancel")
+                            showSuccessDialog = true
                         }
                     },
-                    title = { Text("New Entry") },
-                    text = {
-                        OutlinedTextField(
-                            value = newItemName,
-                            onValueChange = { newItemName = it },
-                            label = { Text("Item Name") },
-                            singleLine = true,
-                            modifier = Modifier.fillMaxWidth()
-                        )
+                    onDismiss = {
+                        newItemName = ""
+                        showNewItemDialog = false
                     }
                 )
+            }
+
+            if (showSuccessDialog) {
+                SuccessDialog(onDismiss = {
+                    showSuccessDialog = false
+                })
             }
         }
     }
 }
-
-
-
 
 
 //@SuppressLint("ViewModelConstructorInComposable")

@@ -91,10 +91,10 @@ fun HomeScreen(
             )
 
             val buttons = listOf(
-                Triple(Icons.Default.Create, "Create") { onCreateClick() },
-                Triple(Icons.Default.Face, "Profile") { onProfileClick() },
-                Triple(Icons.Default.ShoppingCart, "Sales") { onSalesClick() },
-                Triple(Icons.Default.Menu, "Products") { onProductsClick() }
+                Triple(R.drawable.plus, "Create") { onCreateClick() },
+                Triple(R.drawable.profile, "Profile") { onProfileClick() },
+                Triple(R.drawable.sales, "Sales") { onSalesClick() },
+                Triple(R.drawable.product, "Products") { onProductsClick() }
             )
 
             if (isLandscape) {
