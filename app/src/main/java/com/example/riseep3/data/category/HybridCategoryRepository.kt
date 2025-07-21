@@ -16,17 +16,30 @@ class HybridCategoryRepository(
     override fun getAllCategories(): Flow<List<CategoryEntity>> = local.getAllCategories().also {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val categories = remote.getAllCategories().first()
+                val remoteCategories = remote.getAllCategories().first()
+                Log.d("HybridCategoryRepo", "Fetched categories from API: $remoteCategories")
 
-                // ✅ Log what you received from the API
-                Log.d("HybridCategoryRepo", "Fetched categories from API: $categories")
+                // Get current local categories
+                val localCategories = local.getAllCategories().first()
 
-                local.insertAll(flowOf(categories))
+                // Determine which categories to delete
+                val remoteIds = remoteCategories.map { it.id }.toSet()
+                val categoriesToDelete = localCategories.filterNot { it.id in remoteIds }
+
+                // Delete missing ones
+                categoriesToDelete.forEach { categoryToDelete ->
+                    Log.d("HybridCategoryRepo", "Deleting local category not in API: $categoryToDelete")
+                    local.delete(categoryToDelete)
+                }
+
+                // Insert or update from remote
+                local.insertAll(flowOf(remoteCategories))
             } catch (e: Exception) {
                 Log.e("HybridCategoryRepo", "Error fetching from API, using cache", e)
             }
         }
     }
+
 
     override fun getCategoryById(id: Int): Flow<CategoryEntity?> = local.getCategoryById(id)
 
