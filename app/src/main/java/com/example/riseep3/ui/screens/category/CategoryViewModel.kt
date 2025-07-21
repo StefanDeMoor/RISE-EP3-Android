@@ -1,5 +1,6 @@
 package com.example.riseep3.ui.screens.category
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -25,17 +26,11 @@ open class CategoryViewModel(
     init {
         viewModelScope.launch {
             repository.getAllCategories().collect { categories ->
+                Log.d("CategoryViewModel", "Loaded categories: $categories")
                 _uiState.update { it.copy(categories = categories) }
-
-                if (categories.none { it.name == "Overview" }) {
-                    val newId = categories.maxOfOrNull { it.id }?.plus(1) ?: 1
-                    val overviewCategory = CategoryEntity(id = newId, name = "Overview")
-                    repository.insertAll(flowOf(listOf(overviewCategory)))
-                }
             }
         }
     }
-
 
     fun onCategoryNameChange(newName: String) {
         _uiState.update { it.copy(newCategoryName = newName) }
