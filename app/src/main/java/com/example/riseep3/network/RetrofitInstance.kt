@@ -23,4 +23,9 @@ object RetrofitInstance {
         retrofit.create(CategoryApiService::class.java)
     }
 
+    val overviewApiService: OverviewApiService by lazy {
+        retrofit.create(OverviewApiService::class.java)
+    }
+
+
 }
