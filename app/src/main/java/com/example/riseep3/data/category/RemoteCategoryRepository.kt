@@ -1,5 +1,7 @@
 package com.example.riseep3.data.category
 
+import com.example.riseep3.domain.category.toDto
+import com.example.riseep3.domain.category.toEntity
 import com.example.riseep3.network.RetrofitInstance
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -7,17 +9,20 @@ import kotlinx.coroutines.flow.flow
 class RemoteCategoryRepository : CategoryRepository {
 
     override fun getAllCategories(): Flow<List<CategoryEntity>> = flow {
-        emit(RetrofitInstance.categoryApiService.getCategories())
+        val response = RetrofitInstance.categoryApiService.getCategories()
+        val categoryEntities = response.`$values`.map { it.toEntity() }
+        emit(categoryEntities)
     }
 
     override fun getCategoryById(id: Int): Flow<CategoryEntity?> = flow {
-        val categories = RetrofitInstance.categoryApiService.getCategories()
-        emit(categories.find { it.id == id })
+        val response = RetrofitInstance.categoryApiService.getCategories()
+        val category = response.`$values`.find { it.id == id }?.toEntity()
+        emit(category)
     }
 
     override suspend fun insertAll(categories: Flow<List<CategoryEntity>>) {
         categories.collect { list ->
-            list.forEach { RetrofitInstance.categoryApiService.addCategory(it) }
+            list.forEach { RetrofitInstance.categoryApiService.addCategory(it.toDto()) }
         }
     }
 
@@ -26,6 +31,6 @@ class RemoteCategoryRepository : CategoryRepository {
     }
 
     override suspend fun update(category: CategoryEntity) {
-        RetrofitInstance.categoryApiService.updateCategory(category.id, category)
+        RetrofitInstance.categoryApiService.updateCategory(category.id, category.toDto())
     }
 }

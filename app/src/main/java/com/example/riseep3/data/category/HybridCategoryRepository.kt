@@ -18,21 +18,15 @@ class HybridCategoryRepository(
             try {
                 val remoteCategories = remote.getAllCategories().first()
                 Log.d("HybridCategoryRepo", "Fetched categories from API: $remoteCategories")
-
-                // Get current local categories
                 val localCategories = local.getAllCategories().first()
-
-                // Determine which categories to delete
                 val remoteIds = remoteCategories.map { it.id }.toSet()
                 val categoriesToDelete = localCategories.filterNot { it.id in remoteIds }
 
-                // Delete missing ones
                 categoriesToDelete.forEach { categoryToDelete ->
                     Log.d("HybridCategoryRepo", "Deleting local category not in API: $categoryToDelete")
                     local.delete(categoryToDelete)
                 }
 
-                // Insert or update from remote
                 local.insertAll(flowOf(remoteCategories))
             } catch (e: Exception) {
                 Log.e("HybridCategoryRepo", "Error fetching from API, using cache", e)

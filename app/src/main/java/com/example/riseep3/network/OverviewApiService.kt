@@ -1,18 +1,19 @@
 package com.example.riseep3.network
 
-import com.example.riseep3.data.overview.OverviewEntity
+import com.example.riseep3.domain.overview.OverviewDto
+import com.example.riseep3.domain.overview.OverviewResponseWrapper
 import retrofit2.http.*
 
 interface OverviewApiService {
-    @GET("api/overviews")
-    suspend fun getOverviews(): List<OverviewEntity>
+    @GET("api/overview")
+    suspend fun getOverviews(): OverviewResponseWrapper
 
-    @POST("api/overviews")
-    suspend fun addOverview(@Body overview: OverviewEntity)
+    @POST("api/overview")
+    suspend fun addOverview(@Body overview: OverviewDto)
 
-    @PUT("api/overviews/{id}")
-    suspend fun updateOverview(@Path("id") id: Int, @Body overview: OverviewEntity)
+    @PUT("api/overview/{id}")
+    suspend fun updateOverview(@Path("id") id: Int, @Body overview: OverviewDto)
 
-    @DELETE("api/overviews/{id}")
+    @DELETE("api/overview/{id}")
     suspend fun deleteOverview(@Path("id") id: Int)
 }

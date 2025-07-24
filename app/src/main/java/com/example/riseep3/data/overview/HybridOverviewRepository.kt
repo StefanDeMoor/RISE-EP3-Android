@@ -9,20 +9,21 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
 class HybridOverviewRepository(
-    private val remote: OverviewRepository,
-    private val local: OverviewRepository
+    private val remote: RemoteOverviewRepository,
+    private val local: OfflineOverviewRepository
 ) : OverviewRepository {
     override fun getAllOverviews(): Flow<List<OverviewEntity>> = local.getAllOverviews().also {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val remoteItems = remote.getAllOverviews().first()
-                val localItems = local.getAllOverviews().first()
+                val remoteOverviews = remote.getAllOverviews().first()
+                Log.d("HybridOverviewRepo", "Fetched overviews from API: $remoteOverviews")
+                val localOverviews = local.getAllOverviews().first()
 
-                val remoteIds = remoteItems.map { it.id }.toSet()
-                val toDelete = localItems.filterNot { it.id in remoteIds }
+                val remoteIds = remoteOverviews.map { it.id }.toSet()
+                val overviewsToDelete = localOverviews.filterNot { it.id in remoteIds }
 
-                toDelete.forEach { local.delete(it) }
-                local.insertAll(flowOf(remoteItems))
+                overviewsToDelete.forEach { local.delete(it) }
+                local.insertAll(flowOf(remoteOverviews))
             } catch (e: Exception) {
                 Log.e("HybridOverviewRepo", "Using cache", e)
             }

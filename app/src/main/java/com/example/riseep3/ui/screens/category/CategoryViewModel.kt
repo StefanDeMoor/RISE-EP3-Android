@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.riseep3.MainApplication
 import com.example.riseep3.data.category.CategoryEntity
 import com.example.riseep3.data.category.CategoryRepository
+import com.example.riseep3.data.overview.OverviewRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,17 +18,29 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 open class CategoryViewModel(
-    private val repository: CategoryRepository
+    private val categoryRepo: CategoryRepository,
+    private val overviewRepo: OverviewRepository
 ) : ViewModel() {
 
     val _uiState = MutableStateFlow(CategoryState())
     open val uiState: StateFlow<CategoryState> = _uiState.asStateFlow()
 
     init {
+        loadCategories()
+    }
+
+    private fun loadCategories() {
         viewModelScope.launch {
-            repository.getAllCategories().collect { categories ->
-                Log.d("CategoryViewModel", "Loaded categories: $categories")
+            categoryRepo.getAllCategories().collect { categories ->
                 _uiState.update { it.copy(categories = categories) }
+            }
+        }
+    }
+
+    fun loadOverviews() {
+        viewModelScope.launch {
+            overviewRepo.getAllOverviews().collect { overviews ->
+                _uiState.update { it.copy(overviews = overviews) }
             }
         }
     }
@@ -42,7 +55,7 @@ open class CategoryViewModel(
             viewModelScope.launch {
                 val newId = _uiState.value.categories.maxOfOrNull { it.id }?.plus(1) ?: 1
                 val newCategory = CategoryEntity(id = newId, name = name)
-                repository.insertAll(flowOf(listOf(newCategory)))
+                categoryRepo.insertAll(flowOf(listOf(newCategory)))
                 _uiState.update {
                     it.copy(newCategoryName = "", isDialogOpen = false)
                 }
@@ -62,7 +75,7 @@ open class CategoryViewModel(
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val app = this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as MainApplication
-                CategoryViewModel(app.container.categoryRepository)
+                CategoryViewModel(app.container.categoryRepository, app.container.overviewRepository)
             }
         }
     }

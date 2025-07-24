@@ -21,7 +21,10 @@ class AppContainer(context: Context) {
     }
     val overviewRepository: OverviewRepository by lazy {
         HybridOverviewRepository(
-            remote = RemoteOverviewRepository(),
+            remote = RemoteOverviewRepository(
+                overviewDao = database.overviewDao(),
+                amountItemDao = database.amountItemDao()
+            ),
             local = OfflineOverviewRepository(database.overviewDao())
         )
     }
