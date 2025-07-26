@@ -1,8 +1,6 @@
 package com.example.riseep3.network
 
-import com.example.riseep3.data.category.CategoryEntity
 import com.example.riseep3.domain.category.CategoryDto
-import com.example.riseep3.domain.category.CategoryResponseWrapper
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Body
@@ -12,7 +10,7 @@ import retrofit2.http.Path
 
 interface CategoryApiService {
     @GET("api/categories")
-    suspend fun getCategories(): CategoryResponseWrapper
+    suspend fun getCategories(): List<CategoryDto>
 
     @POST("api/categories")
     suspend fun addCategory(@Body category: CategoryDto)

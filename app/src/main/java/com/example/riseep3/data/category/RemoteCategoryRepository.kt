@@ -10,13 +10,13 @@ class RemoteCategoryRepository : CategoryRepository {
 
     override fun getAllCategories(): Flow<List<CategoryEntity>> = flow {
         val response = RetrofitInstance.categoryApiService.getCategories()
-        val categoryEntities = response.`$values`.map { it.toEntity() }
+        val categoryEntities = response.map { it.toEntity() }
         emit(categoryEntities)
     }
 
     override fun getCategoryById(id: Int): Flow<CategoryEntity?> = flow {
         val response = RetrofitInstance.categoryApiService.getCategories()
-        val category = response.`$values`.find { it.id == id }?.toEntity()
+        val category = response.find { it.id == id }?.toEntity()
         emit(category)
     }
 

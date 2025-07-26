@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.riseep3.MainApplication
 import com.example.riseep3.data.category.CategoryEntity
 import com.example.riseep3.data.category.CategoryRepository
+import com.example.riseep3.data.overview.OverviewEntity
 import com.example.riseep3.data.overview.OverviewRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,7 +23,7 @@ open class CategoryViewModel(
     private val overviewRepo: OverviewRepository
 ) : ViewModel() {
 
-    val _uiState = MutableStateFlow(CategoryState())
+    private val _uiState = MutableStateFlow(CategoryState())
     open val uiState: StateFlow<CategoryState> = _uiState.asStateFlow()
 
     init {
@@ -45,31 +46,27 @@ open class CategoryViewModel(
         }
     }
 
-    fun onCategoryNameChange(newName: String) {
-        _uiState.update { it.copy(newCategoryName = newName) }
-    }
+    fun addOverview(title: String, categoryName: String) {
+        viewModelScope.launch {
+            val categoryId = _uiState.value.categories
+                .find { it.name == categoryName }
+                ?.id ?: 0
 
-    fun addCategory() {
-        val name = _uiState.value.newCategoryName.trim()
-        if (name.isNotEmpty()) {
-            viewModelScope.launch {
-                val newId = _uiState.value.categories.maxOfOrNull { it.id }?.plus(1) ?: 1
-                val newCategory = CategoryEntity(id = newId, name = name)
-                categoryRepo.insertAll(flowOf(listOf(newCategory)))
-                _uiState.update {
-                    it.copy(newCategoryName = "", isDialogOpen = false)
-                }
-            }
+            val newId = (_uiState.value.overviews.maxOfOrNull { it.id } ?: 0) + 1
+
+            val newOverview = OverviewEntity(
+                id = newId,
+                title = title,
+                categoryId = categoryId,
+                totalIncome = 0.0,
+                result = 0.0
+            )
+
+            overviewRepo.insertAll(flowOf(listOf(newOverview)))
+            loadOverviews()
         }
     }
 
-    fun openDialog() {
-        _uiState.update { it.copy(isDialogOpen = true) }
-    }
-
-    fun closeDialog() {
-        _uiState.update { it.copy(isDialogOpen = false, newCategoryName = "") }
-    }
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {

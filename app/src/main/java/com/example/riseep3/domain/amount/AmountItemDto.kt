@@ -6,5 +6,5 @@ data class AmountItemDto(
     val amount: Double,
     val overviewId: Int,
     val parentAmountItemId: Int?,
-    val subAmounts: AmountWrapper?
+    val subAmounts: List<AmountItemDto>
 )

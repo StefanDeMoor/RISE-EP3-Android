@@ -1,14 +1,12 @@
-{
-    "$id": "1",
-    "$values": [
-        {
-            "$id": "2",
-            "id": 1,
-            "name": "Overview",
-            "overviews": {
-                "$id": "3",
-                "$values": []
-            }
-        }
-    ]
-}
+[
+    {
+        "id": 1,
+        "name": "Overview",
+        "overviews": []
+    },
+    {
+        "id": 12,
+        "name": "Test Category",
+        "overviews": []
+    }
+]

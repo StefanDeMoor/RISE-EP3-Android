@@ -1,6 +1,6 @@
 package com.example.riseep3.domain.overview
 
-import com.example.riseep3.domain.amount.AmountWrapper
+import com.example.riseep3.domain.amount.AmountItemDto
 
 data class OverviewDto(
     val id: Int,
@@ -8,5 +8,5 @@ data class OverviewDto(
     val categoryId: Int,
     val totalIncome: Double,
     val result: Double,
-    val amounts: AmountWrapper? = null
+    val amounts: List<AmountItemDto>
 )

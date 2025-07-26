@@ -1,64 +1,68 @@
-{
-    "$id": "1",
-    "$values": [
-        {
-            "$id": "2",
-            "id": 1,
-            "title": "July Overview",
-            "categoryId": 1,
-            "category": null,
-            "totalIncome": 5000,
-            "result": 5000,
-            "amounts": {
-                "$id": "3",
-                "$values": [
+[
+    {
+        "id": 1,
+        "title": "July Overview",
+        "categoryId": 1,
+        "category": null,
+        "totalIncome": 5000,
+        "result": 5000,
+        "amounts": [
+            {
+                "id": 1,
+                "name": "Groceries",
+                "amount": 300,
+                "overviewId": 1,
+                "parentAmountItemId": null,
+                "parentAmountItem": null,
+                "subAmounts": [
                     {
-                        "$id": "4",
-                        "id": 1,
-                        "name": "Groceries",
-                        "amount": 300,
+                        "id": 3,
+                        "name": "Fruits",
+                        "amount": 50,
                         "overviewId": 1,
-                        "parentAmountItemId": null,
+                        "parentAmountItemId": 1,
                         "parentAmountItem": null,
-                        "subAmounts": {
-                            "$id": "5",
-                            "$values": [
-                                {
-                                    "$id": "6",
-                                    "id": 3,
-                                    "name": "Fruits",
-                                    "amount": 50,
-                                    "overviewId": 1,
-                                    "parentAmountItemId": 1,
-                                    "parentAmountItem": {
-                                        "$ref": "4"
-                                    },
-                                    "subAmounts": {
-                                        "$id": "7",
-                                        "$values": []
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    {
-                        "$ref": "6"
-                    },
-                    {
-                        "$id": "8",
-                        "id": 2,
-                        "name": "Rent",
-                        "amount": 1500,
-                        "overviewId": 1,
-                        "parentAmountItemId": null,
-                        "parentAmountItem": null,
-                        "subAmounts": {
-                            "$id": "9",
-                            "$values": []
-                        }
+                        "subAmounts": []
                     }
                 ]
+            },
+            {
+                "id": 3,
+                "name": "Fruits",
+                "amount": 50,
+                "overviewId": 1,
+                "parentAmountItemId": 1,
+                "parentAmountItem": {
+                    "id": 1,
+                    "name": "Groceries",
+                    "amount": 300,
+                    "overviewId": 1,
+                    "parentAmountItemId": null,
+                    "parentAmountItem": null,
+                    "subAmounts": [
+                        null
+                    ]
+                },
+                "subAmounts": []
+            },
+            {
+                "id": 2,
+                "name": "Rent",
+                "amount": 1500,
+                "overviewId": 1,
+                "parentAmountItemId": null,
+                "parentAmountItem": null,
+                "subAmounts": []
             }
-        }
-    ]
-}
+        ]
+    },
+    {
+        "id": 2,
+        "title": "August Overview",
+        "categoryId": 1,
+        "category": null,
+        "totalIncome": 5100,
+        "result": 5100,
+        "amounts": []
+    }
+]

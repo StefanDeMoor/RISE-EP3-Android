@@ -21,6 +21,6 @@ fun AmountItemDto.toEntity(): AmountItemEntity = AmountItemEntity(
 )
 
 fun AmountItemDto.flatten(): List<AmountItemDto> {
-    return listOf(this) + (subAmounts?.`$values`?.flatMap { it.flatten() } ?: emptyList())
+    return listOf(this) + (subAmounts.flatMap { it.flatten() } )
 }
 

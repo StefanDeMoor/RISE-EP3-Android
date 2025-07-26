@@ -226,7 +226,9 @@ fun CategoryScreen(
                     onNameChange = { newItemName = it },
                     onConfirm = {
                         if (newItemName.isNotBlank() && selectedCategory != null) {
-                            createdItems.add(newItemName to selectedCategory!!)
+                            if (selectedCategory.equals("Overview", ignoreCase = true)) {
+                                viewModel.addOverview(newItemName, selectedCategory!!)
+                            }
                             newItemName = ""
                             showNewItemDialog = false
                             showSuccessDialog = true
