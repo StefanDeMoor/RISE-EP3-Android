@@ -9,6 +9,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -25,7 +26,6 @@ import com.example.riseep3.ui.componenten.SuccessDialog
 import com.example.riseep3.ui.componenten.ThemeToggleButton
 import com.example.riseep3.ui.componenten.category.NewItemDialog
 import com.example.riseep3.ui.theme.Montagu
-import com.example.riseep3.ui.theme.RiseTheme
 import com.example.riseep3.ui.theme.ThemeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -160,65 +160,61 @@ fun CategoryScreen(
                             onClick = {
                                 selectedCategory = category.name
                                 expanded = false
-                                showNewItemDialog = true
+
+                                if (category.name.equals("Overview", ignoreCase = true)) {
+                                    viewModel.loadOverviews()
+                                    showNewItemDialog = false
+                                } else {
+                                    showNewItemDialog = true
+                                }
                             }
                         )
                     }
                 }
             }
 
-            // Created items
             Column(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                createdItems.forEach { (itemName, categoryName) ->
-                    var clicked by remember { mutableStateOf(false) }
-                    val scale by animateFloatAsState(
-                        targetValue = if (clicked) 0.9f else 1f,
-                        animationSpec = tween(durationMillis = 150),
-                        finishedListener = {
-                            if (clicked) {
-                                onCategoryClick(categoryName)
-                                clicked = false
-                            }
-                        },
-                        label = "cardScale"
-                    )
-
-                    Card(
-                        onClick = {
-                            if (!clicked) clicked = true
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .scale(scale),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.onBackground
-                        ),
-                        shape = MaterialTheme.shapes.medium,
-                        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+                if (selectedCategory.equals("Overview", ignoreCase = true)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                text = itemName,
-                                style = MaterialTheme.typography.titleMedium.copy(
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.background
-                                )
-                            )
+                        Text(
+                            text = "Overviews",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
 
+                        IconButton(
+                            onClick = { showNewItemDialog = true },
+                            modifier = Modifier.size(24.dp)
+                        ) {
                             Icon(
-                                painter = painterResource(id = R.drawable.overview),
-                                contentDescription = "Overview Icon",
-                                tint = MaterialTheme.colorScheme.background
+                                imageVector = Icons.Default.Add,
+                                contentDescription = "Add Overview",
+                                tint = MaterialTheme.colorScheme.onSurface
                             )
+                        }
+                    }
+
+                    state.overviews.forEach { overview ->
+                        OverviewCard(title = overview.title, onClick = { onCategoryClick("Overview") })
+                    }
+
+                    createdItems.filter { it.second.equals("Overview", ignoreCase = true) }
+                        .forEach { (itemName, _) ->
+                            OverviewCard(title = itemName, onClick = { onCategoryClick("Overview") })
+                        }
+
+                } else {
+                    createdItems.forEach { (itemName, categoryName) ->
+                        if (categoryName != "Overview") {
+                            OverviewCard(title = itemName, onClick = { onCategoryClick(categoryName) })
                         }
                     }
                 }
@@ -230,7 +226,9 @@ fun CategoryScreen(
                     onNameChange = { newItemName = it },
                     onConfirm = {
                         if (newItemName.isNotBlank() && selectedCategory != null) {
-                            createdItems.add(newItemName to selectedCategory!!)
+                            if (selectedCategory.equals("Overview", ignoreCase = true)) {
+                                viewModel.addOverview(newItemName, selectedCategory!!)
+                            }
                             newItemName = ""
                             showNewItemDialog = false
                             showSuccessDialog = true
@@ -251,6 +249,59 @@ fun CategoryScreen(
         }
     }
 }
+
+@Composable
+fun OverviewCard(title: String, onClick: () -> Unit) {
+    var clicked by remember { mutableStateOf(false) }
+    val scale by animateFloatAsState(
+        targetValue = if (clicked) 0.9f else 1f,
+        animationSpec = tween(durationMillis = 150),
+        finishedListener = {
+            if (clicked) {
+                onClick()
+                clicked = false
+            }
+        },
+        label = "cardScale"
+    )
+
+    Card(
+        onClick = {
+            if (!clicked) clicked = true
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .scale(scale),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.onBackground
+        ),
+        shape = MaterialTheme.shapes.medium,
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.background
+                )
+            )
+
+            Icon(
+                painter = painterResource(id = R.drawable.overview),
+                contentDescription = "Overview Icon",
+                tint = MaterialTheme.colorScheme.background
+            )
+        }
+    }
+}
+
 
 
 //@SuppressLint("ViewModelConstructorInComposable")
