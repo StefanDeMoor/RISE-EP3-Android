@@ -87,7 +87,7 @@ fun OverviewScreen(
                         )
                     }
 
-                    ResultText(result = state.income.toIntOrNull() ?: 0)
+                    ResultOutlinedField(result = state.income.toIntOrNull() ?: 0)
                 }
             }
         }
