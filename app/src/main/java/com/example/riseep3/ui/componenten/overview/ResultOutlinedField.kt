@@ -1,4 +1,4 @@
-package com.example.riseep3.ui.screens.overview
+package com.example.riseep3.ui.componenten.overview
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme

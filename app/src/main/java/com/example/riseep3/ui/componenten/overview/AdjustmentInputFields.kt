@@ -1,4 +1,4 @@
-package com.example.riseep3.ui.screens.overview
+package com.example.riseep3.ui.componenten.overview
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer

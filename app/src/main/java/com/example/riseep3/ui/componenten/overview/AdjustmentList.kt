@@ -1,4 +1,4 @@
-package com.example.riseep3.ui.screens.overview
+package com.example.riseep3.ui.componenten.overview
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -49,7 +49,7 @@ fun AdjustmentList(
             ) {
                 Text(name, modifier = Modifier.weight(1f))
                 Text(
-                    text = "${if (value >= 0) "+" else "-"}€${kotlin.math.abs(value)}",
+                    text = "${if (value <= 0) "+" else "-"}€${kotlin.math.abs(value)}",
                     modifier = Modifier.weight(1f)
                 )
                 Row(modifier = Modifier.width(64.dp)) {

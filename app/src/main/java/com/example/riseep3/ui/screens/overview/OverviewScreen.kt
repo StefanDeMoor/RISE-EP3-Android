@@ -13,6 +13,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.riseep3.ui.componenten.ScreenTitle
 import com.example.riseep3.ui.componenten.TopBar
+import com.example.riseep3.ui.componenten.overview.AdjustmentButtons
+import com.example.riseep3.ui.componenten.overview.AdjustmentInputFields
+import com.example.riseep3.ui.componenten.overview.AdjustmentList
+import com.example.riseep3.ui.componenten.overview.IncomeInputField
+import com.example.riseep3.ui.componenten.overview.IncomeSummaryCard
+import com.example.riseep3.ui.componenten.overview.ResultOutlinedField
 import com.example.riseep3.ui.theme.ThemeViewModel
 
 @Composable
@@ -87,7 +93,7 @@ fun OverviewScreen(
                         )
                     }
 
-                    ResultOutlinedField(result = state.income.toIntOrNull() ?: 0)
+                    ResultOutlinedField(result = state.baseIncome - state.adjustments.sumOf { it.second })
                 }
             }
         }
