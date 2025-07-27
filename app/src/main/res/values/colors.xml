@@ -10,4 +10,6 @@
     <color name="gold">#d4af37</color>
     <color name="fancy_blue">#25466c</color>
     <color name="dark_gray">#47536b</color>
+    <color name="light_screen_add">#a1cd74</color>
+    <color name="light_red_substract">#ff4747</color>
 </resources>

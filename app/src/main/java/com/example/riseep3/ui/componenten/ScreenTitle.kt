@@ -10,9 +10,11 @@ import com.example.riseep3.R
 import com.example.riseep3.ui.theme.Montagu
 
 @Composable
-fun ScreenTitle() {
+fun ScreenTitle(
+    title: String
+) {
     Text(
-        text = "Categories",
+        text = title,
         style = MaterialTheme.typography.headlineLarge.copy(
             fontFamily = Montagu,
             fontSize = 32.sp,

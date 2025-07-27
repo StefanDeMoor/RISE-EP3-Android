@@ -57,7 +57,7 @@ fun CategoryScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            ScreenTitle()
+            ScreenTitle("Categories")
 
             CategoryDropdownMenu(
                 expanded = expanded,
