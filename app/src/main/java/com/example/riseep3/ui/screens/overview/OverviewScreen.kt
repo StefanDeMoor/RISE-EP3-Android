@@ -23,6 +23,7 @@ import com.example.riseep3.ui.theme.ThemeViewModel
 
 @Composable
 fun OverviewScreen(
+    title: String,
     modifier: Modifier = Modifier,
     viewModel: OverviewViewModel = viewModel(),
     themeViewModel: ThemeViewModel,
@@ -51,7 +52,7 @@ fun OverviewScreen(
             verticalArrangement = Arrangement.spacedBy(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ScreenTitle("Overviews")
+            ScreenTitle(title)
 
             if (!state.isIncomeSet) {
                 IncomeInputField(

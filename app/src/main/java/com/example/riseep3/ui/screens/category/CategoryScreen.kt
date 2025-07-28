@@ -91,7 +91,7 @@ fun CategoryScreen(
                 } else {
                     createdItems.forEach { (itemName, categoryName) ->
                         if (!categoryName.equals("Overview", ignoreCase = true)) {
-                            OverviewCard(title = itemName, onClick = { onCategoryClick(categoryName) })
+                            OverviewCard(title = itemName, onClick = { onCategoryClick(itemName) })
                         }
                     }
                 }

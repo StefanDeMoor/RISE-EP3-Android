@@ -1,13 +1,11 @@
 package com.example.riseep3.ui.screens.category
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.riseep3.MainApplication
-import com.example.riseep3.data.category.CategoryEntity
 import com.example.riseep3.data.category.CategoryRepository
 import com.example.riseep3.data.overview.OverviewEntity
 import com.example.riseep3.data.overview.OverviewRepository
