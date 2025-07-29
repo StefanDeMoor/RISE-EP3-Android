@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun AdjustmentList(
-    adjustments: List<Pair<String, Int>>,
+    adjustments: List<Pair<String, Double>>,
     onEdit: (Int) -> Unit,
     onDelete: (Int) -> Unit
 ) {

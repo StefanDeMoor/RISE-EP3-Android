@@ -26,8 +26,8 @@ import androidx.compose.ui.unit.dp
 fun AdjustmentInputFields(
     amountName: String,
     onAmountNameChange: (String) -> Unit,
-    amountInput: String,
-    onAmountChange: (String) -> Unit,
+    amountInput: Double,
+    onAmountChange: (Double) -> Unit,
     onConfirm: () -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -59,8 +59,13 @@ fun AdjustmentInputFields(
         )
         Spacer(modifier = Modifier.width(8.dp))
         TextField(
-            value = amountInput,
-            onValueChange = onAmountChange,
+            value = amountInput.toString(),
+            onValueChange = {
+                val parsed = it.toDoubleOrNull()
+                if (parsed != null) {
+                    onAmountChange(parsed)
+                }
+            },
             placeholder = { Text("€") },
             singleLine = true,
             modifier = Modifier.weight(1f),

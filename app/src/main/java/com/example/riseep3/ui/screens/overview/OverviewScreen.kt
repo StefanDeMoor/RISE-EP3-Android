@@ -54,22 +54,26 @@ fun OverviewScreen(
         ) {
             ScreenTitle(title)
 
-            if (!state.isIncomeSet) {
-                IncomeInputField(
-                    income = state.income,
-                    onIncomeChange = viewModel::onIncomeChange,
-                    onConfirm = viewModel::onIncomeConfirm
-                )
+            if (!state.isTotalIncomeSet) {
+                state.totalIncome?.let {
+                    IncomeInputField(
+                        totalIncome = it,
+                        onTotalIncomeChange = viewModel::onIncomeChange,
+                        onConfirm = viewModel::onIncomeConfirm
+                    )
+                }
             } else {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    IncomeSummaryCard(
-                        income = state.income,
-                        onEdit = viewModel::onIncomeEditStart,
-                        onDelete = viewModel::onIncomeDelete
-                    )
+                    state.totalIncome?.let {
+                        IncomeSummaryCard(
+                            totalIncome = it,
+                            onEdit = viewModel::onIncomeEditStart,
+                            onDelete = viewModel::onIncomeDelete
+                        )
+                    }
 
                     if (!state.isAdjusting) {
                         AdjustmentButtons(
@@ -94,7 +98,7 @@ fun OverviewScreen(
                         )
                     }
 
-                    ResultOutlinedField(result = state.baseIncome - state.adjustments.sumOf { it.second })
+                    ResultOutlinedField(result = state.result - state.adjustments.sumOf { it.second })
                 }
             }
         }

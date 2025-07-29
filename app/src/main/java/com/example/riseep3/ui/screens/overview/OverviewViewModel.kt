@@ -5,30 +5,49 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.riseep3.MainApplication
 import com.example.riseep3.data.amount.AmountItemCategory
-import com.example.riseep3.ui.screens.category.CategoryViewModel
+import com.example.riseep3.data.overview.OverviewRepository
+import kotlinx.coroutines.launch
 
 class OverviewViewModel(
-    private val amountItemRepo: AmountItemCategory
+    private val amountItemRepo: AmountItemCategory,
+    private val overviewRepo: OverviewRepository
 ) : ViewModel() {
     var uiState by mutableStateOf(OverviewState())
         private set
 
-    fun onIncomeChange(newIncome: String) {
-        if (!uiState.isIncomeSet) {
-            uiState = uiState.copy(income = newIncome)
+    fun loadOverviewById(id: Int) {
+        viewModelScope.launch {
+            overviewRepo.getOverviewById(id).collect { overview ->
+                val isTotalIncomeSet = overview?.totalIncome != null
+                uiState = uiState.copy(
+                    totalIncome = overview?.totalIncome ?: 0.0,
+                    isTotalIncomeSet = isTotalIncomeSet,
+                    result = overview?.totalIncome ?: 0.0
+                )
+            }
+        }
+    }
+
+    fun onIncomeChange(newTotalIncome: Double) {
+        if (!uiState.isTotalIncomeSet) {
+            uiState = uiState.copy(totalIncome = newTotalIncome)
         }
     }
 
     fun onIncomeConfirm() {
-        val incomeValue = uiState.income.toIntOrNull()
-        if (incomeValue != null) {
+        val totalIncomeValue = uiState.totalIncome
+        if (totalIncomeValue != null) {
+//            viewModelScope.launch {
+//                overviewRepo.updateTotalIncome(incomeValue)
+//            }
             uiState = uiState.copy(
-                isIncomeSet = true,
-                baseIncome = incomeValue
+                isTotalIncomeSet = true,
+                result = totalIncomeValue
             )
         }
     }
@@ -38,13 +57,13 @@ class OverviewViewModel(
         uiState = uiState.copy(
             isAdjusting = true,
             isAddition = isAddition,
-            amountInput = "",
+            amountInput = 0.0,
             amountName = "",
             editIndex = null
         )
     }
 
-    fun onAmountChange(newAmount: String) {
+    fun onAmountChange(newAmount: Double) {
         uiState = uiState.copy(amountInput = newAmount)
     }
 
@@ -53,7 +72,7 @@ class OverviewViewModel(
     }
 
     fun onAmountConfirm() {
-        val amount = uiState.amountInput.toIntOrNull() ?: return
+        val amount = uiState.amountInput
         val signedAmount = if (uiState.isAddition == true) -amount else amount
 
         val updatedAdjustments = uiState.adjustments.toMutableList()
@@ -65,7 +84,7 @@ class OverviewViewModel(
         }
 
         val totalAdjustments = updatedAdjustments.sumOf { it.second }
-        if (totalAdjustments > uiState.baseIncome) {
+        if (totalAdjustments > uiState.result) {
             return
         }
 
@@ -73,7 +92,7 @@ class OverviewViewModel(
             adjustments = updatedAdjustments,
             isAdjusting = false,
             isAddition = null,
-            amountInput = "",
+            amountInput = 0.0,
             amountName = "",
             editIndex = null
         )
@@ -85,7 +104,7 @@ class OverviewViewModel(
         uiState = uiState.copy(
             isAdjusting = true,
             isAddition = value >= 0,
-            amountInput = kotlin.math.abs(value).toString(),
+            amountInput = value,
             amountName = name,
             editIndex = index
         )
@@ -102,14 +121,14 @@ class OverviewViewModel(
 
     fun onIncomeEditStart() {
         uiState = uiState.copy(
-            isIncomeSet = false
+            isTotalIncomeSet = false
         )
     }
 
     fun onIncomeDelete() {
         uiState = uiState.copy(
-            income = "",
-            isIncomeSet = false,
+            totalIncome = 0.0,
+            isTotalIncomeSet = false,
             adjustments = emptyList()
         )
     }
@@ -118,7 +137,7 @@ class OverviewViewModel(
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val app = this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as MainApplication
-                OverviewViewModel(app.container.amountItemRepository)
+                OverviewViewModel(app.container.amountItemRepository, app.container.overviewRepository)
             }
         }
     }

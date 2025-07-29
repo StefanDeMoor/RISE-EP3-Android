@@ -14,4 +14,12 @@ class RemoteAmountItemRepository : AmountItemCategory {
         val entities = response.map { it.toEntity() }
         emit(entities)
     }
+
+    override suspend fun insertAll(amountItems: Flow<List<AmountItemEntity>>) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun delete(amountItem: AmountItemEntity) {
+        TODO("Not yet implemented")
+    }
 }

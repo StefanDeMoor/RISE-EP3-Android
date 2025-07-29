@@ -19,6 +19,6 @@ data class OverviewEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val title: String,
     val categoryId: Int,
-    val totalIncome: Double,
+    val totalIncome: Double?,
     val result: Double
 )

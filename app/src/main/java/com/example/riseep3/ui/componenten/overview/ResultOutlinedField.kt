@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun ResultOutlinedField(
-    result: Int
+    result: Double
 ) {
     OutlinedTextField(
         value = "€$result",

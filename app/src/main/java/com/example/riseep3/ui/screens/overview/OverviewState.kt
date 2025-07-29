@@ -1,14 +1,14 @@
 package com.example.riseep3.ui.screens.overview
 
 data class OverviewState(
-    val baseIncome: Int = 0,
-    val income: String = "",
-    val isIncomeSet: Boolean = false,
+    val result: Double = 0.0,
+    val totalIncome: Double? = null,
+    val isTotalIncomeSet: Boolean = false,
     val isAdjusting: Boolean = false,
     val isAddition: Boolean? = null,
-    val amountInput: String = "",
+    val amountInput: Double = 0.0,
     val amountName: String = "",
-    val adjustments: List<Pair<String, Int>> = emptyList(),
+    val adjustments: List<Pair<String, Double>> = emptyList(),
     val editIndex: Int? = null
 )
 

@@ -30,4 +30,12 @@ class HybridAmountItemRepository(
            }
        }
     }
+
+    override suspend fun insertAll(amountItems: Flow<List<AmountItemEntity>>) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun delete(amountItem: AmountItemEntity) {
+        TODO("Not yet implemented")
+    }
 }

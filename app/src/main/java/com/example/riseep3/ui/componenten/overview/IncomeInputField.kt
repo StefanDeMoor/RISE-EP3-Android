@@ -14,15 +14,20 @@ import androidx.compose.ui.text.input.ImeAction
 
 @Composable
 fun IncomeInputField(
-    income: String,
-    onIncomeChange: (String) -> Unit,
+    totalIncome: Double,
+    onTotalIncomeChange: (Double) -> Unit,
     onConfirm: () -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
     OutlinedTextField(
-        value = income,
-        onValueChange = onIncomeChange,
+        value = totalIncome.toString(),
+        onValueChange = {
+            val parsed = it.toDoubleOrNull()
+            if (parsed != null) {
+                onTotalIncomeChange(parsed)
+            }
+        },
         label = { Text("Totaal Inkomen") },
         singleLine = true,
         modifier = Modifier.fillMaxWidth(),
