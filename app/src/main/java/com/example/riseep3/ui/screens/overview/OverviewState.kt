@@ -2,7 +2,7 @@ package com.example.riseep3.ui.screens.overview
 
 data class OverviewState(
     val result: Double = 0.0,
-    val totalIncome: Double? = null,
+    val totalIncome: Double = 0.0,
     val isTotalIncomeSet: Boolean = false,
     val isAdjusting: Boolean = false,
     val isAddition: Boolean? = null,

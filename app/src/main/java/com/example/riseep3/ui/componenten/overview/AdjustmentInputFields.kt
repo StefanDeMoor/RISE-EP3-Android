@@ -16,6 +16,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -31,6 +33,9 @@ fun AdjustmentInputFields(
     onConfirm: () -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
+    val inputState = remember(amountInput) {
+        mutableStateOf(if (amountInput == 0.0) "" else amountInput.toString())
+    }
 
     Row(
         modifier = Modifier
@@ -59,12 +64,10 @@ fun AdjustmentInputFields(
         )
         Spacer(modifier = Modifier.width(8.dp))
         TextField(
-            value = amountInput.toString(),
+            value = inputState.value,
             onValueChange = {
-                val parsed = it.toDoubleOrNull()
-                if (parsed != null) {
-                    onAmountChange(parsed)
-                }
+                inputState.value = it
+                it.toDoubleOrNull()?.let { parsed -> onAmountChange(parsed) }
             },
             placeholder = { Text("€") },
             singleLine = true,
@@ -95,3 +98,4 @@ fun AdjustmentInputFields(
         }
     }
 }
+

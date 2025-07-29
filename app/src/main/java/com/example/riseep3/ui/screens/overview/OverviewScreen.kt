@@ -16,16 +16,16 @@ import com.example.riseep3.ui.componenten.TopBar
 import com.example.riseep3.ui.componenten.overview.AdjustmentButtons
 import com.example.riseep3.ui.componenten.overview.AdjustmentInputFields
 import com.example.riseep3.ui.componenten.overview.AdjustmentList
-import com.example.riseep3.ui.componenten.overview.IncomeInputField
 import com.example.riseep3.ui.componenten.overview.IncomeSummaryCard
 import com.example.riseep3.ui.componenten.overview.ResultOutlinedField
+import com.example.riseep3.ui.componenten.overview.TotalIncomeInputField
 import com.example.riseep3.ui.theme.ThemeViewModel
 
 @Composable
 fun OverviewScreen(
     title: String,
     modifier: Modifier = Modifier,
-    viewModel: OverviewViewModel = viewModel(),
+    viewModel: OverviewViewModel = viewModel(factory = OverviewViewModel.Factory),
     themeViewModel: ThemeViewModel,
     onNavigateBack: () -> Unit = {}
 ) {
@@ -55,25 +55,22 @@ fun OverviewScreen(
             ScreenTitle(title)
 
             if (!state.isTotalIncomeSet) {
-                state.totalIncome?.let {
-                    IncomeInputField(
-                        totalIncome = it,
-                        onTotalIncomeChange = viewModel::onIncomeChange,
-                        onConfirm = viewModel::onIncomeConfirm
-                    )
-                }
-            } else {
+                TotalIncomeInputField(
+                    totalIncome = state.totalIncome,
+                    onTotalIncomeChange = viewModel::onIncomeChange,
+                    onConfirm = viewModel::onIncomeConfirm
+                )
+            }
+            else {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    state.totalIncome?.let {
-                        IncomeSummaryCard(
-                            totalIncome = it,
-                            onEdit = viewModel::onIncomeEditStart,
-                            onDelete = viewModel::onIncomeDelete
-                        )
-                    }
+                    IncomeSummaryCard(
+                        totalIncome = state.totalIncome,
+                        onEdit = viewModel::onIncomeEditStart,
+                        onDelete = viewModel::onIncomeDelete
+                    )
 
                     if (!state.isAdjusting) {
                         AdjustmentButtons(
