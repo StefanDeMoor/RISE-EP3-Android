@@ -6,21 +6,12 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface AmountItemDao {
 
+    @Query("SELECT * FROM amount_items ORDER BY name ASC")
+    fun getAllAmountItems(): Flow<List<AmountItemEntity>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(amountItems: List<AmountItemEntity>)
 
-    @Update
-    suspend fun update(amountItem: AmountItemEntity)
-
     @Delete
     suspend fun delete(amountItem: AmountItemEntity)
-
-    @Query("SELECT * FROM amount_items WHERE id = :id")
-    fun getAmountItemById(id: Int): Flow<AmountItemEntity?>
-
-    @Query("SELECT * FROM amount_items WHERE overviewId = :overviewId")
-    fun getAmountsByOverviewId(overviewId: Int): Flow<List<AmountItemEntity>>
-
-    @Query("DELETE FROM amount_items")
-    suspend fun clearAll()
 }

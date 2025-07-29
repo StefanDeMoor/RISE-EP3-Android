@@ -4,8 +4,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.riseep3.MainApplication
+import com.example.riseep3.data.amount.AmountItemCategory
+import com.example.riseep3.ui.screens.category.CategoryViewModel
 
-class OverviewViewModel : ViewModel() {
+class OverviewViewModel(
+    private val amountItemRepo: AmountItemCategory
+) : ViewModel() {
     var uiState by mutableStateOf(OverviewState())
         private set
 
@@ -106,5 +114,13 @@ class OverviewViewModel : ViewModel() {
         )
     }
 
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val app = this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as MainApplication
+                OverviewViewModel(app.container.amountItemRepository)
+            }
+        }
+    }
 }
 
