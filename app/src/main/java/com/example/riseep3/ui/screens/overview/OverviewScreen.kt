@@ -17,9 +17,9 @@ import com.example.riseep3.ui.componenten.TopBar
 import com.example.riseep3.ui.componenten.overview.AdjustmentButtons
 import com.example.riseep3.ui.componenten.overview.AdjustmentInputFields
 import com.example.riseep3.ui.componenten.overview.AdjustmentList
-import com.example.riseep3.ui.componenten.overview.IncomeSummaryCard
 import com.example.riseep3.ui.componenten.overview.ResultOutlinedField
 import com.example.riseep3.ui.componenten.overview.TotalIncomeInputField
+import com.example.riseep3.ui.componenten.overview.TotalIncomeSummaryCard
 import com.example.riseep3.ui.theme.ThemeViewModel
 
 @Composable
@@ -71,9 +71,9 @@ fun OverviewScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    IncomeSummaryCard(
+                    TotalIncomeSummaryCard(
                         totalIncome = state.totalIncome,
-                        onEdit = viewModel::onIncomeEditStart,
+                        onEdit = viewModel::onTotalIncomeEditStart,
                         onDelete = viewModel::onIncomeDelete
                     )
 

@@ -2,6 +2,7 @@ package com.example.riseep3.network
 
 import com.example.riseep3.domain.overview.OverviewDto
 import com.example.riseep3.domain.overview.OverviewRequestWrapper
+import retrofit2.Response
 import retrofit2.http.*
 
 interface OverviewApiService {
@@ -14,8 +15,8 @@ interface OverviewApiService {
     @PUT("api/overview/{id}")
     suspend fun updateOverview(@Path("id") id: Int, @Body overviewWrapper: OverviewRequestWrapper)
 
-    @PUT("api/overview/{id}/totalincome")
-    suspend fun updateTotalIncome(@Path("id") id: Int, @Body newTotalIncome: Double)
+    @PUT("api/overview/{id}/totalIncome")
+    suspend fun updateTotalIncome(@Path("id") id: Int, @Body newTotalIncome: Double): Response<Unit>
 
     @DELETE("api/overview/{id}")
     suspend fun deleteOverview(@Path("id") id: Int)

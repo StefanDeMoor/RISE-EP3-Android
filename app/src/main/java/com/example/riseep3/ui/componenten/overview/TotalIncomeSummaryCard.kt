@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun IncomeSummaryCard(
+fun TotalIncomeSummaryCard(
     totalIncome: Double,
     onEdit: () -> Unit,
     onDelete: () -> Unit

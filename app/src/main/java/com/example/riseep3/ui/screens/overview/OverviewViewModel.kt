@@ -123,7 +123,7 @@ class OverviewViewModel(
     }
 
 
-    fun onIncomeEditStart() {
+    fun onTotalIncomeEditStart() {
         uiState = uiState.copy(
             isTotalIncomeSet = false
         )

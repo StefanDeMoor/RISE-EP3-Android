@@ -43,8 +43,17 @@ class HybridOverviewRepository(
     }
 
     override suspend fun updateTotalIncome(id: Int, newTotalIncome: Double) {
-        TODO("Not yet implemented")
+        // 1. Update remote first
+        remote.updateTotalIncome(id, newTotalIncome)
+
+        // 2. Update local cache: get current overview, update the field, save
+        val overview = local.getOverviewById(id).first()
+        if (overview != null) {
+            val updatedOverview = overview.copy(totalIncome = newTotalIncome)
+            local.update(updatedOverview)
+        }
     }
+
 
     override suspend fun delete(overview: OverviewEntity) {
         remote.delete(overview)
