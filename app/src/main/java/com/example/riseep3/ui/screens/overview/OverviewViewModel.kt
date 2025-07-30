@@ -20,15 +20,20 @@ class OverviewViewModel(
     var uiState by mutableStateOf(OverviewState())
         private set
 
+    private var currentOverviewId: Int = -1
+
     fun loadOverviewById(id: Int) {
         viewModelScope.launch {
+            currentOverviewId = id
             overviewRepo.getOverviewById(id).collect { overview ->
                 val isTotalIncomeSet = overview?.totalIncome != null
-                uiState = uiState.copy(
-                    totalIncome = overview?.totalIncome ?: 0.0,
-                    isTotalIncomeSet = isTotalIncomeSet,
-                    result = overview?.totalIncome ?: 0.0
-                )
+                if (overview != null) {
+                    uiState = uiState.copy(
+                        totalIncome = overview.totalIncome ?: 0.0,
+                        isTotalIncomeSet = isTotalIncomeSet,
+                        overviewTitle = overview.title
+                    )
+                }
             }
         }
     }
@@ -41,17 +46,16 @@ class OverviewViewModel(
 
     fun onIncomeConfirm() {
         val totalIncomeValue = uiState.totalIncome
-        if (totalIncomeValue != null) {
-//            viewModelScope.launch {
-//                overviewRepo.updateTotalIncome(incomeValue)
-//            }
-            uiState = uiState.copy(
-                isTotalIncomeSet = true,
-                result = totalIncomeValue
-            )
+        viewModelScope.launch {
+            if (currentOverviewId != -1) {
+                overviewRepo.updateTotalIncome(currentOverviewId, totalIncomeValue)
+                uiState = uiState.copy(
+                    isTotalIncomeSet = true,
+                    result = totalIncomeValue
+                )
+            }
         }
     }
-
 
     fun onAdjustmentStart(isAddition: Boolean) {
         uiState = uiState.copy(

@@ -50,7 +50,7 @@ fun OverviewSection(
     }
 
     overviews.forEach { overview ->
-        OverviewCard(title = overview.title, onClick = { onCardClick(overview.title) })
+        OverviewCard(title = overview.title, onClick = { onCardClick(overview.id.toString()) })
     }
 
     createdItems.filter { it.second.equals("Overview", ignoreCase = true) }

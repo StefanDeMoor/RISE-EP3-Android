@@ -13,5 +13,9 @@ class OfflineOverviewRepository(private val dao: OverviewDao) : OverviewReposito
 
     override suspend fun update(overview: OverviewEntity) = dao.update(overview)
 
+    override suspend fun updateTotalIncome(id: Int, newTotalIncome: Double) {
+        dao.updateTotalIncome(id, newTotalIncome)
+    }
+
     override suspend fun delete(overview: OverviewEntity) = dao.delete(overview)
 }

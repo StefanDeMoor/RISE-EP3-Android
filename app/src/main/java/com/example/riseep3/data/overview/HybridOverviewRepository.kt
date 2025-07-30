@@ -42,6 +42,10 @@ class HybridOverviewRepository(
         local.update(overview)
     }
 
+    override suspend fun updateTotalIncome(id: Int, newTotalIncome: Double) {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun delete(overview: OverviewEntity) {
         remote.delete(overview)
         local.delete(overview)

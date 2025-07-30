@@ -40,18 +40,18 @@ fun HomeCalcApp(
             }
             composable("category") {
                 CategoryScreen(
-                    onCategoryClick = { title -> navController.navigate("overview/${Uri.encode(title)}") },
+                    onCategoryClick = { overviewId -> navController.navigate("overview/$overviewId") },
                     onNavigateBack = { navController.navigate("home") },
                     themeViewModel =  themeViewModel,
                 )
             }
             composable(
-                "overview/{title}",
-                arguments = listOf(navArgument("title") { type = NavType.StringType })
+                "overview/{id}",
+                arguments = listOf(navArgument("id") { type = NavType.IntType })
             ) { backStackEntry ->
-                val title = backStackEntry.arguments?.getString("title") ?: "Overview"
+                val id = backStackEntry.arguments?.getInt("id") ?: -1
                 OverviewScreen(
-                    title = title,
+                    overviewId = id,
                     themeViewModel = themeViewModel,
                     onNavigateBack = { navController.popBackStack() }
                 )

@@ -14,6 +14,9 @@ interface OverviewApiService {
     @PUT("api/overview/{id}")
     suspend fun updateOverview(@Path("id") id: Int, @Body overviewWrapper: OverviewRequestWrapper)
 
+    @PUT("api/overview/{id}/totalincome")
+    suspend fun updateTotalIncome(@Path("id") id: Int, @Body newTotalIncome: Double)
+
     @DELETE("api/overview/{id}")
     suspend fun deleteOverview(@Path("id") id: Int)
 }

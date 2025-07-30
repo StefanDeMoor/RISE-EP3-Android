@@ -63,6 +63,15 @@ class RemoteOverviewRepository(
         api.updateOverview(overview.id, OverviewRequestWrapper(overviewDto))
     }
 
+    override suspend fun updateTotalIncome(id: Int, newTotalIncome: Double) {
+        api.updateTotalIncome(id, newTotalIncome)
+
+        val overview = overviewDao.getOverviewByIdOnce(id) ?: return
+        val updated = overview.copy(totalIncome = newTotalIncome)
+        overviewDao.update(updated)
+    }
+
+
     override suspend fun delete(overview: OverviewEntity) {
         api.deleteOverview(overview.id)
     }

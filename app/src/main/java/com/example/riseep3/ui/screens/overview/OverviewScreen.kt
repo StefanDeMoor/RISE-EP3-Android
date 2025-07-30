@@ -5,6 +5,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -23,7 +24,7 @@ import com.example.riseep3.ui.theme.ThemeViewModel
 
 @Composable
 fun OverviewScreen(
-    title: String,
+    overviewId: Int,
     modifier: Modifier = Modifier,
     viewModel: OverviewViewModel = viewModel(factory = OverviewViewModel.Factory),
     themeViewModel: ThemeViewModel,
@@ -31,6 +32,10 @@ fun OverviewScreen(
 ) {
     val state = viewModel.uiState
     val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
+
+    LaunchedEffect(overviewId) {
+        viewModel.loadOverviewById(overviewId)
+    }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -52,7 +57,7 @@ fun OverviewScreen(
             verticalArrangement = Arrangement.spacedBy(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ScreenTitle(title)
+            ScreenTitle(state.overviewTitle)
 
             if (!state.isTotalIncomeSet) {
                 TotalIncomeInputField(
