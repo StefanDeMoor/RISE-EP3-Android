@@ -13,7 +13,7 @@ fun ResultOutlinedField(
     result: Double
 ) {
     OutlinedTextField(
-        value = "€$result",
+        value = "€%.2f".format(result),
         onValueChange = {},
         label = { Text("Resultaat") },
         readOnly = true,

@@ -34,7 +34,7 @@ fun TotalIncomeSummaryCard(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Totaal Inkomen: €$totalIncome", style = MaterialTheme.typography.bodyLarge)
+            Text("Totaal Inkomen: €%.2f".format(totalIncome), style = MaterialTheme.typography.bodyLarge)
             Row {
                 IconButton(onClick = onEdit) {
                     Icon(Icons.Default.Edit, contentDescription = "Inkomen bewerken")

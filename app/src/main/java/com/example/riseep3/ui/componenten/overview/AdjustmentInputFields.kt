@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import java.util.Locale
 
 @Composable
 fun AdjustmentInputFields(
@@ -34,7 +35,9 @@ fun AdjustmentInputFields(
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val inputState = remember(amountInput) {
-        mutableStateOf(if (amountInput == 0.0) "" else amountInput.toString())
+        mutableStateOf(
+            if (amountInput == 0.0) "" else String.format(Locale.US, "%.2f", amountInput)
+        )
     }
 
     Row(
