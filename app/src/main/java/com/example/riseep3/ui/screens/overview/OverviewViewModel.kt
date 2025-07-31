@@ -205,14 +205,6 @@ class OverviewViewModel(
         )
     }
 
-    fun onIncomeDelete() {
-        uiState = uiState.copy(
-            totalIncome = 0.0,
-            isTotalIncomeSet = false,
-            adjustments = emptyList()
-        )
-    }
-
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {

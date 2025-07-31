@@ -73,8 +73,7 @@ fun OverviewScreen(
                 ) {
                     TotalIncomeSummaryCard(
                         totalIncome = state.totalIncome,
-                        onEdit = viewModel::onTotalIncomeEditStart,
-                        onDelete = viewModel::onIncomeDelete
+                        onEdit = viewModel::onTotalIncomeEditStart
                     )
 
                     if (!state.isAdjusting) {

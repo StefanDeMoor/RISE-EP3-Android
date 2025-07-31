@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 fun TotalIncomeSummaryCard(
     totalIncome: Double,
     onEdit: () -> Unit,
-    onDelete: () -> Unit
 ) {
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onBackground),
@@ -39,9 +38,6 @@ fun TotalIncomeSummaryCard(
             Row {
                 IconButton(onClick = onEdit) {
                     Icon(Icons.Default.Edit, contentDescription = "Inkomen bewerken")
-                }
-                IconButton(onClick = onDelete) {
-                    Icon(Icons.Default.Delete, contentDescription = "Inkomen verwijderen")
                 }
             }
         }
