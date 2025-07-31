@@ -25,18 +25,34 @@ class OverviewViewModel(
     fun loadOverviewById(id: Int) {
         viewModelScope.launch {
             currentOverviewId = id
-            overviewRepo.getOverviewById(id).collect { overview ->
-                val isTotalIncomeSet = overview?.totalIncome != null
-                if (overview != null) {
+
+            launch {
+                overviewRepo.getOverviewById(id).collect { overview ->
+                    val isTotalIncomeSet = overview?.totalIncome != null
+                    if (overview != null) {
+                        uiState = uiState.copy(
+                            totalIncome = overview.totalIncome ?: 0.0,
+                            isTotalIncomeSet = isTotalIncomeSet,
+                            overviewTitle = overview.title,
+                            result = overview.totalIncome ?: 0.0
+                        )
+                    }
+                }
+            }
+
+            launch {
+                amountItemRepo.getAllAmountItem().collect { items ->
+                    val relevantItems = items.filter { it.overviewId == id }
+                    val adjustments = relevantItems.map { it.name to it.amount }
+
                     uiState = uiState.copy(
-                        totalIncome = overview.totalIncome ?: 0.0,
-                        isTotalIncomeSet = isTotalIncomeSet,
-                        overviewTitle = overview.title
+                        adjustments = adjustments
                     )
                 }
             }
         }
     }
+
 
     fun onIncomeChange(newTotalIncome: Double) {
         if (!uiState.isTotalIncomeSet) {

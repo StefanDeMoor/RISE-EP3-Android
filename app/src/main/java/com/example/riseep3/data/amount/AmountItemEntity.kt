@@ -17,7 +17,7 @@ import androidx.room.PrimaryKey
 )
 data class AmountItemEntity(
     @PrimaryKey val id: Int,
-    val name: String?,
+    val name: String,
     val amount: Double,
     val overviewId: Int,
     val parentAmountItemId: Int?
