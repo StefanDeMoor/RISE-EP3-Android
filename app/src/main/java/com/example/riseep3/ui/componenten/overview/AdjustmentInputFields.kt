@@ -15,9 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -34,10 +32,15 @@ fun AdjustmentInputFields(
     onConfirm: () -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
-    val inputState = remember(amountInput) {
-        mutableStateOf(
-            if (amountInput == 0.0) "" else String.format(Locale.US, "%.2f", amountInput)
-        )
+
+    var inputValue by remember {
+        mutableStateOf(if (amountInput == 0.0) "" else String.format(Locale.US, "%.2f", amountInput))
+    }
+    var nameValue by remember { mutableStateOf(amountName) }
+
+    LaunchedEffect(amountInput, amountName) {
+        inputValue = if (amountInput == 0.0) "" else String.format(Locale.US, "%.2f", amountInput)
+        nameValue = amountName
     }
 
     Row(
@@ -47,8 +50,11 @@ fun AdjustmentInputFields(
         verticalAlignment = Alignment.CenterVertically
     ) {
         TextField(
-            value = amountName,
-            onValueChange = onAmountNameChange,
+            value = nameValue,
+            onValueChange = {
+                nameValue = it
+                onAmountNameChange(it)
+            },
             placeholder = { Text("Naam") },
             singleLine = true,
             modifier = Modifier.weight(1f),
@@ -67,10 +73,13 @@ fun AdjustmentInputFields(
         )
         Spacer(modifier = Modifier.width(8.dp))
         TextField(
-            value = inputState.value,
+            value = inputValue,
             onValueChange = {
-                inputState.value = it
-                it.toDoubleOrNull()?.let { parsed -> onAmountChange(parsed) }
+                inputValue = it
+                val parsed = it.toDoubleOrNull()
+                if (parsed != null) {
+                    onAmountChange(parsed)
+                }
             },
             placeholder = { Text("€") },
             singleLine = true,
@@ -101,4 +110,5 @@ fun AdjustmentInputFields(
         }
     }
 }
+
 

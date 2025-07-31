@@ -12,6 +12,7 @@ import com.example.riseep3.MainApplication
 import com.example.riseep3.data.amount.AmountItemCategory
 import com.example.riseep3.data.amount.AmountItemEntity
 import com.example.riseep3.data.overview.OverviewRepository
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
@@ -19,6 +20,7 @@ class OverviewViewModel(
     private val amountItemRepo: AmountItemCategory,
     private val overviewRepo: OverviewRepository
 ) : ViewModel() {
+
     var uiState by mutableStateOf(OverviewState())
         private set
 
@@ -49,15 +51,11 @@ class OverviewViewModel(
                         .sortedBy { it.id }
                         .map { Triple(it.id, it.name, it.amount) }
 
-
-                    uiState = uiState.copy(
-                        adjustments = adjustments
-                    )
+                    uiState = uiState.copy(adjustments = adjustments)
                 }
             }
         }
     }
-
 
     fun onIncomeChange(newTotalIncome: Double) {
         if (!uiState.isTotalIncomeSet) {
@@ -105,33 +103,24 @@ class OverviewViewModel(
         viewModelScope.launch {
             if (uiState.editIndex != null) {
                 val index = uiState.editIndex!!
-                val (id, oldName, oldAmount) = uiState.adjustments[index]
+                val (id, _, _) = uiState.adjustments[index]
 
-                amountItemRepo.getAllAmountItem().collect { items ->
-                    val itemToUpdate = items.firstOrNull {
-                        it.id == id
+                val items = amountItemRepo.getAllAmountItem().first()
+                val itemToUpdate = items.firstOrNull { it.id == id }
+
+                if (itemToUpdate != null) {
+                    val updatedItem = itemToUpdate.copy(
+                        name = uiState.amountName,
+                        amount = signedAmount
+                    )
+                    amountItemRepo.update(updatedItem)
+
+                    val updatedAdjustments = uiState.adjustments.toMutableList().apply {
+                        set(index, Triple(id, uiState.amountName, signedAmount))
                     }
 
-                    if (itemToUpdate != null) {
-                        val updatedItem = itemToUpdate.copy(
-                            name = uiState.amountName,
-                            amount = signedAmount
-                        )
-                        amountItemRepo.update(updatedItem)
-
-                        val updatedAdjustments = uiState.adjustments.toMutableList().apply {
-                            set(index, Triple(id, uiState.amountName, signedAmount))
-                        }
-
-                        uiState = uiState.copy(
-                            adjustments = updatedAdjustments,
-                            isAdjusting = false,
-                            isAddition = null,
-                            amountInput = 0.0,
-                            amountName = "",
-                            editIndex = null
-                        )
-                    }
+                    uiState = uiState.copy(adjustments = updatedAdjustments)
+                    resetAdjustmentInput()
                 }
             } else {
                 val newItem = AmountItemEntity(
@@ -143,21 +132,11 @@ class OverviewViewModel(
                 )
 
                 amountItemRepo.insertAll(flowOf(listOf(newItem)))
-
-                uiState = uiState.copy(
-                    isAdjusting = false,
-                    isAddition = null,
-                    amountInput = 0.0,
-                    amountName = "",
-                    editIndex = null
-                )
+                resetAdjustmentInput()
+                loadOverviewById(currentOverviewId)
             }
-
         }
     }
-
-
-
 
     fun onEditStart(index: Int) {
         val (_, name, value) = uiState.adjustments[index]
@@ -174,26 +153,31 @@ class OverviewViewModel(
         val adjustmentToDelete = uiState.adjustments.getOrNull(index) ?: return
 
         viewModelScope.launch {
-            amountItemRepo.getAllAmountItem().collect { items ->
-                val matchingItem = items.firstOrNull {
-                    it.id == adjustmentToDelete.first
-                }
+            val items = amountItemRepo.getAllAmountItem().first()
+            val matchingItem = items.firstOrNull { it.id == adjustmentToDelete.first }
 
-                if (matchingItem != null) {
-                    amountItemRepo.delete(matchingItem)
+            if (matchingItem != null) {
+                amountItemRepo.delete(matchingItem)
 
-                    val updatedList = uiState.adjustments.toMutableList().apply {
-                        removeAt(index)
-                    }
-                    uiState = uiState.copy(adjustments = updatedList)
+                val updatedList = uiState.adjustments.toMutableList().apply {
+                    removeAt(index)
                 }
+                uiState = uiState.copy(adjustments = updatedList)
             }
         }
     }
 
     fun onTotalIncomeEditStart() {
+        uiState = uiState.copy(isTotalIncomeSet = false)
+    }
+
+    private fun resetAdjustmentInput() {
         uiState = uiState.copy(
-            isTotalIncomeSet = false
+            isAdjusting = false,
+            isAddition = null,
+            amountInput = 0.0,
+            amountName = "",
+            editIndex = null
         )
     }
 
@@ -206,4 +190,3 @@ class OverviewViewModel(
         }
     }
 }
-
