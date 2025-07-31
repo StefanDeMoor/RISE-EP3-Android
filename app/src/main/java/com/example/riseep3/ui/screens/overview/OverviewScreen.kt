@@ -99,7 +99,7 @@ fun OverviewScreen(
                         )
                     }
 
-                    ResultOutlinedField(result = state.result - state.adjustments.sumOf { it.second })
+                    ResultOutlinedField(result = state.result - state.adjustments.sumOf { it.third })
                 }
             }
         }

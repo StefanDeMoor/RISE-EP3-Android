@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun AdjustmentList(
-    adjustments: List<Pair<String, Double>>,
+    adjustments: List<Triple<Int, String, Double>>,
     onEdit: (Int) -> Unit,
     onDelete: (Int) -> Unit
 ) {
@@ -40,7 +40,7 @@ fun AdjustmentList(
 
         HorizontalDivider()
 
-        adjustments.forEachIndexed { index, (name, value) ->
+        adjustments.forEachIndexed { index, (_, name, value) ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -65,3 +65,4 @@ fun AdjustmentList(
         }
     }
 }
+

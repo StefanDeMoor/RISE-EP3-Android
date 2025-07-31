@@ -9,7 +9,7 @@ data class OverviewState(
     val isAddition: Boolean? = null,
     val amountInput: Double = 0.0,
     val amountName: String = "",
-    val adjustments: List<Pair<String, Double>> = emptyList(),
+    val adjustments: List<Triple<Int, String, Double>> = emptyList(),
     val editIndex: Int? = null
 )
 

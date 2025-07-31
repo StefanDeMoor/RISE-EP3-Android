@@ -45,7 +45,10 @@ class OverviewViewModel(
             launch {
                 amountItemRepo.getAllAmountItem().collect { items ->
                     val relevantItems = items.filter { it.overviewId == id }
-                    val adjustments = relevantItems.map { it.name to it.amount }
+                    val adjustments = relevantItems
+                        .sortedBy { it.id }
+                        .map { Triple(it.id, it.name, it.amount) }
+
 
                     uiState = uiState.copy(
                         adjustments = adjustments
@@ -102,13 +105,11 @@ class OverviewViewModel(
         viewModelScope.launch {
             if (uiState.editIndex != null) {
                 val index = uiState.editIndex!!
-                val (oldName, oldAmount) = uiState.adjustments[index]
+                val (id, oldName, oldAmount) = uiState.adjustments[index]
 
                 amountItemRepo.getAllAmountItem().collect { items ->
                     val itemToUpdate = items.firstOrNull {
-                        it.overviewId == currentOverviewId &&
-                                it.name == oldName &&
-                                it.amount == oldAmount
+                        it.id == id
                     }
 
                     if (itemToUpdate != null) {
@@ -119,7 +120,7 @@ class OverviewViewModel(
                         amountItemRepo.update(updatedItem)
 
                         val updatedAdjustments = uiState.adjustments.toMutableList().apply {
-                            set(index, uiState.amountName to signedAmount)
+                            set(index, Triple(id, uiState.amountName, signedAmount))
                         }
 
                         uiState = uiState.copy(
@@ -133,7 +134,6 @@ class OverviewViewModel(
                     }
                 }
             } else {
-
                 val newItem = AmountItemEntity(
                     id = 0,
                     name = uiState.amountName,
@@ -144,12 +144,7 @@ class OverviewViewModel(
 
                 amountItemRepo.insertAll(flowOf(listOf(newItem)))
 
-                val updatedAdjustments = uiState.adjustments.toMutableList().apply {
-                    add(uiState.amountName to signedAmount)
-                }
-
                 uiState = uiState.copy(
-                    adjustments = updatedAdjustments,
                     isAdjusting = false,
                     isAddition = null,
                     amountInput = 0.0,
@@ -157,6 +152,7 @@ class OverviewViewModel(
                     editIndex = null
                 )
             }
+
         }
     }
 
@@ -164,11 +160,11 @@ class OverviewViewModel(
 
 
     fun onEditStart(index: Int) {
-        val (name, value) = uiState.adjustments[index]
+        val (_, name, value) = uiState.adjustments[index]
         uiState = uiState.copy(
             isAdjusting = true,
-            isAddition = value >= 0,
-            amountInput = value,
+            isAddition = value <= 0,
+            amountInput = kotlin.math.abs(value),
             amountName = name,
             editIndex = index
         )
@@ -180,9 +176,7 @@ class OverviewViewModel(
         viewModelScope.launch {
             amountItemRepo.getAllAmountItem().collect { items ->
                 val matchingItem = items.firstOrNull {
-                    it.overviewId == currentOverviewId &&
-                            it.name == adjustmentToDelete.first &&
-                            it.amount == adjustmentToDelete.second
+                    it.id == adjustmentToDelete.first
                 }
 
                 if (matchingItem != null) {
@@ -196,8 +190,6 @@ class OverviewViewModel(
             }
         }
     }
-
-
 
     fun onTotalIncomeEditStart() {
         uiState = uiState.copy(
