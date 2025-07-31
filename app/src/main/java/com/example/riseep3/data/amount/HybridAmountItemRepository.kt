@@ -37,6 +37,7 @@ class HybridAmountItemRepository(
     }
 
     override suspend fun delete(amountItem: AmountItemEntity) {
-        TODO("Not yet implemented")
+        remote.delete(amountItem)
+        local.delete(amountItem)
     }
 }

@@ -33,6 +33,6 @@ class RemoteAmountItemRepository : AmountItemCategory {
     }
 
     override suspend fun delete(amountItem: AmountItemEntity) {
-        TODO("Not yet implemented")
+        api.deleteAmountItem(amountItem.id)
     }
 }

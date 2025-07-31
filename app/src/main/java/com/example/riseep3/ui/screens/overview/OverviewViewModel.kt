@@ -139,12 +139,28 @@ class OverviewViewModel(
     }
 
     fun onDeleteAdjustment(index: Int) {
-        val updatedList = uiState.adjustments.toMutableList().apply { removeAt(index) }
+        val adjustmentToDelete = uiState.adjustments.getOrNull(index) ?: return
 
-        uiState = uiState.copy(
-            adjustments = updatedList
-        )
+        viewModelScope.launch {
+            amountItemRepo.getAllAmountItem().collect { items ->
+                val matchingItem = items.firstOrNull {
+                    it.overviewId == currentOverviewId &&
+                            it.name == adjustmentToDelete.first &&
+                            it.amount == adjustmentToDelete.second
+                }
+
+                if (matchingItem != null) {
+                    amountItemRepo.delete(matchingItem)
+
+                    val updatedList = uiState.adjustments.toMutableList().apply {
+                        removeAt(index)
+                    }
+                    uiState = uiState.copy(adjustments = updatedList)
+                }
+            }
+        }
     }
+
 
 
     fun onTotalIncomeEditStart() {
