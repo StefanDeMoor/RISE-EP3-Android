@@ -10,7 +10,9 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.riseep3.MainApplication
 import com.example.riseep3.data.amount.AmountItemCategory
+import com.example.riseep3.data.amount.AmountItemEntity
 import com.example.riseep3.data.overview.OverviewRepository
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
 class OverviewViewModel(
@@ -95,17 +97,22 @@ class OverviewViewModel(
         val amount = uiState.amountInput
         val signedAmount = if (uiState.isAddition == true) -amount else amount
 
-        val updatedAdjustments = uiState.adjustments.toMutableList()
+        if (currentOverviewId == -1 || uiState.amountName.isBlank()) return
 
-        if (uiState.editIndex != null) {
-            updatedAdjustments[uiState.editIndex!!] = uiState.amountName to signedAmount
-        } else {
-            updatedAdjustments.add(uiState.amountName to signedAmount)
+        val newItem = AmountItemEntity(
+            id = 0,
+            name = uiState.amountName,
+            amount = signedAmount,
+            overviewId = currentOverviewId,
+            parentAmountItemId = null
+        )
+
+        viewModelScope.launch {
+            amountItemRepo.insertAll(flowOf(listOf(newItem)))
         }
 
-        val totalAdjustments = updatedAdjustments.sumOf { it.second }
-        if (totalAdjustments > uiState.result) {
-            return
+        val updatedAdjustments = uiState.adjustments.toMutableList().apply {
+            add(uiState.amountName to signedAmount)
         }
 
         uiState = uiState.copy(
@@ -117,6 +124,7 @@ class OverviewViewModel(
             editIndex = null
         )
     }
+
 
 
     fun onEditStart(index: Int) {

@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 
 class HybridAmountItemRepository(
     private val remote : RemoteAmountItemRepository,
-    private val local : OfflineAmountItemCategory
+    private val local : OfflineAmountItemRepository
 ) : AmountItemCategory {
 
     override fun getAllAmountItem(): Flow<List<AmountItemEntity>> = local.getAllAmountItem().also {
@@ -32,7 +32,8 @@ class HybridAmountItemRepository(
     }
 
     override suspend fun insertAll(amountItems: Flow<List<AmountItemEntity>>) {
-        TODO("Not yet implemented")
+        remote.insertAll(amountItems)
+        local.insertAll(amountItems)
     }
 
     override suspend fun delete(amountItem: AmountItemEntity) {
