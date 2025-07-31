@@ -5,6 +5,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -16,20 +17,25 @@ import com.example.riseep3.ui.componenten.TopBar
 import com.example.riseep3.ui.componenten.overview.AdjustmentButtons
 import com.example.riseep3.ui.componenten.overview.AdjustmentInputFields
 import com.example.riseep3.ui.componenten.overview.AdjustmentList
-import com.example.riseep3.ui.componenten.overview.IncomeInputField
-import com.example.riseep3.ui.componenten.overview.IncomeSummaryCard
 import com.example.riseep3.ui.componenten.overview.ResultOutlinedField
+import com.example.riseep3.ui.componenten.overview.TotalIncomeInputField
+import com.example.riseep3.ui.componenten.overview.TotalIncomeSummaryCard
 import com.example.riseep3.ui.theme.ThemeViewModel
 
 @Composable
 fun OverviewScreen(
+    overviewId: Int,
     modifier: Modifier = Modifier,
-    viewModel: OverviewViewModel = viewModel(),
+    viewModel: OverviewViewModel = viewModel(factory = OverviewViewModel.Factory),
     themeViewModel: ThemeViewModel,
     onNavigateBack: () -> Unit = {}
 ) {
     val state = viewModel.uiState
     val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
+
+    LaunchedEffect(overviewId) {
+        viewModel.loadOverviewById(overviewId)
+    }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -51,23 +57,23 @@ fun OverviewScreen(
             verticalArrangement = Arrangement.spacedBy(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ScreenTitle("Overviews")
+            ScreenTitle(state.overviewTitle)
 
-            if (!state.isIncomeSet) {
-                IncomeInputField(
-                    income = state.income,
-                    onIncomeChange = viewModel::onIncomeChange,
+            if (!state.isTotalIncomeSet) {
+                TotalIncomeInputField(
+                    totalIncome = state.totalIncome,
+                    onTotalIncomeChange = viewModel::onIncomeChange,
                     onConfirm = viewModel::onIncomeConfirm
                 )
-            } else {
+            }
+            else {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    IncomeSummaryCard(
-                        income = state.income,
-                        onEdit = viewModel::onIncomeEditStart,
-                        onDelete = viewModel::onIncomeDelete
+                    TotalIncomeSummaryCard(
+                        totalIncome = state.totalIncome,
+                        onEdit = viewModel::onTotalIncomeEditStart
                     )
 
                     if (!state.isAdjusting) {
@@ -93,7 +99,7 @@ fun OverviewScreen(
                         )
                     }
 
-                    ResultOutlinedField(result = state.baseIncome - state.adjustments.sumOf { it.second })
+                    ResultOutlinedField(result = state.result - state.adjustments.sumOf { it.third })
                 }
             }
         }

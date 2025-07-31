@@ -27,5 +27,7 @@ object RetrofitInstance {
         retrofit.create(OverviewApiService::class.java)
     }
 
-
+    val amountItemApiService: AmountItemApiService by lazy {
+        retrofit.create(AmountItemApiService::class.java)
+    }
 }

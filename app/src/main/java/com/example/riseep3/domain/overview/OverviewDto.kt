@@ -6,7 +6,7 @@ data class OverviewDto(
     val id: Int,
     val title: String,
     val categoryId: Int,
-    val totalIncome: Double,
+    val totalIncome: Double?,
     val result: Double,
     val amounts: List<AmountItemDto>
 )

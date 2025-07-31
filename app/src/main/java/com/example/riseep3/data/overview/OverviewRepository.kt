@@ -7,5 +7,6 @@ interface OverviewRepository {
     fun getOverviewById(id: Int): Flow<OverviewEntity?>
     suspend fun insertAll(overviews: Flow<List<OverviewEntity>>)
     suspend fun update(overview: OverviewEntity)
+    suspend fun updateTotalIncome(id: Int, newTotalIncome: Double)
     suspend fun delete(overview: OverviewEntity)
 }

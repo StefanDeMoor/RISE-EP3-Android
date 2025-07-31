@@ -19,10 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun IncomeSummaryCard(
-    income: String,
+fun TotalIncomeSummaryCard(
+    totalIncome: Double,
     onEdit: () -> Unit,
-    onDelete: () -> Unit
 ) {
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onBackground),
@@ -35,13 +34,10 @@ fun IncomeSummaryCard(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Totaal Inkomen: €$income", style = MaterialTheme.typography.bodyLarge)
+            Text("Totaal Inkomen: €%.2f".format(totalIncome), style = MaterialTheme.typography.bodyLarge)
             Row {
                 IconButton(onClick = onEdit) {
                     Icon(Icons.Default.Edit, contentDescription = "Inkomen bewerken")
-                }
-                IconButton(onClick = onDelete) {
-                    Icon(Icons.Default.Delete, contentDescription = "Inkomen verwijderen")
                 }
             }
         }

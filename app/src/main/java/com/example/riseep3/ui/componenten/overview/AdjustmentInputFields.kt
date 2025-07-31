@@ -15,22 +15,33 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import java.util.Locale
 
 @Composable
 fun AdjustmentInputFields(
     amountName: String,
     onAmountNameChange: (String) -> Unit,
-    amountInput: String,
-    onAmountChange: (String) -> Unit,
+    amountInput: Double,
+    onAmountChange: (Double) -> Unit,
     onConfirm: () -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    var inputValue by remember {
+        mutableStateOf(if (amountInput == 0.0) "" else String.format(Locale.US, "%.2f", amountInput))
+    }
+    var nameValue by remember { mutableStateOf(amountName) }
+
+    LaunchedEffect(amountInput, amountName) {
+        inputValue = if (amountInput == 0.0) "" else String.format(Locale.US, "%.2f", amountInput)
+        nameValue = amountName
+    }
 
     Row(
         modifier = Modifier
@@ -39,8 +50,11 @@ fun AdjustmentInputFields(
         verticalAlignment = Alignment.CenterVertically
     ) {
         TextField(
-            value = amountName,
-            onValueChange = onAmountNameChange,
+            value = nameValue,
+            onValueChange = {
+                nameValue = it
+                onAmountNameChange(it)
+            },
             placeholder = { Text("Naam") },
             singleLine = true,
             modifier = Modifier.weight(1f),
@@ -59,8 +73,14 @@ fun AdjustmentInputFields(
         )
         Spacer(modifier = Modifier.width(8.dp))
         TextField(
-            value = amountInput,
-            onValueChange = onAmountChange,
+            value = inputValue,
+            onValueChange = {
+                inputValue = it
+                val parsed = it.toDoubleOrNull()
+                if (parsed != null) {
+                    onAmountChange(parsed)
+                }
+            },
             placeholder = { Text("€") },
             singleLine = true,
             modifier = Modifier.weight(1f),
@@ -90,3 +110,5 @@ fun AdjustmentInputFields(
         }
     }
 }
+
+

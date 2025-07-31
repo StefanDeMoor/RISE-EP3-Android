@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun AdjustmentList(
-    adjustments: List<Pair<String, Int>>,
+    adjustments: List<Triple<Int, String, Double>>,
     onEdit: (Int) -> Unit,
     onDelete: (Int) -> Unit
 ) {
@@ -40,7 +40,7 @@ fun AdjustmentList(
 
         HorizontalDivider()
 
-        adjustments.forEachIndexed { index, (name, value) ->
+        adjustments.forEachIndexed { index, (_, name, value) ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -49,7 +49,7 @@ fun AdjustmentList(
             ) {
                 Text(name, modifier = Modifier.weight(1f))
                 Text(
-                    text = "${if (value <= 0) "+" else "-"}€${kotlin.math.abs(value)}",
+                    text = "${if (value <= 0) "+" else "-"}€${"%.2f".format(kotlin.math.abs(value))}",
                     modifier = Modifier.weight(1f)
                 )
                 Row(modifier = Modifier.width(64.dp)) {
@@ -65,3 +65,4 @@ fun AdjustmentList(
         }
     }
 }
+

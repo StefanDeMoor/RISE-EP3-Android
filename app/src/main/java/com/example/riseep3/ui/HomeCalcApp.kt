@@ -1,5 +1,6 @@
 package com.example.riseep3.ui
 
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -39,17 +40,23 @@ fun HomeCalcApp(
             }
             composable("category") {
                 CategoryScreen(
-                    onCategoryClick = { navController.navigate("overview") },
+                    onCategoryClick = { overviewId -> navController.navigate("overview/$overviewId") },
                     onNavigateBack = { navController.navigate("home") },
                     themeViewModel =  themeViewModel,
                 )
             }
-            composable("overview") {
+            composable(
+                "overview/{id}",
+                arguments = listOf(navArgument("id") { type = NavType.IntType })
+            ) { backStackEntry ->
+                val id = backStackEntry.arguments?.getInt("id") ?: -1
                 OverviewScreen(
+                    overviewId = id,
                     themeViewModel = themeViewModel,
                     onNavigateBack = { navController.popBackStack() }
                 )
             }
+
             composable("profile") {
                 ProfileScreen(
                     onNavigateBack = { navController.navigate("home") },

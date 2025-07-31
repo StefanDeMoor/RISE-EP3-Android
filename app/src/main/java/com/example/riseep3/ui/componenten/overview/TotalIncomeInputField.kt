@@ -8,21 +8,29 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 
 @Composable
-fun IncomeInputField(
-    income: String,
-    onIncomeChange: (String) -> Unit,
+fun TotalIncomeInputField(
+    totalIncome: Double,
+    onTotalIncomeChange: (Double) -> Unit,
     onConfirm: () -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
+    val inputState = remember {
+        mutableStateOf(if (totalIncome == 0.0) "" else totalIncome.toString())
+    }
 
     OutlinedTextField(
-        value = income,
-        onValueChange = onIncomeChange,
+        value = inputState.value,
+        onValueChange = { newText ->
+            inputState.value = newText
+            newText.toDoubleOrNull()?.let { onTotalIncomeChange(it) }
+        },
         label = { Text("Totaal Inkomen") },
         singleLine = true,
         modifier = Modifier.fillMaxWidth(),
@@ -42,3 +50,5 @@ fun IncomeInputField(
         })
     )
 }
+
+
