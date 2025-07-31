@@ -36,6 +36,11 @@ class HybridAmountItemRepository(
         local.insertAll(amountItems)
     }
 
+    override suspend fun update(amountItem: AmountItemEntity) {
+        remote.update(amountItem)
+        local.update(amountItem)
+    }
+
     override suspend fun delete(amountItem: AmountItemEntity) {
         remote.delete(amountItem)
         local.delete(amountItem)

@@ -9,5 +9,7 @@ class OfflineAmountItemRepository(private val dao: AmountItemDao) : AmountItemCa
         amountItems.collect { dao.insertAll(it) }
     }
 
+    override suspend fun update(amountItem: AmountItemEntity) = dao.update(amountItem)
+
     override suspend fun delete(amountItem: AmountItemEntity) = dao.delete(amountItem)
 }

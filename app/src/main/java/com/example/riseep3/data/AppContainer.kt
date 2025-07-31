@@ -34,7 +34,7 @@ class AppContainer(context: Context) {
     }
     val amountItemRepository: AmountItemCategory by lazy {
         HybridAmountItemRepository(
-            remote = RemoteAmountItemRepository(),
+            remote = RemoteAmountItemRepository(database.amountItemDao()),
             local = OfflineAmountItemRepository(database.amountItemDao())
         )
     }

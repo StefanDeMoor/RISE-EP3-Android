@@ -6,7 +6,9 @@ import com.example.riseep3.network.RetrofitInstance
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class RemoteAmountItemRepository : AmountItemCategory {
+class RemoteAmountItemRepository(
+    private val amountItemDao: AmountItemDao
+) : AmountItemCategory {
 
     private val api = RetrofitInstance.amountItemApiService
 
@@ -31,6 +33,40 @@ class RemoteAmountItemRepository : AmountItemCategory {
             }
         }
     }
+
+    override suspend fun update(amountItem: AmountItemEntity) {
+        val subAmountEntities = amountItemDao.getSubAmounts(amountItem.id)
+
+        val subAmountDtos = subAmountEntities.map { subEntity ->
+            toDtoWithSubAmounts(subEntity)
+        }
+
+        val amountItemDto = AmountItemDto(
+            id = amountItem.id,
+            name = amountItem.name,
+            amount = amountItem.amount,
+            overviewId = amountItem.overviewId,
+            parentAmountItemId = amountItem.parentAmountItemId,
+            subAmounts = subAmountDtos
+        )
+
+        api.updateAmountItem(amountItem.id, amountItemDto)
+    }
+
+    private suspend fun toDtoWithSubAmounts(entity: AmountItemEntity): AmountItemDto {
+        val subEntities = amountItemDao.getSubAmounts(entity.id)
+        val subDtos = subEntities.map { toDtoWithSubAmounts(it) }
+
+        return AmountItemDto(
+            id = entity.id,
+            name = entity.name,
+            amount = entity.amount,
+            overviewId = entity.overviewId,
+            parentAmountItemId = entity.parentAmountItemId,
+            subAmounts = subDtos
+        )
+    }
+
 
     override suspend fun delete(amountItem: AmountItemEntity) {
         api.deleteAmountItem(amountItem.id)

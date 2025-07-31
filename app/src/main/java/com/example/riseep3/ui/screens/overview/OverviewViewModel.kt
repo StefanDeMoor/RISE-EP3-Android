@@ -99,31 +99,67 @@ class OverviewViewModel(
 
         if (currentOverviewId == -1 || uiState.amountName.isBlank()) return
 
-        val newItem = AmountItemEntity(
-            id = 0,
-            name = uiState.amountName,
-            amount = signedAmount,
-            overviewId = currentOverviewId,
-            parentAmountItemId = null
-        )
-
         viewModelScope.launch {
-            amountItemRepo.insertAll(flowOf(listOf(newItem)))
-        }
+            if (uiState.editIndex != null) {
+                val index = uiState.editIndex!!
+                val (oldName, oldAmount) = uiState.adjustments[index]
 
-        val updatedAdjustments = uiState.adjustments.toMutableList().apply {
-            add(uiState.amountName to signedAmount)
-        }
+                amountItemRepo.getAllAmountItem().collect { items ->
+                    val itemToUpdate = items.firstOrNull {
+                        it.overviewId == currentOverviewId &&
+                                it.name == oldName &&
+                                it.amount == oldAmount
+                    }
 
-        uiState = uiState.copy(
-            adjustments = updatedAdjustments,
-            isAdjusting = false,
-            isAddition = null,
-            amountInput = 0.0,
-            amountName = "",
-            editIndex = null
-        )
+                    if (itemToUpdate != null) {
+                        val updatedItem = itemToUpdate.copy(
+                            name = uiState.amountName,
+                            amount = signedAmount
+                        )
+                        amountItemRepo.update(updatedItem)
+
+                        val updatedAdjustments = uiState.adjustments.toMutableList().apply {
+                            set(index, uiState.amountName to signedAmount)
+                        }
+
+                        uiState = uiState.copy(
+                            adjustments = updatedAdjustments,
+                            isAdjusting = false,
+                            isAddition = null,
+                            amountInput = 0.0,
+                            amountName = "",
+                            editIndex = null
+                        )
+                    }
+                }
+            } else {
+
+                val newItem = AmountItemEntity(
+                    id = 0,
+                    name = uiState.amountName,
+                    amount = signedAmount,
+                    overviewId = currentOverviewId,
+                    parentAmountItemId = null
+                )
+
+                amountItemRepo.insertAll(flowOf(listOf(newItem)))
+
+                val updatedAdjustments = uiState.adjustments.toMutableList().apply {
+                    add(uiState.amountName to signedAmount)
+                }
+
+                uiState = uiState.copy(
+                    adjustments = updatedAdjustments,
+                    isAdjusting = false,
+                    isAddition = null,
+                    amountInput = 0.0,
+                    amountName = "",
+                    editIndex = null
+                )
+            }
+        }
     }
+
 
 
 
