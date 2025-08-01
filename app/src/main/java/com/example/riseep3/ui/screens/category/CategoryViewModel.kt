@@ -22,7 +22,7 @@ open class CategoryViewModel(
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CategoryState())
-    open val uiState: StateFlow<CategoryState> = _uiState.asStateFlow()
+    val uiState: StateFlow<CategoryState> = _uiState.asStateFlow()
 
     init {
         loadCategories()
@@ -65,6 +65,35 @@ open class CategoryViewModel(
         }
     }
 
+    fun selectCategory(categoryName: String) {
+        _uiState.update { it.copy(selectedCategory = categoryName) }
+
+        if (categoryName.equals("Overview", ignoreCase = true)) {
+            loadOverviews()
+        }
+    }
+
+    fun addCreatedItem(name: String, categoryName: String) {
+        _uiState.update {
+            it.copy(createdItems = it.createdItems + (name to categoryName))
+        }
+    }
+
+    fun clearNewItemName() {
+        _uiState.update { it.copy(newItemName = "") }
+    }
+
+    fun updateNewItemName(name: String) {
+        _uiState.update { it.copy(newItemName = name) }
+    }
+
+    fun setShowNewItemDialog(show: Boolean) {
+        _uiState.update { it.copy(isDialogOpen = show) }
+    }
+
+    fun setShowSuccessDialog(show: Boolean) {
+        _uiState.update { it.copy(showSuccessDialog = show) }
+    }
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {

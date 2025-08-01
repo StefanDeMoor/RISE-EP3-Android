@@ -30,11 +30,6 @@ fun CategoryScreen(
     val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
 
     var expanded by remember { mutableStateOf(false) }
-    var selectedCategory by remember { mutableStateOf<String?>(null) }
-    var showNewItemDialog by remember { mutableStateOf(false) }
-    var showSuccessDialog by remember { mutableStateOf(false) }
-    var newItemName by remember { mutableStateOf("") }
-    val createdItems = remember { mutableStateListOf<Pair<String, String>>() }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -56,23 +51,15 @@ fun CategoryScreen(
             verticalArrangement = Arrangement.spacedBy(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             ScreenTitle("Categories")
 
             CategoryDropdownMenu(
                 expanded = expanded,
-                selectedCategory = selectedCategory,
+                selectedCategory = state.selectedCategory,
                 categories = state.categories,
                 onCategorySelected = { category ->
-                    selectedCategory = category.name
+                    viewModel.selectCategory(category.name)
                     expanded = false
-
-                    if (category.name.equals("Overview", ignoreCase = true)) {
-                        viewModel.loadOverviews()
-                        showNewItemDialog = false
-                    } else {
-                        showNewItemDialog = true
-                    }
                 },
                 onExpandedChange = { expanded = it }
             )
@@ -81,15 +68,15 @@ fun CategoryScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                if (selectedCategory.equals("Overview", ignoreCase = true)) {
+                if (state.selectedCategory.equals("Overview", ignoreCase = true)) {
                     OverviewSection(
                         overviews = state.overviews,
-                        createdItems = createdItems,
-                        onAddClick = { showNewItemDialog = true },
+                        createdItems = state.createdItems,
+                        onAddClick = { viewModel.setShowNewItemDialog(true) },
                         onCardClick = onCategoryClick
                     )
                 } else {
-                    createdItems.forEach { (itemName, categoryName) ->
+                    state.createdItems.forEach { (itemName, categoryName) ->
                         if (!categoryName.equals("Overview", ignoreCase = true)) {
                             OverviewCard(title = itemName, onClick = { onCategoryClick(itemName) })
                         }
@@ -97,33 +84,36 @@ fun CategoryScreen(
                 }
             }
 
-            if (showNewItemDialog) {
+            if (state.isDialogOpen) {
                 NewItemDialog(
-                    itemName = newItemName,
-                    onNameChange = { newItemName = it },
+                    itemName = state.newItemName,
+                    onNameChange = viewModel::updateNewItemName,
                     onConfirm = {
-                        if (newItemName.isNotBlank() && selectedCategory != null) {
+                        val selectedCategory = state.selectedCategory ?: return@NewItemDialog
+                        val itemName = state.newItemName
+                        if (itemName.isNotBlank()) {
                             if (selectedCategory.equals("Overview", ignoreCase = true)) {
-                                viewModel.addOverview(newItemName, selectedCategory!!)
+                                viewModel.addOverview(itemName, selectedCategory)
                             }
-                            createdItems.add(Pair(newItemName, selectedCategory!!))
-                            newItemName = ""
-                            showNewItemDialog = false
-                            showSuccessDialog = true
+                            viewModel.addCreatedItem(itemName, selectedCategory)
+                            viewModel.clearNewItemName()
+                            viewModel.setShowNewItemDialog(false)
+                            viewModel.setShowSuccessDialog(true)
                         }
                     },
                     onDismiss = {
-                        newItemName = ""
-                        showNewItemDialog = false
+                        viewModel.clearNewItemName()
+                        viewModel.setShowNewItemDialog(false)
                     }
                 )
             }
 
-            if (showSuccessDialog) {
+            if (state.showSuccessDialog) {
                 SuccessDialog(onDismiss = {
-                    showSuccessDialog = false
+                    viewModel.setShowSuccessDialog(false)
                 })
             }
         }
     }
 }
+
