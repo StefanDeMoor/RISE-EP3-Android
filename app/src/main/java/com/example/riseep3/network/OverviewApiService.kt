@@ -7,17 +7,17 @@ import retrofit2.http.*
 
 interface OverviewApiService {
     @GET("api/overview")
-    suspend fun getOverviews(): List<OverviewDto>
+    suspend fun getOverviews(): Response<List<OverviewDto>>
 
     @POST("api/overview")
-    suspend fun addOverview(@Body overview: OverviewDto)
+    suspend fun addOverview(@Body overview: OverviewDto): Response<Unit>
 
     @PUT("api/overview/{id}")
-    suspend fun updateOverview(@Path("id") id: Int, @Body overviewWrapper: OverviewRequestWrapper)
+    suspend fun updateOverview(@Path("id") id: Int, @Body overviewWrapper: OverviewRequestWrapper): Response<Unit>
 
     @PUT("api/overview/{id}/totalIncome")
     suspend fun updateTotalIncome(@Path("id") id: Int, @Body newTotalIncome: Double): Response<Unit>
 
     @DELETE("api/overview/{id}")
-    suspend fun deleteOverview(@Path("id") id: Int)
+    suspend fun deleteOverview(@Path("id") id: Int): Response<Unit>
 }
