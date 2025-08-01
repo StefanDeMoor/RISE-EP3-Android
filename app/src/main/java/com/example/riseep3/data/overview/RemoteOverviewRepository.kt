@@ -1,11 +1,13 @@
 package com.example.riseep3.data.overview
 
+import android.util.Log
 import com.example.riseep3.data.amount.AmountItemDao
 import com.example.riseep3.domain.overview.OverviewDto
 import com.example.riseep3.domain.overview.OverviewRequestWrapper
 import com.example.riseep3.domain.overview.toEntity
 import com.example.riseep3.network.RetrofitInstance
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import com.example.riseep3.domain.overview.flatten
 
@@ -18,19 +20,27 @@ class RemoteOverviewRepository(
 
     override fun getAllOverviews(): Flow<List<OverviewEntity>> = flow {
         val response = api.getOverviews()
-        val overviewEntities = response.map { it.toEntity() }
+        if (response.isSuccessful) {
+            Log.d("RemoteOverviewRepo", "getAllOverviews success: Response code = ${response.code()}")
+            val overviewDtos = response.body() ?: emptyList()
+            val overviewEntities = overviewDtos.map { it.toEntity() }
 
-        val amountEntities = response.flatMap { overview ->
-            overview.amounts.flatMap { it.flatten() }
-                .map { it.toEntity() }
+            val amountEntities = overviewDtos.flatMap { overview ->
+                overview.amounts.flatMap { it.flatten() }.map { it.toEntity() }
+            }
+
+            overviewDao.insertAll(overviewEntities)
+            amountItemDao.insertAll(amountEntities)
+
+            emit(overviewEntities)
+        } else {
+            Log.e("RemoteOverviewRepo", "getAllOverviews failed: Response code = ${response.code()}")
+            emit(emptyList())
         }
-
-        overviewDao.insertAll(overviewEntities)
-        amountItemDao.insertAll(amountEntities)
-
-        emit(overviewEntities)
+    }.catch { e ->
+        Log.e("RemoteOverviewRepo", "Unexpected error", e)
+        emit(emptyList())
     }
-
 
     override fun getOverviewById(id: Int): Flow<OverviewEntity?> = overviewDao.getOverviewById(id)
 
@@ -45,7 +55,12 @@ class RemoteOverviewRepository(
                     result = overview.result,
                     amounts = emptyList()
                 )
-                api.addOverview(overviewDto)
+                try {
+                    val response = api.addOverview(overviewDto)
+                    Log.d("RemoteOverviewRepo", "Insert success: Response code = ${response.code()}")
+                } catch (e: Exception) {
+                    Log.e("RemoteOverviewRepo", "Insert failed", e)
+                }
             }
         }
     }
@@ -59,16 +74,33 @@ class RemoteOverviewRepository(
             result = overview.result,
             amounts = emptyList()
         )
-
-        api.updateOverview(overview.id, OverviewRequestWrapper(overviewDto))
+        try {
+            val response = api.updateOverview(overview.id, OverviewRequestWrapper(overviewDto))
+            Log.d("RemoteOverviewRepo", "Update success: Response code = ${response.code()}")
+        } catch (e: Exception) {
+            Log.e("RemoteOverviewRepo", "Update failed", e)
+        }
     }
 
     override suspend fun updateTotalIncome(id: Int, newTotalIncome: Double) {
-        api.updateTotalIncome(id, newTotalIncome)
+        try {
+            val response = api.updateTotalIncome(id, newTotalIncome)
+            if (response.isSuccessful) {
+                Log.d("RemoteOverviewRepo", "updateTotalIncome success: Response code = ${response.code()}")
+            } else {
+                Log.e("RemoteOverviewRepo", "updateTotalIncome failed: Response code = ${response.code()}")
+            }
+        } catch (e: Exception) {
+            Log.e("RemoteOverviewRepo", "Exception in updateTotalIncome", e)
+        }
     }
 
-
     override suspend fun delete(overview: OverviewEntity) {
-        api.deleteOverview(overview.id)
+        try {
+            val response = api.deleteOverview(overview.id)
+            Log.d("RemoteOverviewRepo", "Delete success: Response code = ${response.code()}")
+        } catch (e: Exception) {
+            Log.e("RemoteOverviewRepo", "Delete failed", e)
+        }
     }
 }

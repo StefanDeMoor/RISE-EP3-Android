@@ -11,10 +11,10 @@ import retrofit2.http.Path
 
 interface AmountItemApiService {
     @GET("api/amount")
-    suspend fun getAmountItems(): List<AmountItemDto>
+    suspend fun getAmountItems(): Response<List<AmountItemDto>>
 
     @POST("api/amount")
-    suspend fun addAmountItem(@Body amountItem: AmountItemDto)
+    suspend fun addAmountItem(@Body amountItem: AmountItemDto): Response<Unit>
 
     @PUT("api/amount/{id}")
     suspend fun updateAmountItem(@Path("id") id: Int, @Body amountItem: AmountItemDto): Response<Unit>
