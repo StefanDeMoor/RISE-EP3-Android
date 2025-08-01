@@ -7,5 +7,10 @@ data class CategoryState(
     val categories: List<CategoryEntity> = emptyList(),
     val overviews: List<OverviewEntity> = emptyList(),
     val newCategoryName: String = "",
-    val isDialogOpen: Boolean = false
+    val isDialogOpen: Boolean = false,
+    val selectedCategory: String? = null,
+    val createdItems: List<Pair<String, String>> = emptyList(),
+    val showNewItemDialog: Boolean = false,
+    val newItemName: String = "",
+    val showSuccessDialog: Boolean = false
 )
