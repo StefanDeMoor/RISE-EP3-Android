@@ -16,17 +16,17 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
-class OverviewViewModel(
+open class OverviewViewModel(
     private val amountItemRepo: AmountItemCategory,
     private val overviewRepo: OverviewRepository
 ) : ViewModel() {
 
-    var uiState by mutableStateOf(OverviewState())
+    open var uiState by mutableStateOf(OverviewState())
         private set
 
     private var currentOverviewId: Int = -1
 
-    fun loadOverviewById(id: Int) {
+    open fun loadOverviewById(id: Int) {
         viewModelScope.launch {
             currentOverviewId = id
 

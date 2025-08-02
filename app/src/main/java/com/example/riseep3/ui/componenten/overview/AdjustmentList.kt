@@ -19,6 +19,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.runtime.*
+import com.example.riseep3.ui.theme.RiseTheme
 
 @Composable
 fun AdjustmentList(
@@ -62,6 +65,30 @@ fun AdjustmentList(
                 }
             }
             HorizontalDivider()
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AdjustmentListPreview() {
+    RiseTheme {
+        var items by remember {
+            mutableStateOf(
+                listOf(
+                    Triple(0, "Lunch", -8.50),
+                    Triple(1, "Refund", 5.00),
+                    Triple(2, "Groceries", -32.90)
+                )
+            )
+        }
+
+        Column(modifier = Modifier.padding(16.dp)) {
+            AdjustmentList(
+                adjustments = items,
+                onEdit = {},
+                onDelete = { index -> items = items.filterIndexed { i, _ -> i != index } }
+            )
         }
     }
 }

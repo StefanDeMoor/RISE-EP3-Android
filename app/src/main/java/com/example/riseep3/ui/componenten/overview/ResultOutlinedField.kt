@@ -7,6 +7,8 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.riseep3.ui.theme.RiseTheme
 
 @Composable
 fun ResultOutlinedField(
@@ -30,4 +32,14 @@ fun ResultOutlinedField(
             disabledTextColor = MaterialTheme.colorScheme.onSurface
         )
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ResultOutlinedFieldPreview() {
+    RiseTheme {
+        ResultOutlinedField(
+            result = 1234.56
+        )
+    }
 }

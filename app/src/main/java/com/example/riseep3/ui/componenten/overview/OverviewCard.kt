@@ -23,6 +23,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.riseep3.R
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.layout.*
+import com.example.riseep3.ui.theme.RiseTheme
 
 @Composable
 fun OverviewCard(title: String, onClick: () -> Unit) {
@@ -72,6 +75,16 @@ fun OverviewCard(title: String, onClick: () -> Unit) {
                 contentDescription = "Overview Icon",
                 tint = MaterialTheme.colorScheme.background
             )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun OverviewCardPreview() {
+    RiseTheme {
+        Column(modifier = Modifier.padding(16.dp)) {
+            OverviewCard(title = "Total Overview") {}
         }
     }
 }
