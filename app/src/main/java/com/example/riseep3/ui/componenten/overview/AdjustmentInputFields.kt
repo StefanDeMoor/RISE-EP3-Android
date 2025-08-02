@@ -16,12 +16,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import java.util.Locale
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.layout.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import com.example.riseep3.ui.theme.RiseTheme
 
 @Composable
 fun AdjustmentInputFields(
@@ -107,6 +110,31 @@ fun AdjustmentInputFields(
             keyboardController?.hide()
         }) {
             Icon(Icons.Default.Check, contentDescription = "Bevestig")
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AdjustmentInputFieldsPreview() {
+    RiseTheme {
+        var name by remember { mutableStateOf("Groceries") }
+        var amount by remember { mutableDoubleStateOf(12.5) }
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            AdjustmentInputFields(
+                amountName = name,
+                onAmountNameChange = { name = it },
+                amountInput = amount,
+                onAmountChange = { amount = it },
+                onConfirm = {}
+            )
         }
     }
 }

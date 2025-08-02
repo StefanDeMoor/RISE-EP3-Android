@@ -5,9 +5,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.example.riseep3.R
 import com.example.riseep3.ui.theme.Montagu
+import com.example.riseep3.ui.theme.RiseTheme
 
 @Composable
 fun ScreenTitle(
@@ -23,4 +25,12 @@ fun ScreenTitle(
             letterSpacing = 1.5.sp
         )
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ScreenTitlePreview() {
+    RiseTheme {
+        ScreenTitle(title = "Example Title")
+    }
 }

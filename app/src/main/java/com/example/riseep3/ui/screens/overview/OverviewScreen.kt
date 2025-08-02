@@ -8,8 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.riseep3.ui.componenten.ScreenTitle
@@ -20,6 +22,10 @@ import com.example.riseep3.ui.componenten.overview.AdjustmentList
 import com.example.riseep3.ui.componenten.overview.ResultOutlinedField
 import com.example.riseep3.ui.componenten.overview.TotalIncomeInputField
 import com.example.riseep3.ui.componenten.overview.TotalIncomeSummaryCard
+import com.example.riseep3.ui.screens.fake.FakeAmountItemRepository
+import com.example.riseep3.ui.screens.fake.FakeOverviewRepository
+import com.example.riseep3.ui.screens.fake.FakeOverviewViewModel
+import com.example.riseep3.ui.screens.fake.FakeThemeViewModel
 import com.example.riseep3.ui.theme.ThemeViewModel
 
 @Composable
@@ -105,3 +111,23 @@ fun OverviewScreen(
         }
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun OverviewScreenPreview() {
+    val fakeAmountItemRepo = remember { FakeAmountItemRepository() }
+    val fakeOverviewRepo = remember { FakeOverviewRepository() }
+    val fakeOverviewViewModel = remember { FakeOverviewViewModel(
+        amountItemRepo = fakeAmountItemRepo,
+        overviewRepo = fakeOverviewRepo
+    ) }
+    val fakeThemeViewModel = remember { FakeThemeViewModel() }
+
+    OverviewScreen(
+        overviewId = 1,
+        viewModel = fakeOverviewViewModel,
+        themeViewModel = fakeThemeViewModel,
+        onNavigateBack = {}
+    )
+}
+

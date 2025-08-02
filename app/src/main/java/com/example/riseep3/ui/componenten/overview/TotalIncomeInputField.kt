@@ -8,11 +8,14 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.riseep3.ui.theme.RiseTheme
 
 @Composable
 fun TotalIncomeInputField(
@@ -51,4 +54,17 @@ fun TotalIncomeInputField(
     )
 }
 
+@Preview(showBackground = true)
+@Composable
+fun TotalIncomeInputFieldPreview() {
+    RiseTheme {
+        val totalIncomeState = remember { mutableDoubleStateOf(2500.0) }
+
+        TotalIncomeInputField(
+            totalIncome = totalIncomeState.doubleValue,
+            onTotalIncomeChange = { totalIncomeState.doubleValue = it },
+            onConfirm = {}
+        )
+    }
+}
 

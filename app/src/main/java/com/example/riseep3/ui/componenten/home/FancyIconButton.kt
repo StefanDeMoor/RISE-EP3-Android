@@ -18,12 +18,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.riseep3.R
+import com.example.riseep3.ui.theme.RiseTheme
 
 @Composable
 fun FancyIconButton(
@@ -72,5 +74,29 @@ fun FancyIconButton(
                     .semantics { this.contentDescription = contentDescription }
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun FancyIconButtonPreview_Light() {
+    RiseTheme(darkTheme = false) {
+        FancyIconButton(
+            icon = R.drawable.plus,
+            contentDescription = "Create",
+            onClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun FancyIconButtonPreview_Dark() {
+    RiseTheme(darkTheme = true) {
+        FancyIconButton(
+            icon = R.drawable.plus,
+            contentDescription = "Create",
+            onClick = {}
+        )
     }
 }

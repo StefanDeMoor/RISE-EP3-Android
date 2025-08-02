@@ -7,6 +7,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.riseep3.ui.componenten.ScreenTitle
@@ -16,6 +17,10 @@ import com.example.riseep3.ui.componenten.category.NewItemDialog
 import com.example.riseep3.ui.componenten.category.CategoryDropdownMenu
 import com.example.riseep3.ui.componenten.overview.OverviewCard
 import com.example.riseep3.ui.componenten.overview.OverviewSection
+import com.example.riseep3.ui.screens.fake.FakeCategoryRepository
+import com.example.riseep3.ui.screens.fake.FakeCategoryViewModel
+import com.example.riseep3.ui.screens.fake.FakeOverviewRepository
+import com.example.riseep3.ui.screens.fake.FakeThemeViewModel
 import com.example.riseep3.ui.theme.ThemeViewModel
 
 @Composable
@@ -116,4 +121,26 @@ fun CategoryScreen(
         }
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun CategoryScreenPreview() {
+    val fakeCategoryRepo = remember { FakeCategoryRepository() }
+    val fakeOverviewRepo = remember { FakeOverviewRepository() }
+    val fakeCategoryVM = remember {
+        FakeCategoryViewModel(
+            categoryRepo = fakeCategoryRepo,
+            overviewRepo = fakeOverviewRepo
+        )
+    }
+    val fakeThemeVM = remember { FakeThemeViewModel() }
+
+    CategoryScreen(
+        viewModel = fakeCategoryVM,
+        themeViewModel = fakeThemeVM,
+        onCategoryClick = {},
+        onNavigateBack = {}
+    )
+}
+
 
