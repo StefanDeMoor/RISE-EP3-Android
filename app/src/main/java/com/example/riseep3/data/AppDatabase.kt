@@ -29,7 +29,7 @@ abstract class AppDatabase : RoomDatabase() {
         fun getDatabase(context: Context): AppDatabase {
             return Instance ?: synchronized(this) {
                 Room.databaseBuilder(context, AppDatabase::class.java, "app_database")
-                    .fallbackToDestructiveMigration(false) // To prevent crash when schema changes in dev
+                    .fallbackToDestructiveMigration(false)
                     .build()
                     .also { Instance = it }
             }

@@ -1,0 +1,113 @@
+° RoomDb = Het is een databasebibliotheek in Android die een abstractielaag bovenop SQLite biedt
+
+° AbstractieLaag = Het is een manier om complexiteit te verbergen en een systeem eenvoudiger en overzichtelijker te maken door er een tussenlaag bovenop te bouwen
+
+* Waarom Room toepassen?
+    -> Zonder Room :
+        - Je schrijft ruwe SQL-queries als tekst
+        - Geen controle op fouten bij het compileren
+        - Zelf data uit rijen halen en omzetten naar objecten
+    -> Met Room:
+        - Je werkt met Kotlin of Java-objecten (Entity, DAO)
+        - Room vertaalt jouw code automatisch naar SQL
+        - Minder kans op fouten, meer overzicht, makkelijker te onderhouden
+
+* Room biedt ondersteuning voor:
+    1) Entities = tabellen
+    2) DAO's (Data Access Object) = toegangsmethoden
+    3) Roomdatabase = de "brug" tussen je app en de database
+
+* Code voorbeelden:
+    1) CategoryEntity
+        = Een klasse die overeenkomt met een tabel in de database
+    ------------------------------------------------------------------------------------------------
+    @Entity(tableName = "categories")
+    data class CategoryEntity(
+        @PrimaryKey(autoGenerate = true) val id: Int = 0,
+        val name: String
+    )
+    ------------------------------------------------------------------------------------------------
+        -> De data class bevat de kolommen van de tabel
+        ° data class = Klasse die wordt gebruikt om data op te slaan
+            -> Bevat automatisch functies zoals : equals() | hashCode() | toString() | copy()
+
+    2) CategoryDao
+        = Interface waarin je aangeeft hoe je met de database wilt communcieren
+    ------------------------------------------------------------------------------------------------
+    @Dao
+    interface CategoryDao {
+        @Insert
+        suspend fun insertAll(categories: List<CategoryEntity>)
+
+        @Update
+        suspend fun update(category: CategoryEntity)
+
+        @Delete
+        suspend fun delete(category: CategoryEntity)
+
+        @Query("SELECT * from categories WHERE id = :id")
+        fun getCategory(id: Int): Flow<CategoryEntity>
+
+        @Query("SELECT * from categories ORDER BY name ASC")
+        fun getAllCategories(): Flow<List<CategoryEntity>>
+    }
+    ------------------------------------------------------------------------------------------------
+        ° suspend = Maakt een functie asynchroon/pauzeerbaar en geschikt voor coroutines
+            -> Hierdoor kan Kotlin de operatie op de achtergrond uitvoeren, zonder dat de gebruikersinterface blokkeert
+
+    3) AppDatabase
+    ------------------------------------------------------------------------------------------------
+    @Database(
+        entities = [CategoryEntity::class, OverviewEntity::class, AmountItemEntity::class],
+        version = 5,
+        exportSchema = false
+    )
+    abstract class AppDatabase : RoomDatabase() {
+
+        abstract fun categoryDao(): CategoryDao
+        abstract fun overviewDao(): OverviewDao
+        abstract fun amountItemDao(): AmountItemDao
+
+        companion object {
+            @Volatile
+            private var Instance: AppDatabase? = null
+
+            fun getDatabase(context: Context): AppDatabase {
+                return Instance ?: synchronized(this) {
+                    Room.databaseBuilder(context, AppDatabase::class.java, "app_database")
+                        .fallbackToDestructiveMigration(false)
+                        .build()
+                        .also { Instance = it }
+                }
+            }
+        }
+    }
+    ------------------------------------------------------------------------------------------------
+    * @Database(...)
+        -> Deze annotatie vertelt Room dat deze klasse een database voorstelt.
+        -> entities = [...]: Elke Entity is een tabel in de database.
+        -> version : Dit is de versie van de database. Verhoog je deze waarde bij elke schema-wijziging.
+        -> exportSchema = false: Hiermee geef je aan dat je de database-structuur niet extern wilt exporteren
+
+    ° abstract class = Een klasse die niet direct geïnstantieerd mag worden (je mag er geen AppDatabase() van maken).
+                       Je gebruikt ze om een basisstructuur te definiëren die andere klassen of systemen (zoals Room) verder invullen.
+    ° companion object = een object dat bij de klasse hoort in plaats van bij een instantie ervan. Het is vergelijkbaar met static in Java.
+        -> functies of variabelen beschikbaar te maken zonder dat je een object van de klasse moet maken
+        -> bijvoorbeeld: AppDatabase.getDatabase(context)
+        -> Je gebruikt het hier om de database als Singleton op te zetten.
+
+    ° @Volatile = Dit zorgt ervoor dat meerdere threads altijd de meest recente waarde van Instance gebruiken.
+        -> Zonder @Volatile kan het gebeuren dat één thread een verouderde waarde uit cache gebruikt, wat tot bugs leidt.
+
+    * getDatabase()
+        -> Dit is een factory-methode die zorgt dat er maar één instantie van de database wordt aangemaakt (Singleton).
+        -> Als Instance al bestaat → return die direct.
+        -> Als Instance null is → gebruik synchronized om er zeker van te zijn dat slechts één thread tegelijk de database aanmaakt.
+        * synchronized(this)
+            - Dit zorgt ervoor dat twee threads niet tegelijk binnenkomen in dit blok.
+            - Het voorkomt dat er per ongeluk twee databases tegelijk worden aangemaakt.
+        * .also { Instance = it }
+            - Nadat de database is aangemaakt (.build()), wordt it (de nieuwe database) tegelijk toegekend aan Instance.
+        * .fallbackToDestructiveMigration(false)
+            - Als de databaseversie verandert en je geen migratie opgeeft, dan mag Room NIET automatisch de database wissen en opnieuw aanmaken.
+            - Als je true zou instellen, wordt de database vernietigd en opnieuw opgebouwd bij een versieconflict. (Handig tijdens ontwikkeling, riskant in productie!)
