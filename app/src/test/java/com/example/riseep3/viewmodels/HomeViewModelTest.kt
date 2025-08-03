@@ -1,4 +1,4 @@
-package com.example.riseep3
+package com.example.riseep3.viewmodels
 
 import com.example.riseep3.ui.theme.ThemeViewModel
 import kotlinx.coroutines.flow.first
