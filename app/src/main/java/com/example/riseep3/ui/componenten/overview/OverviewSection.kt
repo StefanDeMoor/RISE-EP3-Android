@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.platform.testTag
 import com.example.riseep3.ui.theme.RiseTheme
 
 @Composable
@@ -43,7 +44,9 @@ fun OverviewSection(
 
         IconButton(
             onClick = onAddClick,
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier
+                .size(24.dp)
+                .testTag("AddOverviewButton")
         ) {
             Icon(
                 imageVector = Icons.Default.Add,
@@ -51,6 +54,7 @@ fun OverviewSection(
                 tint = MaterialTheme.colorScheme.onSurface
             )
         }
+
     }
 
     overviews.forEach { overview ->

@@ -1,4 +1,4 @@
-package com.example.riseep3
+package com.example.riseep3.navigation
 
 import android.annotation.SuppressLint
 import androidx.compose.ui.platform.LocalContext
@@ -8,6 +8,7 @@ import androidx.compose.ui.test.performClick
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.riseep3.assertCurrentRouteName
 import com.example.riseep3.ui.HomeCalcApp
 import org.junit.Before
 import org.junit.Rule
@@ -15,7 +16,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class HomeNavigationTest {
+class NavigationTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()

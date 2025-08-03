@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import com.example.riseep3.ui.theme.RiseTheme
 
 @Composable
@@ -60,7 +61,9 @@ fun AdjustmentInputFields(
             },
             placeholder = { Text("Naam") },
             singleLine = true,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .testTag("AmountNameInput"),
             colors = TextFieldDefaults.colors(
                 focusedTextColor = MaterialTheme.colorScheme.onSurface,
                 unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
@@ -86,7 +89,9 @@ fun AdjustmentInputFields(
             },
             placeholder = { Text("€") },
             singleLine = true,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .testTag("AmountInput"),
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = {
                 onConfirm()
@@ -108,7 +113,9 @@ fun AdjustmentInputFields(
         IconButton(onClick = {
             onConfirm()
             keyboardController?.hide()
-        }) {
+        },
+            modifier = Modifier.testTag("ConfirmButton")
+        ) {
             Icon(Icons.Default.Check, contentDescription = "Bevestig")
         }
     }
