@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.example.riseep3.R
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
+import androidx.compose.ui.platform.testTag
 import com.example.riseep3.ui.theme.RiseTheme
 
 @Composable
@@ -48,7 +49,8 @@ fun OverviewCard(title: String, onClick: () -> Unit) {
         },
         modifier = Modifier
             .fillMaxWidth()
-            .scale(scale),
+            .scale(scale)
+            .testTag("OverviewCard_$title"),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.onBackground
         ),

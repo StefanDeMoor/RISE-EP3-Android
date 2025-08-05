@@ -19,6 +19,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.riseep3.R
 
@@ -44,7 +45,8 @@ fun ThemeToggleButton(
     Surface(
         modifier = modifier
             .size(48.dp)
-            .scale(scale),
+            .scale(scale)
+            .testTag("ThemeToggleButton"),
         shape = CircleShape,
         color = MaterialTheme.colorScheme.onBackground,
         onClick = {

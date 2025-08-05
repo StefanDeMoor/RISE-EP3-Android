@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.riseep3.MainApplication
-import com.example.riseep3.data.amount.AmountItemCategory
+import com.example.riseep3.data.amount.AmountItemRepository
 import com.example.riseep3.data.amount.AmountItemEntity
 import com.example.riseep3.data.overview.OverviewRepository
 import kotlinx.coroutines.flow.first
@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
 open class OverviewViewModel(
-    private val amountItemRepo: AmountItemCategory,
+    private val amountItemRepo: AmountItemRepository,
     private val overviewRepo: OverviewRepository
 ) : ViewModel() {
 
