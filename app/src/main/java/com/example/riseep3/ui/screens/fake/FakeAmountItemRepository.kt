@@ -8,40 +8,32 @@ import kotlinx.coroutines.flow.flow
 
 class FakeAmountItemRepository : AmountItemCategory {
 
-    private val fakeAmountItems = listOf(
-        AmountItemEntity(
-            id = 1,
-            overviewId = 1,
-            amount = 1000.0,
-            name = "Huur",
-            parentAmountItemId = null
-        ),
-        AmountItemEntity(
-            id = 2,
-            overviewId = 1,
-            amount = 500.0,
-            name = "Elek",
-            parentAmountItemId = null
-        )
-    )
+    private val fakeAmountItems = mutableListOf<AmountItemEntity>()
 
     override fun getAllAmountItem(): Flow<List<AmountItemEntity>> {
         return flow {
-            emit(fakeAmountItems.filter { it.overviewId == 1 })
+            emit(fakeAmountItems)
         }
     }
 
     override suspend fun insertAll(amountItems: Flow<List<AmountItemEntity>>) {
-        TODO("Not yet implemented")
+        amountItems.collect {
+            fakeAmountItems.addAll(it)
+        }
     }
 
     override suspend fun update(amountItem: AmountItemEntity) {
-        TODO("Not yet implemented")
+        val index = fakeAmountItems.indexOfFirst { it.id == amountItem.id }
+        if (index != -1) {
+            fakeAmountItems[index] = amountItem
+        }
     }
 
     override suspend fun delete(amountItem: AmountItemEntity) {
-        TODO("Not yet implemented")
+        fakeAmountItems.removeIf { it.id == amountItem.id }
     }
 
-
+    fun reset() {
+        fakeAmountItems.clear()
+    }
 }

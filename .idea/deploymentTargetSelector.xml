@@ -5,13 +5,10 @@
       <SelectionState runConfigName="HomeCalcApp">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="OverviewScreenTest">
+      <SelectionState runConfigName="OverviewDaoTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="HomeScreenTest">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="testInsertAndGetAllCategories()">
+      <SelectionState runConfigName="CategoryDaoTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

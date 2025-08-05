@@ -7,46 +7,49 @@ import kotlinx.coroutines.flow.flow
 
 class FakeOverviewRepository : OverviewRepository {
 
-    private val fakeData = listOf(
-        OverviewEntity(
-            id = 1,
-            title = "August Budget",
-            totalIncome = 3000.0,
-            categoryId = 1,
-            result = 0.0
-        ),
-        OverviewEntity(
-            id = 2,
-            title = "September Budget",
-            totalIncome = 3200.0,
-            categoryId = 1,
-            result = 0.0
-        )
-    )
+    private val fakeData = mutableListOf<OverviewEntity>()
 
-    override fun getAllOverviews(): Flow<List<OverviewEntity>> {
-        TODO("Not yet implemented")
+    override fun getAllOverviews(): Flow<List<OverviewEntity>> = flow {
+        emit(fakeData)
     }
 
-    override fun getOverviewById(id: Int): Flow<OverviewEntity?> {
-        return flow {
-            emit(fakeData.find { it.id == id })
-        }
+    override fun getOverviewById(id: Int): Flow<OverviewEntity?> = flow {
+        emit(fakeData.find { it.id == id })
     }
 
     override suspend fun insertAll(overviews: Flow<List<OverviewEntity>>) {
-        TODO("Not yet implemented")
+        overviews.collect { list ->
+            list.forEach { newOverview ->
+                val index = fakeData.indexOfFirst { it.id == newOverview.id }
+                if (index != -1) {
+                    fakeData[index] = newOverview
+                } else {
+                    fakeData.add(newOverview)
+                }
+            }
+        }
     }
 
     override suspend fun update(overview: OverviewEntity) {
-        TODO("Not yet implemented")
+        val index = fakeData.indexOfFirst { it.id == overview.id }
+        if (index != -1) {
+            fakeData[index] = overview
+        }
     }
 
     override suspend fun updateTotalIncome(id: Int, newTotalIncome: Double) {
-        TODO("Not yet implemented")
+        val index = fakeData.indexOfFirst { it.id == id }
+        if (index != -1) {
+            val old = fakeData[index]
+            fakeData[index] = old.copy(totalIncome = newTotalIncome)
+        }
     }
 
     override suspend fun delete(overview: OverviewEntity) {
-        TODO("Not yet implemented")
+        fakeData.removeIf { it.id == overview.id }
+    }
+
+    fun reset() {
+        fakeData.clear()
     }
 }
