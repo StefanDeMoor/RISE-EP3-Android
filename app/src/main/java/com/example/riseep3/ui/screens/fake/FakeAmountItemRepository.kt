@@ -1,12 +1,12 @@
 package com.example.riseep3.ui.screens.fake
 
-import com.example.riseep3.data.amount.AmountItemCategory
+import com.example.riseep3.data.amount.AmountItemRepository
 import com.example.riseep3.data.amount.AmountItemEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 
-class FakeAmountItemRepository : AmountItemCategory {
+class FakeAmountItemRepository : AmountItemRepository {
 
     private val fakeAmountItems = mutableListOf<AmountItemEntity>()
 

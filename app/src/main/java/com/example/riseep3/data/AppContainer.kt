@@ -1,7 +1,7 @@
 package com.example.riseep3.data
 
 import android.content.Context
-import com.example.riseep3.data.amount.AmountItemCategory
+import com.example.riseep3.data.amount.AmountItemRepository
 import com.example.riseep3.data.amount.HybridAmountItemRepository
 import com.example.riseep3.data.amount.OfflineAmountItemRepository
 import com.example.riseep3.data.amount.RemoteAmountItemRepository
@@ -32,7 +32,7 @@ class AppContainer(context: Context) {
             local = OfflineOverviewRepository(database.overviewDao())
         )
     }
-    val amountItemRepository: AmountItemCategory by lazy {
+    val amountItemRepository: AmountItemRepository by lazy {
         HybridAmountItemRepository(
             remote = RemoteAmountItemRepository(database.amountItemDao()),
             local = OfflineAmountItemRepository(database.amountItemDao())

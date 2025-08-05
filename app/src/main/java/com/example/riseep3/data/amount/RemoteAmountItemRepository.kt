@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.flow
 
 class RemoteAmountItemRepository(
     private val amountItemDao: AmountItemDao
-) : AmountItemCategory {
+) : AmountItemRepository {
 
     private val api = RetrofitInstance.amountItemApiService
 

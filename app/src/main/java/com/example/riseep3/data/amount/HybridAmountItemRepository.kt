@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 class HybridAmountItemRepository(
     private val remote : RemoteAmountItemRepository,
     private val local : OfflineAmountItemRepository
-) : AmountItemCategory {
+) : AmountItemRepository {
 
     override fun getAllAmountItem(): Flow<List<AmountItemEntity>> = local.getAllAmountItem().also {
        CoroutineScope(Dispatchers.IO).launch {

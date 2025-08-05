@@ -1,12 +1,12 @@
 package com.example.riseep3.ui.screens.fake
 
-import com.example.riseep3.data.amount.AmountItemCategory
+import com.example.riseep3.data.amount.AmountItemRepository
 import com.example.riseep3.data.overview.OverviewRepository
 import com.example.riseep3.ui.screens.overview.OverviewState
 import com.example.riseep3.ui.screens.overview.OverviewViewModel
 
 class FakeOverviewViewModel(
-    amountItemRepo: AmountItemCategory,
+    amountItemRepo: AmountItemRepository,
     overviewRepo: OverviewRepository,
     initialState: OverviewState = OverviewState(
         overviewTitle = "Monthly Report",
