@@ -48,10 +48,10 @@ class NavigationTest {
     }
 
     @Test
-    fun clickProfileButton_navigatesToProfile() {
-        composeTestRule.onNodeWithContentDescription("Profile").performClick()
+    fun clickCustomerButton_navigatesToProfile() {
+        composeTestRule.onNodeWithContentDescription("Customer").performClick()
         composeTestRule.waitForIdle()
-        navController.assertCurrentRouteName("profile")
+        navController.assertCurrentRouteName("customer")
     }
 
     @Test

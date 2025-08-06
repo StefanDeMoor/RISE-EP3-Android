@@ -1,4 +1,4 @@
-package com.example.riseep3.ui.screens.profile
+package com.example.riseep3.ui.screens.customer
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
@@ -19,7 +19,7 @@ import com.example.riseep3.ui.theme.RiseTheme
 import com.example.riseep3.ui.theme.ThemeViewModel
 
 @Composable
-fun ProfileScreen(
+fun CustomerScreen(
     themeViewModel: ThemeViewModel,
     onNavigateBack: () -> Unit = {}
 ) {
@@ -58,8 +58,8 @@ fun ProfileScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             ScreenTitle(
-                title = "Profile",
-                modifier = Modifier.testTag("ProfileScreenTitle")
+                title = "Customer",
+                modifier = Modifier.testTag("CustomerScreenTitle")
             )
         }
     }
@@ -68,8 +68,8 @@ fun ProfileScreen(
 @SuppressLint("ViewModelConstructorInComposable")
 @Preview
 @Composable
-fun ProfileScreenPreview() {
+fun CustomerScreenPreview() {
     RiseTheme {
-        ProfileScreen(themeViewModel = ThemeViewModel())
+        CustomerScreen(themeViewModel = ThemeViewModel())
     }
 }

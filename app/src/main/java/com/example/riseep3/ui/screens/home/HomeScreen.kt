@@ -25,7 +25,7 @@ import com.example.riseep3.ui.theme.ThemeViewModel
 fun HomeScreen(
     modifier: Modifier = Modifier,
     onCreateClick: () -> Unit,
-    onProfileClick: () -> Unit,
+    onCustomerClick: () -> Unit,
     onSalesClick: () -> Unit,
     onProductsClick: () -> Unit,
     themeViewModel: ThemeViewModel
@@ -86,7 +86,7 @@ fun HomeScreen(
 
             val buttons = listOf(
                 Triple(R.drawable.plus, "Create") { onCreateClick() },
-                Triple(R.drawable.profile, "Profile") { onProfileClick() },
+                Triple(R.drawable.profile, "Customer") { onCustomerClick() },
                 Triple(R.drawable.sales, "Sales") { onSalesClick() },
                 Triple(R.drawable.product, "Products") { onProductsClick() }
             )
@@ -151,7 +151,7 @@ fun PreviewHomeScreen(isDarkTheme: Boolean) {
     RiseTheme(darkTheme = isDarkTheme) {
         HomeScreen(
             onCreateClick = {},
-            onProfileClick = {},
+            onCustomerClick = {},
             onSalesClick = {},
             onProductsClick = {},
             themeViewModel = ThemeViewModel()
