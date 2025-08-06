@@ -20,6 +20,8 @@ import com.example.riseep3.ui.componenten.ScreenTitle
 import com.example.riseep3.ui.componenten.ThemeToggleButton
 import com.example.riseep3.ui.theme.RiseTheme
 import com.example.riseep3.ui.theme.ThemeViewModel
+import com.example.riseep3.ui.componenten.customer.SearchBar
+
 
 @Composable
 fun CustomerScreen(
@@ -27,6 +29,7 @@ fun CustomerScreen(
     onNavigateBack: () -> Unit = {}
 ) {
     val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
+    var searchQuery by remember { mutableStateOf("") }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -88,13 +91,16 @@ fun CustomerScreen(
             verticalArrangement = Arrangement.spacedBy(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
+            SearchBar(
+                query = searchQuery,
+                onQueryChange = { searchQuery = it }
+            )
         }
     }
 }
 
 @SuppressLint("ViewModelConstructorInComposable")
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun CustomerScreenPreview() {
     RiseTheme {
