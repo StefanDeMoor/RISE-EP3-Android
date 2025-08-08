@@ -14,9 +14,9 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.riseep3.ui.screens.category.CategoryScreen
+import com.example.riseep3.ui.screens.customer.CustomerScreen
 import com.example.riseep3.ui.screens.home.HomeScreen
 import com.example.riseep3.ui.screens.products.ProductScreen
-import com.example.riseep3.ui.screens.profile.ProfileScreen
 import com.example.riseep3.ui.screens.sales.SalesScreen
 import com.example.riseep3.ui.theme.ThemeViewModel
 import org.junit.Rule
@@ -39,7 +39,7 @@ class HomeScreenTest {
             when (currentScreen) {
                 "home" -> HomeScreen(
                     onCreateClick = { currentScreen = "create" },
-                    onProfileClick = { currentScreen = "profile" },
+                    onCustomerClick = { currentScreen = "customer" },
                     onSalesClick = { currentScreen = "sales" },
                     onProductsClick = { currentScreen = "product" },
                     themeViewModel = themeViewModel
@@ -53,7 +53,7 @@ class HomeScreenTest {
                     themeViewModel = themeViewModel,
                     onNavigateBack = { currentScreen = "home" }
                 )
-                "profile" -> ProfileScreen(
+                "customer" -> CustomerScreen(
                     themeViewModel = themeViewModel,
                     onNavigateBack = { currentScreen = "home" }
                 )
@@ -88,13 +88,13 @@ class HomeScreenTest {
 
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithContentDescription("Profile")
+        composeTestRule.onNodeWithContentDescription("Customer")
             .assertIsDisplayed()
             .performClick()
 
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithTag("ProfileScreenTitle").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("CustomerScreenTitle").assertIsDisplayed()
 
         composeTestRule.onNodeWithContentDescription("Back").performClick()
 
@@ -114,7 +114,7 @@ class HomeScreenTest {
 
         composeTestRule.onNodeWithContentDescription("Create").assertIsDisplayed()
         composeTestRule.onNodeWithContentDescription("Sales").assertIsDisplayed()
-        composeTestRule.onNodeWithContentDescription("Profile").assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription("Customer").assertIsDisplayed()
         composeTestRule.onNodeWithContentDescription("Products").assertIsDisplayed()
     }
 
@@ -124,7 +124,7 @@ class HomeScreenTest {
         composeTestRule.setContent {
             HomeScreen(
                 onCreateClick = {},
-                onProfileClick = {},
+                onCustomerClick = {},
                 onSalesClick = {},
                 onProductsClick = {},
                 themeViewModel =  ThemeViewModel(),

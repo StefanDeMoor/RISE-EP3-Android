@@ -29,7 +29,7 @@ class SalesScreenTest {
 
     @SuppressLint("ViewModelConstructorInComposable")
     @Test
-    fun salesScreen_displaysProfileText() {
+    fun salesScreen_displaysSalesText() {
         composeTestRule.setContent {
             SalesScreen(
                 themeViewModel = ThemeViewModel(),

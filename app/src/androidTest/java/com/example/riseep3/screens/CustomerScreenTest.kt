@@ -10,41 +10,41 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.riseep3.ui.screens.customer.CustomerScreen
 import com.example.riseep3.ui.screens.fake.FakeThemeViewModel
-import com.example.riseep3.ui.screens.profile.ProfileScreen
 import com.example.riseep3.ui.theme.ThemeViewModel
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class ProfileScreenTest {
+class CustomerScreenTest {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     @SuppressLint("ViewModelConstructorInComposable")
     @Test
-    fun profileScreen_displaysProfileText() {
+    fun customerScreen_displaysCustomerText() {
         composeTestRule.setContent {
-            ProfileScreen(
+            CustomerScreen(
                 themeViewModel = ThemeViewModel(),
                 onNavigateBack = {}
             )
         }
 
         composeTestRule
-            .onNodeWithText("Profile")
+            .onNodeWithText("Customer")
             .assertIsDisplayed()
     }
 
     @SuppressLint("ViewModelConstructorInComposable")
     @Test
-    fun profileScreen_backButtonClick_triggersCallback() {
+    fun customerScreen_backButtonClick_triggersCallback() {
         composeTestRule.setContent {
             var backClicked by remember { mutableStateOf(false) }
 
-            ProfileScreen(
+            CustomerScreen(
                 themeViewModel = ThemeViewModel(),
                 onNavigateBack = { backClicked = true }
             )
@@ -66,11 +66,11 @@ class ProfileScreenTest {
 
     @SuppressLint("StateFlowValueCalledInComposition")
     @Test
-    fun profileScreen_toggleTheme_changesTheme() {
+    fun customerScreen_toggleTheme_changesTheme() {
         val fakeThemeViewModel = FakeThemeViewModel()
 
         composeTestRule.setContent {
-            ProfileScreen(
+            CustomerScreen(
                 themeViewModel = fakeThemeViewModel,
                 onNavigateBack = {}
             )

@@ -1,6 +1,5 @@
 package com.example.riseep3.ui
 
-import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -12,10 +11,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.riseep3.ui.screens.category.CategoryScreen
+import com.example.riseep3.ui.screens.customer.CustomerScreen
 import com.example.riseep3.ui.screens.home.HomeScreen
 import com.example.riseep3.ui.screens.overview.OverviewScreen
 import com.example.riseep3.ui.screens.products.ProductScreen
-import com.example.riseep3.ui.screens.profile.ProfileScreen
 import com.example.riseep3.ui.screens.sales.SalesScreen
 import com.example.riseep3.ui.theme.RiseTheme
 import com.example.riseep3.ui.theme.ThemeViewModel
@@ -32,7 +31,7 @@ fun HomeCalcApp(
             composable("home") {
                 HomeScreen(
                     onCreateClick = { navController.navigate("category") },
-                    onProfileClick = { navController.navigate("profile") },
+                    onCustomerClick = { navController.navigate("customer") },
                     onSalesClick = { navController.navigate("sales") },
                     onProductsClick = { navController.navigate("products") },
                     themeViewModel = themeViewModel
@@ -57,8 +56,8 @@ fun HomeCalcApp(
                 )
             }
 
-            composable("profile") {
-                ProfileScreen(
+            composable("customer") {
+                CustomerScreen(
                     onNavigateBack = { navController.navigate("home") },
                     themeViewModel =  themeViewModel,
                 )

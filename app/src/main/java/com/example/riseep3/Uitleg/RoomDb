@@ -33,6 +33,12 @@
 
     2) CategoryDao
         = Interface waarin je aangeeft hoe je met de database wilt communcieren
+        * Hoe doet Room dit met een interface?
+            - Room kijkt tijdens het compileren naar de DAO-interface (bijv. CategoryDao).
+            - Omdat je die hebt gemarkeerd met @Dao en annotaties zoals @Insert of @Query, genereert Room automatisch een klasse die de interface implementeert.
+            - Die gegenereerde klasse bevat de echte code om met de database te praten  zoals SQL uitvoeren of data ophalen.
+            - Dus jij definieert alleen wat je wilt doen, en Room schrijft de echte uitvoer-code op de achtergrond voor je.
+                => Kort gezegd: Room gebruikt de interface als blauwdruk om automatisch de databasecode te genereren tijdens het bouwen van je app.
     ------------------------------------------------------------------------------------------------
     @Dao
     interface CategoryDao {
@@ -54,6 +60,10 @@
     ------------------------------------------------------------------------------------------------
         ° suspend = Maakt een functie asynchroon/pauzeerbaar en geschikt voor coroutines
             -> Hierdoor kan Kotlin de operatie op de achtergrond uitvoeren, zonder dat de gebruikersinterface blokkeert
+        ° coroutine = Een lichte, pauzeerbare functie die je op de achtergrond kunt uitvoeren zonder je app te blokkeren.
+            * verschil met een thread
+                - Een thread is een manier om meerdere dingen tegelijk te doen, maar elke thread gebruikt vrij veel geheugen (~1MB).
+                - Een coroutine daarentegen gebruikt veel minder geheugen (enkele KB’s) en is sneller opgestart.
 
     3) AppDatabase
     ------------------------------------------------------------------------------------------------
