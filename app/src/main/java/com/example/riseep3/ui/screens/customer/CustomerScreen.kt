@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.riseep3.ui.componenten.ScreenTitle
 import com.example.riseep3.ui.componenten.ThemeToggleButton
+import com.example.riseep3.ui.componenten.customer.CustomerCard
 import com.example.riseep3.ui.theme.RiseTheme
 import com.example.riseep3.ui.theme.ThemeViewModel
 import com.example.riseep3.ui.componenten.customer.SearchBar
@@ -58,7 +59,7 @@ fun CustomerScreen(
                     }
 
                     ScreenTitle(
-                        title = "Customer",
+                        title = "Customers",
                         modifier = Modifier
                             .align(Alignment.Center)
                             .testTag("CustomerScreenTitle")
@@ -88,13 +89,23 @@ fun CustomerScreen(
                 .padding(innerPadding)
                 .padding(horizontal = 24.dp, vertical = 16.dp)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             SearchBar(
                 query = searchQuery,
                 onQueryChange = { searchQuery = it }
             )
+
+            CustomerCard(name = "John Doe", phoneNumber = "+32 488 756 257")
+            CustomerCard(name = "Jane Smith", phoneNumber = "+32 488 126 834")
+            CustomerCard(name = "John Doe", phoneNumber = "+32 488 756 257")
+            CustomerCard(name = "Jane Smith", phoneNumber = "+32 488 126 834")
+            CustomerCard(name = "John Doe", phoneNumber = "+32 488 756 257")
+            CustomerCard(name = "Jane Smith", phoneNumber = "+32 488 126 834")
+            CustomerCard(name = "John Doe", phoneNumber = "+32 488 756 257")
+            CustomerCard(name = "Jane Smith", phoneNumber = "+32 488 126 834")
+            CustomerCard(name = "John Doe", phoneNumber = "+32 488 756 257")
+            CustomerCard(name = "Jane Smith", phoneNumber = "+32 488 126 834")
         }
     }
 }
