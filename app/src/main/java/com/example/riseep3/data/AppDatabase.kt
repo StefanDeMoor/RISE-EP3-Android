@@ -8,6 +8,7 @@ import com.example.riseep3.data.amount.AmountItemDao
 import com.example.riseep3.data.amount.AmountItemEntity
 import com.example.riseep3.data.category.CategoryDao
 import com.example.riseep3.data.category.CategoryEntity
+import com.example.riseep3.data.customer.CustomerDao
 import com.example.riseep3.data.overview.OverviewDao
 import com.example.riseep3.data.overview.OverviewEntity
 
@@ -21,6 +22,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun categoryDao(): CategoryDao
     abstract fun overviewDao(): OverviewDao
     abstract fun amountItemDao(): AmountItemDao
+    abstract fun customerDao(): CustomerDao
 
     companion object {
         @Volatile

@@ -30,4 +30,8 @@ object RetrofitInstance {
     val amountItemApiService: AmountItemApiService by lazy {
         retrofit.create(AmountItemApiService::class.java)
     }
+
+    val customerApiService: CustomerApiService by lazy {
+        retrofit.create(CustomerApiService::class.java)
+    }
 }
