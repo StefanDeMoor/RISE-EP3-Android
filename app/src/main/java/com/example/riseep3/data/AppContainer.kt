@@ -9,6 +9,10 @@ import com.example.riseep3.data.category.CategoryRepository
 import com.example.riseep3.data.category.HybridCategoryRepository
 import com.example.riseep3.data.category.OfflineCategoryRepository
 import com.example.riseep3.data.category.RemoteCategoryRepository
+import com.example.riseep3.data.customer.CustomerRepository
+import com.example.riseep3.data.customer.HybridCustomerRepository
+import com.example.riseep3.data.customer.OfflineCustomerRepository
+import com.example.riseep3.data.customer.RemoteCustomerRepository
 import com.example.riseep3.data.overview.HybridOverviewRepository
 import com.example.riseep3.data.overview.OfflineOverviewRepository
 import com.example.riseep3.data.overview.OverviewRepository
@@ -36,6 +40,13 @@ class AppContainer(context: Context) {
         HybridAmountItemRepository(
             remote = RemoteAmountItemRepository(database.amountItemDao()),
             local = OfflineAmountItemRepository(database.amountItemDao())
+        )
+    }
+
+    val customerRepository: CustomerRepository by lazy {
+        HybridCustomerRepository(
+            remote = RemoteCustomerRepository(database.customerDao()),
+            local = OfflineCustomerRepository(database.customerDao())
         )
     }
 

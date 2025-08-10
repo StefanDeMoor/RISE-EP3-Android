@@ -1,6 +1,5 @@
 package com.example.riseep3.ui.screens.customer
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -14,12 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.riseep3.ui.componenten.ScreenTitle
 import com.example.riseep3.ui.componenten.ThemeToggleButton
 import com.example.riseep3.ui.componenten.customer.CustomerCard
-import com.example.riseep3.ui.theme.RiseTheme
 import com.example.riseep3.ui.theme.ThemeViewModel
 import com.example.riseep3.ui.componenten.customer.SearchBar
 
@@ -27,10 +25,13 @@ import com.example.riseep3.ui.componenten.customer.SearchBar
 @Composable
 fun CustomerScreen(
     themeViewModel: ThemeViewModel,
+    customerViewModel: CustomerViewModel = viewModel(factory = CustomerViewModel.Factory),
     onNavigateBack: () -> Unit = {}
 ) {
     val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
     var searchQuery by remember { mutableStateOf("") }
+
+    val state by customerViewModel.state.collectAsState()
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -96,25 +97,30 @@ fun CustomerScreen(
                 onQueryChange = { searchQuery = it }
             )
 
-            CustomerCard(name = "John Doe", phoneNumber = "+32 488 756 257")
-            CustomerCard(name = "Jane Smith", phoneNumber = "+32 488 126 834")
-            CustomerCard(name = "John Doe", phoneNumber = "+32 488 756 257")
-            CustomerCard(name = "Jane Smith", phoneNumber = "+32 488 126 834")
-            CustomerCard(name = "John Doe", phoneNumber = "+32 488 756 257")
-            CustomerCard(name = "Jane Smith", phoneNumber = "+32 488 126 834")
-            CustomerCard(name = "John Doe", phoneNumber = "+32 488 756 257")
-            CustomerCard(name = "Jane Smith", phoneNumber = "+32 488 126 834")
-            CustomerCard(name = "John Doe", phoneNumber = "+32 488 756 257")
-            CustomerCard(name = "Jane Smith", phoneNumber = "+32 488 126 834")
+            when {
+                state.isLoading -> {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                }
+                state.error != null -> {
+                    Text(
+                        text = state.error ?: "Error",
+                        color = Color.Red,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                }
+                else -> {
+                    state.customers
+                        .filter {
+                            "${it.firstName} ${it.lastName}".contains(searchQuery, ignoreCase = true)
+                        }
+                        .forEach { customer ->
+                            CustomerCard(
+                                name = "${customer.firstName} ${customer.lastName}",
+                                phoneNumber = customer.phoneNumber
+                            )
+                        }
+                }
+            }
         }
-    }
-}
-
-@SuppressLint("ViewModelConstructorInComposable")
-@Preview(showBackground = true)
-@Composable
-fun CustomerScreenPreview() {
-    RiseTheme {
-        CustomerScreen(themeViewModel = ThemeViewModel())
     }
 }

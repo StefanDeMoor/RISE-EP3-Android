@@ -1,0 +1,45 @@
+° Repository Pattern = Een ontwerppatroon dat een abstractielaag biedt tussen je applicatielogica (bijv. ViewModel) en je data-bronnen (bijv. database, API).
+
+° AbstractieLaag = Het is een manier om complexiteit te verbergen en een systeem eenvoudiger en overzichtelijker te maken door er een tussenlaag bovenop te bouwen
+
+° Dependency Injection = Een ontwerpprincipe waarbij afhankelijkheden (zoals repo's, API-services) worden geïnjecteerd in een klasse in plaats van dat
+                         de klasse zelf verantwoordelijk is voor het creëren ervan.
+    => Bv. In CategoryViewModel wordt de CategoryRepository geïnjecteerd
+
+* De Werking :
+    1) CategoryRepository
+        -> Interface die beschrijft  welke functies beschikbaar zijn om met categorieën te werken
+        -> De ViewModel werkt alleen met deze interface, hij weet niet of de data uit de database of API komt.
+    ------------------------------------------------------------------------------------------------
+    interface CategoryRepository {
+        fun getAllCategories(): Flow<List<CategoryEntity>>
+        fun getCategoryById(id: Int): Flow<CategoryEntity?>
+        suspend fun insertAll(categories: Flow<List<CategoryEntity>>)
+        suspend fun delete(category: CategoryEntity)
+        suspend fun update(category: CategoryEntity)
+    }
+    ------------------------------------------------------------------------------------------------
+    ° Flow = maakt het mogelijk om data-updates asynchroon te ontvangen.
+    ° suspend = geeft aan dat de functie pauzeerbaar is en in een coroutine wordt uitgevoerd.
+
+    2) Meerdere implementaties (Offline | Remote | Hybrid) :
+        -> Voeren de interface uit
+            -> OfflineCategoryRepository → praat met Room (CategoryDao) om data lokaal op te slaan of op te halen.
+            -> RemoteCategoryRepository → praat met de API via Retrofit.
+            -> HybridCategoryRepository → combineert beide:
+                -> geeft meteen lokale data terug (snel voor de UI)
+                -> haalt intussen nieuwe data op van de API
+                -> werkt de lokale database bij met die nieuwe data
+    ° CoroutineScope  = start een "coroutine" (lichtgewicht achtergrondtaak).
+    ° Dispatchers.IO = zegt: voer dit uit op een thread die bedoeld is voor Input/Output taken (zoals database of netwerk).
+    ° launch = start de coroutine meteen, zonder iets terug te geven.
+
+    3) CategoryViewModel :
+        -> In CategoryViewModel wordt de categoryRepo geïnjecteerd.
+        -> ViewModel hoeft niet te weten of data van Room, Retrofit of beide komt.
+    ------------------------------------------------------------------------------------------------
+    open class CategoryViewModel(
+        private val categoryRepo: CategoryRepository,
+        private val overviewRepo: OverviewRepository
+    ) : ViewModel() {
+    ------------------------------------------------------------------------------------------------

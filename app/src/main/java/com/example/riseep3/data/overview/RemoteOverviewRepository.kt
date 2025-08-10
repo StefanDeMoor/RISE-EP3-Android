@@ -3,7 +3,6 @@ package com.example.riseep3.data.overview
 import android.util.Log
 import com.example.riseep3.data.amount.AmountItemDao
 import com.example.riseep3.domain.overview.OverviewDto
-import com.example.riseep3.domain.overview.OverviewRequestWrapper
 import com.example.riseep3.domain.overview.toEntity
 import com.example.riseep3.network.RetrofitInstance
 import kotlinx.coroutines.flow.Flow
@@ -21,7 +20,7 @@ class RemoteOverviewRepository(
     override fun getAllOverviews(): Flow<List<OverviewEntity>> = flow {
         val response = api.getOverviews()
         if (response.isSuccessful) {
-            Log.d("RemoteOverviewRepo", "getAllOverviews success: Response code = ${response.code()}")
+            Log.d("RemoteOverviewRepo", "getOverviews success: Response code = ${response.code()}")
             val overviewDtos = response.body() ?: emptyList()
             val overviewEntities = overviewDtos.map { it.toEntity() }
 
@@ -75,7 +74,7 @@ class RemoteOverviewRepository(
             amounts = emptyList()
         )
         try {
-            val response = api.updateOverview(overview.id, OverviewRequestWrapper(overviewDto))
+            val response = api.updateOverview(overview.id, overviewDto)
             Log.d("RemoteOverviewRepo", "Update success: Response code = ${response.code()}")
         } catch (e: Exception) {
             Log.e("RemoteOverviewRepo", "Update failed", e)
