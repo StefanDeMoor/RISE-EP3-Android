@@ -9,12 +9,13 @@ import com.example.riseep3.data.amount.AmountItemEntity
 import com.example.riseep3.data.category.CategoryDao
 import com.example.riseep3.data.category.CategoryEntity
 import com.example.riseep3.data.customer.CustomerDao
+import com.example.riseep3.data.customer.CustomerEntity
 import com.example.riseep3.data.overview.OverviewDao
 import com.example.riseep3.data.overview.OverviewEntity
 
 @Database(
-    entities = [CategoryEntity::class, OverviewEntity::class, AmountItemEntity::class],
-    version = 6,
+    entities = [CategoryEntity::class, OverviewEntity::class, AmountItemEntity::class, CustomerEntity::class],
+    version = 7,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
