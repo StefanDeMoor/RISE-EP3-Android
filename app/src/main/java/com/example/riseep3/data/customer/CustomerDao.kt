@@ -22,6 +22,9 @@ interface CustomerDao {
     @Update
     suspend fun update(customer: CustomerEntity)
 
+    @Query("UPDATE customers SET profileImagePath = :path WHERE id = :id")
+    suspend fun updateProfileImage(id: Int, path: String?)
+
     @Delete
     suspend fun delete(customer: CustomerEntity)
 }

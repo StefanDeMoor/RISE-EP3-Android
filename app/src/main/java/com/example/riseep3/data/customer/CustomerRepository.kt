@@ -7,5 +7,6 @@ interface CustomerRepository {
     fun getCustomerById(id: Int): Flow<CustomerEntity>
     suspend fun insertAll(customers: Flow<List<CustomerEntity>>)
     suspend fun update(customer: CustomerEntity)
+    suspend fun updateProfileImage(id: Int, path: String?)
     suspend fun delete(customer: CustomerEntity)
 }

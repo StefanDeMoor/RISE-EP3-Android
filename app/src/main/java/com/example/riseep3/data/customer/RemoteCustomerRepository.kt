@@ -6,6 +6,7 @@ import com.example.riseep3.domain.customer.toEntity
 import com.example.riseep3.network.RetrofitInstance
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 
 class RemoteCustomerRepository(
@@ -16,13 +17,21 @@ class RemoteCustomerRepository(
 
     override fun getAllCustomers(): Flow<List<CustomerEntity>> = flow {
         val response = api.getCustomers()
-        if(response.isSuccessful) {
+        if (response.isSuccessful) {
             Log.d("RemoteCustomerRepo", "getCustomers succes: Response code = ${response.code()}")
             val customerDtos = response.body() ?: emptyList()
-            val customerEntities = customerDtos.map { it.toEntity() }
+            val remoteCustomerEntities = customerDtos.map { it.toEntity() }
 
-            customerDao.insertAll(customerEntities)
-            emit(customerEntities)
+            val localCustomers = customerDao.getAllCustomers().first()
+
+            val mergedCustomers = remoteCustomerEntities.map { remoteCustomer ->
+                val localProfileImagePath = localCustomers.find { it.id == remoteCustomer.id }?.profileImagePath
+                remoteCustomer.copy(profileImagePath = localProfileImagePath)
+            }
+
+            customerDao.insertAll(mergedCustomers)
+
+            emit(mergedCustomers)
         } else {
             Log.d("RemoteCustomerRepo", "getCustomers failed: Response code = ${response.code()}")
             emit(emptyList())
@@ -31,6 +40,7 @@ class RemoteCustomerRepository(
         Log.e("RemoteCustomerRepo", "Unexpected error", e)
         emit(emptyList())
     }
+
 
     override fun getCustomerById(id: Int): Flow<CustomerEntity> = customerDao.getCustomerById(id)
 
@@ -42,7 +52,8 @@ class RemoteCustomerRepository(
                     firstName = customer.firstName,
                     lastName = customer.lastName,
                     email = customer.email,
-                    phoneNumber = customer.phoneNumber
+                    phoneNumber = customer.phoneNumber,
+                    profileImagePath = customer.profileImagePath
                 )
                 try {
                     val response = api.addCustomer(customerDto)
@@ -60,7 +71,8 @@ class RemoteCustomerRepository(
             firstName = customer.firstName,
             lastName = customer.lastName,
             email = customer.email,
-            phoneNumber = customer.phoneNumber
+            phoneNumber = customer.phoneNumber,
+            profileImagePath = customer.profileImagePath
         )
         try {
             val response = api.updateCustomer(customer.id, customerDto)
@@ -69,6 +81,32 @@ class RemoteCustomerRepository(
             Log.e("RemoteCustomerRepo", "Update failed", e)
         }
     }
+
+    override suspend fun updateProfileImage(id: Int, path: String?) {
+        try {
+            val customer = customerDao.getCustomerById(id).first()
+            val updatedCustomer = customer.copy(profileImagePath = path)
+
+            val customerDto = CustomerDto(
+                id = updatedCustomer.id,
+                firstName = updatedCustomer.firstName,
+                lastName = updatedCustomer.lastName,
+                email = updatedCustomer.email,
+                phoneNumber = updatedCustomer.phoneNumber,
+                profileImagePath = updatedCustomer.profileImagePath
+            )
+
+            val response = api.updateCustomer(id, customerDto)
+            if (response.isSuccessful) {
+                Log.d("RemoteCustomerRepo", "Profile image updated via full update, code: ${response.code()}")
+            } else {
+                Log.e("RemoteCustomerRepo", "Failed to update profile image, code: ${response.code()}")
+            }
+        } catch (e: Exception) {
+            Log.e("RemoteCustomerRepo", "Exception during profile image update", e)
+        }
+    }
+
 
     override suspend fun delete(customer: CustomerEntity) {
         try {

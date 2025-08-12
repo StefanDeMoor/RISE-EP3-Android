@@ -41,6 +41,11 @@ class HybridCustomerRepository (
         local.update(customer)
     }
 
+    override suspend fun updateProfileImage(id: Int, path: String?) {
+        remote.updateProfileImage(id, path)
+        local.updateProfileImage(id, path)
+    }
+
     override suspend fun delete(customer: CustomerEntity) {
         remote.delete(customer)
         local.delete(customer)
