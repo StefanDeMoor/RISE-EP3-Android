@@ -5,7 +5,7 @@ import com.example.riseep3.data.customer.CustomerRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class FakeCustomerRepository : CustomerRepository {
+open class FakeCustomerRepository : CustomerRepository {
 
     private val customersFlow = MutableStateFlow<List<CustomerEntity>>(emptyList())
 
