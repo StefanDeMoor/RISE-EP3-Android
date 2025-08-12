@@ -1,0 +1,38 @@
+1) Navigatie-architectuur met NavHost en NavController:
+    -> In je app wordt navigatie beheerd door een NavHostController, die wordt aangemaakt met rememberNavController() in de HomeCalcApp composable.
+    -> De NavHost definieert de verschillende navigatiebestemmingen (composable routes) zoals "home", "category", "overview/{id}", "customer", "sales" en "products".
+    -> Elke bestemming correspondeert met een scherm (bijv. HomeScreen, CategoryScreen, etc.) dat getoond wordt wanneer je naar die route navigeert.
+
+2) Navigeren tussen schermen:
+
+    -> Vanuit het HomeScreen zijn er knoppen (zoals "Create", "Customer", "Sales", "Products") met een onClick die navController.navigate() aanroept om naar een nieuwe route te navigeren.
+        Bijvoorbeeld: navController.navigate("category") navigeert naar het CategoryScreen.
+    -> In CategoryScreen kan genavigeerd worden naar een detailoverzicht met een parameter: navController.navigate("overview/$overviewId").
+    -> Terugnavigatie gebeurt via navController.popBackStack() of door te navigeren naar een specifieke route zoals "home".
+
+3) Belangrijke componenten:
+
+    ° NavHostController = Beheert de huidige route en navigatie-acties.
+    ° NavHost = Container waar alle routes en bijbehorende composables geregistreerd zijn.
+    ° composable() routes = Definiëren welk scherm getoond wordt bij welke route.
+    ° Navigatieparameters = Bijvoorbeeld "overview/{id}" met navArgument("id") om dynamische data mee te geven.
+    ° ViewModel = Bijvoorbeeld ThemeViewModel, gebruikt om thema en states te beheren.
+
+* Hoe wordt navigatie getest?
+
+1) Unit-/UI-tests met Compose Test API:
+
+    -> Gebruik van createComposeRule() en TestNavHostController om een testomgeving te creëren waarin navigatie getest kan worden zonder hele app te starten.
+    -> In NavigationTest wordt getest:
+        - Of de startbestemming "home" is.
+        - Knoppen op het home scherm worden gevonden met onNodeWithContentDescription() (zoals "Create", "Customer").
+        - Klikacties worden uitgevoerd met .performClick().
+        - Controle of de huidige route klopt met navController.assertCurrentRouteName().
+
+2) End-to-end navigatie flow test:
+
+    -> In HomeScreenTest wordt een volledige flow nagebootst:
+        - Navigeren via knoppen van home naar schermen als CategoryScreen, SalesScreen, etc.
+        - Controleren of specifieke UI-elementen zichtbaar zijn (bijv. titels met .assertIsDisplayed()).
+        - Terugnavigatie wordt getest via een "Back" knop en verifiëren dat het home scherm weer verschijnt.
+

@@ -1,0 +1,35 @@
+Uitleg: Hoe werkt offline-first in jouw app?
+1) Wat is offline-first?
+Dat betekent dat de app eerst lokale data gebruikt (offline opslag, zoals Room database) om direct snelle toegang te geven.
+Ondertussen probeert de app op de achtergrond de data te verversen vanaf het netwerk (remote API).
+Zo werkt de app ook zonder internet en synchroniseert het zodra er verbinding is.
+
+2) Offline data via OfflineCategoryRepository
+
+-Dit repository gebruikt alleen de lokale database (CategoryDao).
+-Alle data-opvragingen zoals getAllCategories() en getCategoryById() lezen direct uit Room via Flows.
+-Updates, inserts en deletes worden ook direct op de lokale database uitgevoerd.
+
+3) Remote data via RemoteCategoryRepository
+
+-Dit repository communiceert met de API om categorieën te halen, toe te voegen, te verwijderen en te updaten.
+
+4) Hybride repository als brug: HybridCategoryRepository
+
+-Deze combineert remote en lokaal met een slim patroon:
+
+-Bij getAllCategories() levert het eerst data uit de lokale database (local.getAllCategories()) — dit is direct en snel voor de UI.
+-Tegelijkertijd start het op de achtergrond een coroutine die probeert de data van het netwerk te halen (remote.getAllCategories().first()).
+-Als de fetch lukt, worden de nieuwe categorieën in de lokale database opgeslagen en worden lokale categorieën die niet meer in de API zitten verwijderd.
+-Bij een fout in het netwerk wordt dit gelogd en blijft de app gewoon werken met de lokale cache.
+
+5) Synchronisatie
+
+-In de achtergrond synchroniseert de HybridCategoryRepository dus de lokale database met de serverdata.
+-Zo is de lokale database altijd zo actueel mogelijk, ook als de app offline was en weer online gaat.
+
+6) ViewModel gebruikt het hybride repository
+
+-De CategoryViewModel vraagt altijd data aan via het hybride repository, en ontvangt via een Flow direct de lokale data.
+-Zo ziet de gebruiker direct iets, ook zonder internet.
+
