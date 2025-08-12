@@ -118,34 +118,50 @@ fun CustomerScreen(
 
             when {
                 state.isLoading -> {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .testTag("LoadingIndicator")
+                    )
                 }
                 state.error != null -> {
                     Text(
                         text = state.error ?: "Error",
                         color = Color.Red,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .testTag("ErrorMessage")
                     )
                 }
                 else -> {
-                    state.customers
-                        .filter {
-                            "${it.firstName} ${it.lastName}".contains(searchQuery, ignoreCase = true)
-                        }
-                        .forEach { customer ->
+                    val filteredCustomers = state.customers.filter {
+                        "${it.firstName} ${it.lastName}"
+                            .contains(searchQuery, ignoreCase = true)
+                    }
+
+                    if (filteredCustomers.isEmpty()) {
+                        Text(
+                            text = "No customers available",
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .testTag("NoCustomersMessage")
+                        )
+                    } else {
+                        filteredCustomers.forEach { customer ->
                             CustomerCard(
                                 name = "${customer.firstName} ${customer.lastName}",
                                 phoneNumber = customer.phoneNumber,
                                 profileImagePath = customer.profileImagePath,
                                 onImageClick = {
-                                    // Zet huidige klant-ID en start image picker
                                     selectedCustomerId = customer.id
                                     launcher.launch("image/*")
                                 }
                             )
                         }
+                    }
                 }
             }
+
         }
     }
 }

@@ -16,12 +16,12 @@ import kotlinx.coroutines.launch
 import androidx.lifecycle.viewModelScope
 import java.io.File
 
-class CustomerViewModel(
+open class CustomerViewModel(
     private val repository: CustomerRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(CustomerState())
-    val state: StateFlow<CustomerState> = _state
+    open val state: StateFlow<CustomerState> = _state
 
     init {
         loadCustomers()
@@ -49,7 +49,7 @@ class CustomerViewModel(
         }
     }
 
-    fun updateProfileImage(id: Int, path: String) {
+    open fun updateProfileImage(id: Int, path: String) {
         viewModelScope.launch {
 
             repository.updateProfileImage(id, path)
@@ -64,7 +64,7 @@ class CustomerViewModel(
     }
 
 
-    fun saveImageLocally(context: Context, uri: Uri): String {
+    open fun saveImageLocally(context: Context, uri: Uri): String {
         val fileName = "profile_${System.currentTimeMillis()}.jpg"
         val file = File(context.filesDir, fileName)
 
