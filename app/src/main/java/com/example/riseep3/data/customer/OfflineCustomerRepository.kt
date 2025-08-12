@@ -13,6 +13,8 @@ class OfflineCustomerRepository(private val dao: CustomerDao) : CustomerReposito
 
     override suspend fun update(customer: CustomerEntity) = dao.update(customer)
 
+    override suspend fun updateProfileImage(id: Int, path: String?) = dao.updateProfileImage(id, path)
+
     override suspend fun delete(customer: CustomerEntity) = dao.delete(customer)
 
 }

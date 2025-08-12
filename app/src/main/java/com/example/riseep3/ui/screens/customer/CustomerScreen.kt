@@ -1,5 +1,8 @@
 package com.example.riseep3.ui.screens.customer
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -12,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -32,6 +36,21 @@ fun CustomerScreen(
     var searchQuery by remember { mutableStateOf("") }
 
     val state by customerViewModel.state.collectAsState()
+
+    var selectedCustomerId by remember { mutableStateOf<Int?>(null) }
+
+    val context = LocalContext.current
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            selectedCustomerId?.let { id ->
+                val localPath = customerViewModel.saveImageLocally(context, it)
+                customerViewModel.updateProfileImage(id, localPath)
+            }
+        }
+    }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -116,7 +135,13 @@ fun CustomerScreen(
                         .forEach { customer ->
                             CustomerCard(
                                 name = "${customer.firstName} ${customer.lastName}",
-                                phoneNumber = customer.phoneNumber
+                                phoneNumber = customer.phoneNumber,
+                                profileImagePath = customer.profileImagePath,
+                                onImageClick = {
+                                    // Zet huidige klant-ID en start image picker
+                                    selectedCustomerId = customer.id
+                                    launcher.launch("image/*")
+                                }
                             )
                         }
                 }

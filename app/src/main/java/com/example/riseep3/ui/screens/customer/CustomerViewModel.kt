@@ -1,5 +1,7 @@
 package com.example.riseep3.ui.screens.customer
 
+import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
@@ -12,6 +14,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import androidx.lifecycle.viewModelScope
+import java.io.File
 
 class CustomerViewModel(
     private val repository: CustomerRepository
@@ -45,6 +48,34 @@ class CustomerViewModel(
                 }
         }
     }
+
+    fun updateProfileImage(id: Int, path: String) {
+        viewModelScope.launch {
+
+            repository.updateProfileImage(id, path)
+
+            _state.value = _state.value.copy(
+                customers = _state.value.customers.map {
+                    if (it.id == id) it.copy(profileImagePath = path) else it
+                }
+            )
+
+        }
+    }
+
+
+    fun saveImageLocally(context: Context, uri: Uri): String {
+        val fileName = "profile_${System.currentTimeMillis()}.jpg"
+        val file = File(context.filesDir, fileName)
+
+        context.contentResolver.openInputStream(uri)?.use { input ->
+            file.outputStream().use { output ->
+                input.copyTo(output)
+            }
+        }
+        return file.absolutePath
+    }
+
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
