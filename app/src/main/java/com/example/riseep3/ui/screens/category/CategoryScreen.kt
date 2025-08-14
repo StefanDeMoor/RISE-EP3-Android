@@ -42,9 +42,13 @@ fun CategoryScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopBar(
+                title = "Categories",
                 isDarkTheme = isDarkTheme,
                 onToggleTheme = themeViewModel::toggleTheme,
-                onNavigateBack = onNavigateBack
+                showBackButton = true,
+                onNavigateBack = onNavigateBack,
+                showBottomGradient = true,
+                modifier = Modifier.testTag("CategoryScreenTitle")
             )
         }
     ) { innerPadding ->
@@ -57,11 +61,6 @@ fun CategoryScreen(
             verticalArrangement = Arrangement.spacedBy(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ScreenTitle(
-                title = "Categories",
-                modifier = Modifier.testTag("CategoryScreenTitle")
-            )
-
             CategoryDropdownMenu(
                 expanded = expanded,
                 selectedCategory = state.selectedCategory,

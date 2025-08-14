@@ -1,5 +1,6 @@
 package com.example.riseep3.ui.componenten
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -13,34 +14,81 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun TopBar(
-    isDarkTheme: Boolean,
-    onToggleTheme: () -> Unit,
-    onNavigateBack: () -> Unit
+    title: String? = null,
+    isDarkTheme: Boolean? = null,
+    onToggleTheme: (() -> Unit)? = null,
+    showBackButton: Boolean = false,
+    onNavigateBack: (() -> Unit)? = null,
+    actions: @Composable RowScope.() -> Unit = {},
+    showBottomGradient: Boolean = false,
+    modifier: Modifier = Modifier
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 36.dp, start = 8.dp, end = 16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+    Box(
+        modifier = modifier
     ) {
-        IconButton(onClick = onNavigateBack) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Back",
-                tint = MaterialTheme.colorScheme.tertiary
-            )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(horizontal = 16.dp, vertical = 24.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (showBackButton && onNavigateBack != null) {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = MaterialTheme.colorScheme.tertiary
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                if (isDarkTheme != null && onToggleTheme != null) {
+                    ThemeToggleButton(
+                        isDark = isDarkTheme,
+                        onToggle = onToggleTheme
+                    )
+                }
+
+                actions()
+            }
+
+            if (!title.isNullOrEmpty()) {
+                ScreenTitle(
+                    title = title,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
         }
 
-        ThemeToggleButton(
-            isDark = isDarkTheme,
-            onToggle = onToggleTheme
-        )
+        if (showBottomGradient) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(8.dp)
+                    .align(Alignment.BottomCenter)
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                Color.Black.copy(alpha = 0.25f),
+                                Color.Transparent
+                            )
+                        )
+                    )
+            )
+        }
     }
 }
 

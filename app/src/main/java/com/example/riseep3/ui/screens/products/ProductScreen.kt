@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.riseep3.ui.componenten.ScreenTitle
 import com.example.riseep3.ui.componenten.ThemeToggleButton
+import com.example.riseep3.ui.componenten.TopBar
 import com.example.riseep3.ui.theme.RiseTheme
 import com.example.riseep3.ui.theme.ThemeViewModel
 
@@ -28,24 +29,15 @@ fun ProductScreen(
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 36.dp)
-            ) {
-                IconButton(
-                    onClick = onNavigateBack,
-                    modifier = Modifier.align(Alignment.CenterStart)
-                ) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                }
-
-                ThemeToggleButton(
-                    isDark = isDarkTheme,
-                    onToggle = themeViewModel::toggleTheme,
-                    modifier = Modifier.align(Alignment.CenterEnd)
-                )
-            }
+            TopBar(
+                title = "Products",
+                isDarkTheme = isDarkTheme,
+                onToggleTheme = themeViewModel::toggleTheme,
+                showBackButton = true,
+                onNavigateBack = onNavigateBack,
+                showBottomGradient = true,
+                modifier = Modifier.testTag("ProductScreenTitle")
+            )
         }
     ) { innerPadding ->
         Column(
@@ -57,10 +49,7 @@ fun ProductScreen(
             verticalArrangement = Arrangement.spacedBy(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ScreenTitle(
-                title = "Products",
-                modifier = Modifier.testTag("ProductScreenTitle")
-            )
+
         }
     }
 }
