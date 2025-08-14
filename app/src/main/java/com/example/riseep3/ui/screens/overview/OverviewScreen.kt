@@ -15,7 +15,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.riseep3.ui.componenten.ScreenTitle
 import com.example.riseep3.ui.componenten.TopBar
 import com.example.riseep3.ui.componenten.overview.AdjustmentButtons
 import com.example.riseep3.ui.componenten.overview.AdjustmentInputFields
@@ -49,9 +48,13 @@ fun OverviewScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopBar(
+                title = state.overviewTitle,
                 isDarkTheme = isDarkTheme,
                 onToggleTheme = themeViewModel::toggleTheme,
-                onNavigateBack = onNavigateBack
+                showBackButton = true,
+                onNavigateBack = onNavigateBack,
+                showBottomGradient = true,
+                modifier = Modifier.testTag("OverviewScreenTitle")
             )
         }
     ) { paddingValues ->
@@ -64,11 +67,6 @@ fun OverviewScreen(
             verticalArrangement = Arrangement.spacedBy(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ScreenTitle(
-                title = state.overviewTitle,
-                modifier = Modifier.testTag("OverviewScreenTitle")
-            )
-
             if (!state.isTotalIncomeSet) {
                 TotalIncomeInputField(
                     totalIncome = state.totalIncome,

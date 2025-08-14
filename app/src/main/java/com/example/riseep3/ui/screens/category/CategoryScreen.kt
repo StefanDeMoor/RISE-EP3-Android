@@ -1,5 +1,6 @@
 package com.example.riseep3.ui.screens.category
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -8,10 +9,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.riseep3.ui.componenten.ScreenTitle
+import com.example.riseep3.R
 import com.example.riseep3.ui.componenten.SuccessDialog
 import com.example.riseep3.ui.componenten.TopBar
 import com.example.riseep3.ui.componenten.category.NewItemDialog
@@ -57,9 +60,6 @@ fun CategoryScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(horizontal = 24.dp, vertical = 16.dp)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CategoryDropdownMenu(
                 expanded = expanded,
@@ -72,21 +72,55 @@ fun CategoryScreen(
                 onExpandedChange = { expanded = it }
             )
 
+            if (state.selectedCategory.isNullOrBlank()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.dropdown),
+                            contentDescription = "Dropdown illustration",
+                            modifier = Modifier.size(80.dp)
+                        )
+
+                        Text(
+                            text = "Choose the category you want to work with",
+                            style = MaterialTheme.typography.bodyMedium,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(top = 8.dp)
+                        )
+                    }
+                }
+            }
+
             Column(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
             ) {
-                if (state.selectedCategory.equals("Overview", ignoreCase = true)) {
-                    OverviewSection(
-                        overviews = state.overviews,
-                        createdItems = state.createdItems,
-                        onAddClick = { viewModel.setShowNewItemDialog(true) },
-                        onCardClick = onCategoryClick
-                    )
-                } else {
-                    state.createdItems.forEach { (itemName, categoryName) ->
-                        if (!categoryName.equals("Overview", ignoreCase = true)) {
-                            OverviewCard(title = itemName, onClick = { onCategoryClick(itemName) })
+                if (!state.selectedCategory.isNullOrBlank()) {
+                    if (state.selectedCategory.equals("Overview", ignoreCase = true)) {
+                        OverviewSection(
+                            overviews = state.overviews,
+                            createdItems = state.createdItems,
+                            onAddClick = { viewModel.setShowNewItemDialog(true) },
+                            onCardClick = onCategoryClick
+                        )
+                    } else {
+                        state.createdItems.forEach { (itemName, categoryName) ->
+                            if (!categoryName.equals("Overview", ignoreCase = true)) {
+                                OverviewCard(
+                                    title = itemName,
+                                    onClick = { onCategoryClick(itemName) }
+                                )
+                            }
                         }
                     }
                 }
@@ -145,5 +179,3 @@ fun CategoryScreenPreview() {
         onNavigateBack = {}
     )
 }
-
-

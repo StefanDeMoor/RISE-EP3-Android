@@ -22,7 +22,7 @@ fun ScreenTitle(
         modifier = modifier,
         style = MaterialTheme.typography.headlineLarge.copy(
             fontFamily = Montagu,
-            fontSize = 28.sp,
+            fontSize = 22.sp,
             fontWeight = FontWeight.SemiBold,
             color = colorResource(R.color.gold),
             letterSpacing = 1.5.sp
