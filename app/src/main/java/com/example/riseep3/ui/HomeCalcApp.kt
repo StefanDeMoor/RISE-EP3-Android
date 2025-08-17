@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.riseep3.ui.screens.category.CategoryScreen
+import com.example.riseep3.ui.screens.customer.AddCustomerScreen
 import com.example.riseep3.ui.screens.customer.CustomerScreen
 import com.example.riseep3.ui.screens.home.HomeScreen
 import com.example.riseep3.ui.screens.overview.OverviewScreen
@@ -60,6 +61,13 @@ fun HomeCalcApp(
                 CustomerScreen(
                     onNavigateBack = { navController.navigate("home") },
                     themeViewModel =  themeViewModel,
+                    onAddCustomerClick = { navController.navigate("addCustomer") }
+                )
+            }
+            composable("addCustomer") {
+                AddCustomerScreen(
+                    themeViewModel = themeViewModel,
+                    onNavigateBack = { navController.popBackStack() }
                 )
             }
             composable("sales") {

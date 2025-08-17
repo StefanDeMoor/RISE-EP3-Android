@@ -26,7 +26,8 @@ import com.example.riseep3.ui.componenten.customer.SearchBar
 fun CustomerScreen(
     themeViewModel: ThemeViewModel,
     customerViewModel: CustomerViewModel = viewModel(factory = CustomerViewModel.Factory),
-    onNavigateBack: () -> Unit = {}
+    onNavigateBack: () -> Unit = {},
+    onAddCustomerClick: () -> Unit
 ) {
     val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
     var searchQuery by rememberSaveable { mutableStateOf("") }
@@ -96,7 +97,7 @@ fun CustomerScreen(
                     CustomerSection(
                         customers = state.customers,
                         searchQuery = searchQuery,
-                        onAddClick = { },
+                        onAddClick = onAddCustomerClick,
                         onImageClick = { customer ->
                             selectedCustomerId = customer.id
                             launcher.launch("image/*")
