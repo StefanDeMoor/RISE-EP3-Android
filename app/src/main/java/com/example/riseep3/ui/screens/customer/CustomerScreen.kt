@@ -17,7 +17,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.riseep3.ui.componenten.TopBar
-import com.example.riseep3.ui.componenten.customer.CustomerCard
+import com.example.riseep3.ui.componenten.customer.CustomerSection
 import com.example.riseep3.ui.theme.ThemeViewModel
 import com.example.riseep3.ui.componenten.customer.SearchBar
 
@@ -93,32 +93,17 @@ fun CustomerScreen(
                     )
                 }
                 else -> {
-                    val filteredCustomers = state.customers.filter {
-                        "${it.firstName} ${it.lastName}"
-                            .contains(searchQuery, ignoreCase = true)
-                    }
-
-                    if (filteredCustomers.isEmpty()) {
-                        Text(
-                            text = "No customers available",
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                                .testTag("NoCustomersMessage")
-                        )
-                    } else {
-                        filteredCustomers.forEach { customer ->
-                            CustomerCard(
-                                name = "${customer.firstName} ${customer.lastName}",
-                                phoneNumber = customer.phoneNumber,
-                                profileImagePath = customer.profileImagePath,
-                                onImageClick = {
-                                    selectedCustomerId = customer.id
-                                    launcher.launch("image/*")
-                                }
-                            )
+                    CustomerSection(
+                        customers = state.customers,
+                        searchQuery = searchQuery,
+                        onAddClick = { },
+                        onImageClick = { customer ->
+                            selectedCustomerId = customer.id
+                            launcher.launch("image/*")
                         }
-                    }
+                    )
                 }
+
             }
 
         }
