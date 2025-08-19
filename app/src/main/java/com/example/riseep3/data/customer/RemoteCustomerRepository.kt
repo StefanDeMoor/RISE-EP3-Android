@@ -44,6 +44,24 @@ class RemoteCustomerRepository(
 
     override fun getCustomerById(id: Int): Flow<CustomerEntity> = customerDao.getCustomerById(id)
 
+    override suspend fun insert(customer: CustomerEntity) {
+        val customerDto = CustomerDto(
+            id = customer.id,
+            firstName = customer.firstName,
+            lastName = customer.lastName,
+            email = customer.email,
+            phoneNumber = customer.phoneNumber,
+            profileImagePath = customer.profileImagePath,
+            btwNumber = customer.btwNumber
+        )
+        try {
+            val response = api.addCustomer(customerDto)
+            Log.d("RemoteCustomerRepo", "Insert success: code = ${response.code()}")
+        } catch (e: Exception) {
+            Log.e("RemoteCustomerRepo", "Insert failed", e)
+        }
+    }
+
     override suspend fun insertAll(customers: Flow<List<CustomerEntity>>) {
         customers.collect { list ->
             list.forEach { customer ->
@@ -53,7 +71,8 @@ class RemoteCustomerRepository(
                     lastName = customer.lastName,
                     email = customer.email,
                     phoneNumber = customer.phoneNumber,
-                    profileImagePath = customer.profileImagePath
+                    profileImagePath = customer.profileImagePath,
+                    btwNumber = customer.btwNumber
                 )
                 try {
                     val response = api.addCustomer(customerDto)
@@ -72,7 +91,8 @@ class RemoteCustomerRepository(
             lastName = customer.lastName,
             email = customer.email,
             phoneNumber = customer.phoneNumber,
-            profileImagePath = customer.profileImagePath
+            profileImagePath = customer.profileImagePath,
+            btwNumber = customer.btwNumber
         )
         try {
             val response = api.updateCustomer(customer.id, customerDto)
@@ -93,7 +113,8 @@ class RemoteCustomerRepository(
                 lastName = updatedCustomer.lastName,
                 email = updatedCustomer.email,
                 phoneNumber = updatedCustomer.phoneNumber,
-                profileImagePath = updatedCustomer.profileImagePath
+                profileImagePath = updatedCustomer.profileImagePath,
+                btwNumber = updatedCustomer.btwNumber
             )
 
             val response = api.updateCustomer(id, customerDto)

@@ -31,6 +31,11 @@ class HybridCustomerRepository (
 
     override fun getCustomerById(id: Int): Flow<CustomerEntity> = local.getCustomerById(id)
 
+    override suspend fun insert(customer: CustomerEntity) {
+        remote.insert(customer)
+        local.insert(customer)
+    }
+
     override suspend fun insertAll(customers: Flow<List<CustomerEntity>>) {
         remote.insertAll(customers)
         local.insertAll(customers)

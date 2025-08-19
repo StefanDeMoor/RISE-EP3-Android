@@ -10,5 +10,6 @@ data class CustomerEntity(
     val lastName: String,
     val email: String,
     val phoneNumber: String,
-    val profileImagePath: String? = null
+    val profileImagePath: String? = null,
+    val btwNumber: String? = null
 )

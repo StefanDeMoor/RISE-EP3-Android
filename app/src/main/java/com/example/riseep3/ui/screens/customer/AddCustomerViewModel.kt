@@ -38,20 +38,20 @@ class AddCustomerViewModel(
         _state.value = _state.value.copy(profileImageUri = uri)
     }
 
-//    fun saveCustomer(onSaved: () -> Unit) {
-//        viewModelScope.launch {
-//            val customer = CustomerEntity(
-//                firstName = _state.value.firstName,
-//                lastName = _state.value.lastName,
-//                email = _state.value.email,
-//                phoneNumber = _state.value.phone,
-//                //btwNumber = _state.value.btwNumber,
-//                profileImagePath = _state.value.profileImageUri?.toString() // of lokaal opslaan zoals in je andere VM
-//            )
-//            repository.insertCustomer(customer)
-//            onSaved()
-//        }
-//    }
+    fun saveCustomer(onSaved: () -> Unit) {
+        viewModelScope.launch {
+            val customer = CustomerEntity(
+                firstName = _state.value.firstName,
+                lastName = _state.value.lastName,
+                email = _state.value.email,
+                phoneNumber = _state.value.phone,
+                btwNumber = _state.value.btwNumber,
+                profileImagePath = _state.value.profileImageUri?.toString()
+            )
+            repository.insert(customer)
+            onSaved()
+        }
+    }
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {

@@ -7,6 +7,8 @@ class OfflineCustomerRepository(private val dao: CustomerDao) : CustomerReposito
 
     override fun getCustomerById(id: Int): Flow<CustomerEntity> = dao.getCustomerById(id)
 
+    override suspend fun insert(customer: CustomerEntity) = dao.insert(customer)
+
     override suspend fun insertAll(customers: Flow<List<CustomerEntity>>) {
         customers.collect { dao.insertAll(it) }
     }
