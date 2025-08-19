@@ -24,7 +24,8 @@ fun CustomerSection(
     ) {
         SectionHeader(
             title = "Customers",
-            onAddClick = onAddClick
+            onAddClick = onAddClick,
+            invertedColors = true
         )
 
         val filteredCustomers = customers.filter {

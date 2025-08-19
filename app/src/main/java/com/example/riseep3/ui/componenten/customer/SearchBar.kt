@@ -27,7 +27,7 @@ fun SearchBar(
         modifier = Modifier
             .fillMaxWidth()
             .testTag("SearchBar"),
-        placeholder = { Text("Search", color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.5f)) },
+        placeholder = { Text("Search", color = MaterialTheme.colorScheme.primary) },
         singleLine = true,
         trailingIcon = {
             Icon(
@@ -41,11 +41,11 @@ fun SearchBar(
             focusedContainerColor = backgroundColor,
             unfocusedContainerColor = backgroundColor,
             disabledContainerColor = backgroundColor,
-            cursorColor = MaterialTheme.colorScheme.tertiary,
+            cursorColor = MaterialTheme.colorScheme.onPrimary,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent,
         ),
-        textStyle = TextStyle(color = MaterialTheme.colorScheme.tertiary)
+        textStyle = TextStyle(color = MaterialTheme.colorScheme.onPrimary)
     )
 }

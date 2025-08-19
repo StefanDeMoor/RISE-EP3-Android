@@ -6,6 +6,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -17,7 +18,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -31,20 +31,18 @@ import com.example.riseep3.R
 import com.example.riseep3.ui.componenten.TopBar
 import com.example.riseep3.ui.componenten.customer.CustomerTextField
 import com.example.riseep3.ui.screens.fake.FakeThemeViewModel
+import com.example.riseep3.ui.theme.CustomerTheme
 import com.example.riseep3.ui.theme.ThemeViewModel
 
 @Composable
 fun AddCustomerScreen(
     themeViewModel: ThemeViewModel,
     onNavigateBack: () -> Unit = {},
-    customerViewModel: CustomerViewModel = viewModel(factory = CustomerViewModel.Factory)
 ) {
-    var firstName by remember { mutableStateOf("") }
-    var lastName by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var phone by remember { mutableStateOf("") }
-    var btwNumber by remember { mutableStateOf("") }
-    var profileImageUri by remember { mutableStateOf<Uri?>(null) }
+    val addCustomerViewModel: AddCustomerViewModel = viewModel(factory = AddCustomerViewModel.Factory)
+    val state by addCustomerViewModel.state.collectAsState()
+
+    var profileImageUri = state.profileImageUri
 
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -56,113 +54,117 @@ fun AddCustomerScreen(
     val profileCircleSize = 130.dp
     val profileCircleOffset = -(profileCircleSize / 2)
 
-    Scaffold(
-        containerColor = MaterialTheme.colorScheme.background,
-        topBar = {
-            TopBar(
-                title = "",
-                isDarkTheme = isDarkTheme,
-                onToggleTheme = themeViewModel::toggleTheme,
-                showBackButton = true,
-                onNavigateBack = onNavigateBack,
-                showBottomGradient = false,
-                modifier = Modifier.testTag("AddCustomerScreenTitle")
-            )
-        },
-        bottomBar = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp)
-                    .background(Color(0xFF48617A)),
-                contentAlignment = Alignment.Center
-            ) {
-                Button(
-                    onClick = { },
-                    shape = RoundedCornerShape(40),
+    CustomerTheme(darkTheme = isDarkTheme) {
+        Scaffold(
+            containerColor = MaterialTheme.colorScheme.onPrimary,
+            topBar = {
+                TopBar(
+                    title = "",
+                    isDarkTheme = isDarkTheme,
+                    onToggleTheme = themeViewModel::toggleTheme,
+                    showBackButton = true,
+                    onNavigateBack = onNavigateBack,
+                    showBottomGradient = false,
+                    invertedColors = true,
+                    modifier = Modifier.testTag("AddCustomerScreenTitle")
+                )
+            },
+            bottomBar = {
+                Box(
                     modifier = Modifier
-                        .padding(bottom = 20.dp)
-                        .height(45.dp)
-                        .width(140.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+                        .fillMaxWidth()
+                        .height(100.dp)
+                        .background(MaterialTheme.colorScheme.primary),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Text(text = "Save", color = Color(0xFF48617A), fontSize = 18.sp)
+                    Button(
+                        onClick = { /*addCustomerViewModel.saveCustomer { onNavigateBack() } */},
+                        shape = RoundedCornerShape(45),
+                        modifier = Modifier
+                            .padding(bottom = 20.dp)
+                            .height(45.dp)
+                            .width(140.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onPrimary)
+                    ) {
+                        Text(text = "Save", color = MaterialTheme.colorScheme.primary, fontSize = 18.sp)
+                    }
                 }
             }
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Box(
+        ) { innerPadding ->
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 160.dp)
-                    .background(Color(0xFF48617A), RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
+                    .padding(innerPadding)
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Box(
                     modifier = Modifier
-                        .size(profileCircleSize)
-                        .align(Alignment.TopCenter)
-                        .offset(y = profileCircleOffset)
-                        .clip(CircleShape)
-                        .background(Color.White)
-                        .clickable { imagePicker.launch("image/*") },
-                    contentAlignment = Alignment.Center
+                        .fillMaxSize()
+                        .padding(top = 160.dp)
+                        .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
                 ) {
-                    if (profileImageUri != null) {
-                        Image(
-                            painter = rememberAsyncImagePainter(profileImageUri),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .clip(CircleShape),
-                            contentScale = ContentScale.Crop
-                        )
-                    } else {
-                        Icon(
-                            painter = painterResource(R.drawable.image),
-                            contentDescription = null,
-                            tint = Color(0xFF1B3B5A),
-                            modifier = Modifier
-                                .size(50.dp)
-                        )
+                    Box(
+                        modifier = Modifier
+                            .size(profileCircleSize)
+                            .align(Alignment.TopCenter)
+                            .offset(y = profileCircleOffset)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.onPrimary)
+                            .border(2.dp, MaterialTheme.colorScheme.primary, CircleShape)
+                            .clickable { imagePicker.launch("image/*") },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        if (profileImageUri != null) {
+                            Image(
+                                painter = rememberAsyncImagePainter(profileImageUri),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .clip(CircleShape),
+                                contentScale = ContentScale.Crop
+                            )
+                        } else {
+                            Icon(
+                                painter = painterResource(R.drawable.image),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier
+                                    .size(50.dp)
+                            )
+                        }
                     }
-                }
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 100.dp, start = 24.dp, end = 24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "ADD NEW CUSTOMER",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Normal,
-                        color = Color.White
-                    )
-                    HorizontalDivider(
-                        modifier = Modifier.padding(vertical = 30.dp),
-                        thickness = 1.dp,
-                        color = Color.White
-                    )
 
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 30.dp, start = 24.dp, end = 24.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(15.dp)
+                            .padding(top = 100.dp, start = 24.dp, end = 24.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        CustomerTextField(value = firstName, onValueChange = { firstName = it }, placeholder = "Firstname")
-                        CustomerTextField(value = lastName, onValueChange = { lastName = it }, placeholder = "Lastname")
-                        CustomerTextField(value = email, onValueChange = { email = it }, placeholder = "E-mail")
-                        CustomerTextField(value = phone, onValueChange = { phone = it }, placeholder = "PhoneNumber")
-                        CustomerTextField(value = btwNumber, onValueChange = { btwNumber = it }, placeholder = "BTW-Number") }
+                        Text(
+                            text = "ADD NEW CUSTOMER",
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Normal,
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                        HorizontalDivider(
+                            modifier = Modifier.padding(vertical = 30.dp),
+                            thickness = 2.dp,
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 30.dp, start = 24.dp, end = 24.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(15.dp)
+                        ) {
+                            CustomerTextField(value = state.firstName, onValueChange = addCustomerViewModel::updateFirstName, placeholder = "Firstname")
+                            CustomerTextField(value = state.lastName, onValueChange = addCustomerViewModel::updateLastName, placeholder = "Lastname")
+                            CustomerTextField(value = state.email, onValueChange = addCustomerViewModel::updateEmail, placeholder = "E-mail")
+                            CustomerTextField(value = state.phone, onValueChange = addCustomerViewModel::updatePhone, placeholder = "PhoneNumber")
+                            CustomerTextField(value = state.btwNumber, onValueChange = addCustomerViewModel::updateBtwNumber, placeholder = "BTW-Number") }
+                    }
                 }
             }
         }

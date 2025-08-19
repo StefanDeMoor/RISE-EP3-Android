@@ -22,8 +22,13 @@ import androidx.compose.ui.unit.dp
 fun SectionHeader(
     title: String,
     onAddClick: (() -> Unit)? = null,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    invertedColors: Boolean = false
 ) {
+    val bgColor =
+        if (invertedColors) MaterialTheme.colorScheme.primary
+        else MaterialTheme.colorScheme.onPrimary
+
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -33,7 +38,7 @@ fun SectionHeader(
             text = title,
             fontWeight = FontWeight.Bold,
             fontSize = MaterialTheme.typography.titleLarge.fontSize,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = bgColor,
             modifier = Modifier.padding(vertical = 20.dp)
         )
 
@@ -47,7 +52,7 @@ fun SectionHeader(
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = "Add $title",
-                    tint = MaterialTheme.colorScheme.onSurface
+                    tint = bgColor
                 )
             }
         }

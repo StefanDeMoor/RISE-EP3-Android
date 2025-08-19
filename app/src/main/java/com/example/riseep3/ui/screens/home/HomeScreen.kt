@@ -41,7 +41,7 @@ fun HomeScreen(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = MaterialTheme.colorScheme.primary,
         topBar = {
             TopBar(
                 isDarkTheme = isDarkTheme,
@@ -64,7 +64,7 @@ fun HomeScreen(
             Text(
                 text = "Welcome to",
                 style = MaterialTheme.typography.headlineSmall.copy(
-                    color = MaterialTheme.colorScheme.tertiary,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     letterSpacing = 1.sp
                 )
             )
@@ -122,7 +122,7 @@ fun HomeScreen(
                 Text(
                     text = "Calculate at home!",
                     style = MaterialTheme.typography.bodyLarge.copy(
-                        color = MaterialTheme.colorScheme.tertiary,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         letterSpacing = 1.sp
                     )
                 )
@@ -132,7 +132,7 @@ fun HomeScreen(
                 Text(
                     text = "For yourself or for your business!",
                     style = MaterialTheme.typography.bodyLarge.copy(
-                        color = MaterialTheme.colorScheme.tertiary,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         letterSpacing = 1.sp,
                         lineHeight = if (isLandscape) 28.sp else 44.sp
                     )

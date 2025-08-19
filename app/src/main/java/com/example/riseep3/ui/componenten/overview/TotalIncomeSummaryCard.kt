@@ -25,7 +25,7 @@ fun TotalIncomeSummaryCard(
     onEdit: () -> Unit,
 ) {
     Card(
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onBackground),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onPrimary),
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
@@ -35,7 +35,11 @@ fun TotalIncomeSummaryCard(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Totaal Inkomen: €%.2f".format(totalIncome), style = MaterialTheme.typography.bodyLarge)
+            Text(
+                "Totaal Inkomen: €%.2f".format(totalIncome),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.primary
+            )
             Row {
                 IconButton(onClick = onEdit) {
                     Icon(Icons.Default.Edit, contentDescription = "Inkomen bewerken")

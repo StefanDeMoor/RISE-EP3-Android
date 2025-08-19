@@ -19,7 +19,7 @@ fun OverviewSection(
 ) {
     SectionHeader(
         title = "Overviews",
-        onAddClick = onAddClick
+        onAddClick = onAddClick,
     )
 
     overviews.forEach { overview ->
