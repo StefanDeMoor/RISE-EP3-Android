@@ -8,13 +8,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.riseep3.R
-import com.example.riseep3.ui.componenten.ThemeToggleButton
+import com.example.riseep3.ui.componenten.TopBar
 import com.example.riseep3.ui.componenten.home.FancyIconButton
 import com.example.riseep3.ui.screens.rememberWindowInfo
 import com.example.riseep3.ui.theme.Montagu
@@ -40,19 +41,15 @@ fun HomeScreen(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = MaterialTheme.colorScheme.primary,
         topBar = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 36.dp, end = 16.dp),
-                contentAlignment = Alignment.TopEnd
-            ) {
-                ThemeToggleButton(
-                    isDark = isDarkTheme,
-                    onToggle = themeViewModel::toggleTheme
-                )
-            }
+            TopBar(
+                isDarkTheme = isDarkTheme,
+                onToggleTheme = themeViewModel::toggleTheme,
+                showBackButton = false,
+                showBottomGradient = false,
+                modifier = Modifier.testTag("HomeScreenTitle")
+            )
         }
     ) { innerPadding ->
         Column(
@@ -67,7 +64,7 @@ fun HomeScreen(
             Text(
                 text = "Welcome to",
                 style = MaterialTheme.typography.headlineSmall.copy(
-                    color = MaterialTheme.colorScheme.tertiary,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     letterSpacing = 1.sp
                 )
             )
@@ -125,7 +122,7 @@ fun HomeScreen(
                 Text(
                     text = "Calculate at home!",
                     style = MaterialTheme.typography.bodyLarge.copy(
-                        color = MaterialTheme.colorScheme.tertiary,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         letterSpacing = 1.sp
                     )
                 )
@@ -135,7 +132,7 @@ fun HomeScreen(
                 Text(
                     text = "For yourself or for your business!",
                     style = MaterialTheme.typography.bodyLarge.copy(
-                        color = MaterialTheme.colorScheme.tertiary,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         letterSpacing = 1.sp,
                         lineHeight = if (isLandscape) 28.sp else 44.sp
                     )

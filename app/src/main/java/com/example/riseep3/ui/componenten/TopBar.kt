@@ -28,15 +28,17 @@ fun TopBar(
     onNavigateBack: (() -> Unit)? = null,
     actions: @Composable RowScope.() -> Unit = {},
     showBottomGradient: Boolean = false,
+    invertedColors: Boolean = false,
     modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = modifier
-    ) {
+    val bgColor = if (invertedColors) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary
+    val contentColor = if (invertedColors) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onPrimary
+
+    Box(modifier = modifier) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.surface)
+                .background(bgColor)
                 .padding(horizontal = 16.dp, vertical = 24.dp)
         ) {
             Row(
@@ -48,7 +50,7 @@ fun TopBar(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = MaterialTheme.colorScheme.tertiary
+                            tint = contentColor
                         )
                     }
                 }
@@ -58,7 +60,9 @@ fun TopBar(
                 if (isDarkTheme != null && onToggleTheme != null) {
                     ThemeToggleButton(
                         isDark = isDarkTheme,
-                        onToggle = onToggleTheme
+                        onToggle = onToggleTheme,
+                        modifier = Modifier,
+                        invertedColors = invertedColors
                     )
                 }
 
@@ -68,7 +72,7 @@ fun TopBar(
             if (!title.isNullOrEmpty()) {
                 ScreenTitle(
                     title = title,
-                    modifier = Modifier.align(Alignment.Center)
+                    modifier = Modifier.align(Alignment.Center),
                 )
             }
         }

@@ -45,7 +45,7 @@ fun OverviewScreen(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = MaterialTheme.colorScheme.primary,
         topBar = {
             TopBar(
                 title = state.overviewTitle,

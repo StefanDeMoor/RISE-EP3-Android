@@ -53,7 +53,7 @@ fun CategoryDropdownMenu(
             label = {
                 Text(
                     text = if (selectedCategory == null) "Select a category" else "Category",
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             },
             placeholder = { Text("Select a category") },
@@ -61,9 +61,9 @@ fun CategoryDropdownMenu(
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MaterialTheme.colorScheme.onSurface,
-                unfocusedBorderColor = MaterialTheme.colorScheme.onSurface,
-                focusedLabelColor = MaterialTheme.colorScheme.onSurface
+                focusedBorderColor = MaterialTheme.colorScheme.onPrimary,
+                unfocusedBorderColor = MaterialTheme.colorScheme.onPrimary,
+                focusedLabelColor = MaterialTheme.colorScheme.onPrimary
             ),
             modifier = Modifier
                 .menuAnchor()
@@ -77,9 +77,9 @@ fun CategoryDropdownMenu(
                 .exposedDropdownSize()
                 .border(
                     width = 1.dp,
-                    color = MaterialTheme.colorScheme.surface,
+                    color = MaterialTheme.colorScheme.primary,
                 )
-                .background(MaterialTheme.colorScheme.onBackground)
+                .background(MaterialTheme.colorScheme.onPrimary)
         ) {
             categories.forEach { category ->
                 DropdownMenuItem(
@@ -91,13 +91,13 @@ fun CategoryDropdownMenu(
                         ) {
                             Text(
                                 text = category.name,
-                                color = MaterialTheme.colorScheme.background
+                                color = MaterialTheme.colorScheme.primary
                             )
                             if (category.name.equals("Overview", ignoreCase = true)) {
                                 Icon(
                                     painter = painterResource(id = R.drawable.overview),
                                     contentDescription = "Overview Icon",
-                                    tint = MaterialTheme.colorScheme.background
+                                    tint = MaterialTheme.colorScheme.primary
                                 )
                             }
                         }

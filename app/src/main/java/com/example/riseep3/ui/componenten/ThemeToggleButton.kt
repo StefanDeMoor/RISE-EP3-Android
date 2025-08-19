@@ -27,7 +27,8 @@ import com.example.riseep3.R
 fun ThemeToggleButton(
     isDark: Boolean,
     onToggle: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    invertedColors: Boolean = false
 ) {
     var clicked by remember { mutableStateOf(false) }
     val scale by animateFloatAsState(
@@ -41,6 +42,9 @@ fun ThemeToggleButton(
         },
         label = "toggleButtonScale"
     )
+    val bgColor =
+        if (invertedColors) MaterialTheme.colorScheme.primary
+        else MaterialTheme.colorScheme.onPrimary
 
     Surface(
         modifier = modifier
@@ -48,7 +52,7 @@ fun ThemeToggleButton(
             .scale(scale)
             .testTag("ThemeToggleButton"),
         shape = CircleShape,
-        color = MaterialTheme.colorScheme.onBackground,
+        color = bgColor,
         onClick = {
             if (!clicked) {
                 clicked = true

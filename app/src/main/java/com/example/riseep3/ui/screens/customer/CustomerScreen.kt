@@ -17,16 +17,18 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.riseep3.ui.componenten.TopBar
-import com.example.riseep3.ui.componenten.customer.CustomerCard
+import com.example.riseep3.ui.componenten.customer.CustomerSection
 import com.example.riseep3.ui.theme.ThemeViewModel
 import com.example.riseep3.ui.componenten.customer.SearchBar
+import com.example.riseep3.ui.theme.CustomerTheme
 
 
 @Composable
 fun CustomerScreen(
     themeViewModel: ThemeViewModel,
     customerViewModel: CustomerViewModel = viewModel(factory = CustomerViewModel.Factory),
-    onNavigateBack: () -> Unit = {}
+    onNavigateBack: () -> Unit = {},
+    onAddCustomerClick: () -> Unit
 ) {
     val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
     var searchQuery by rememberSaveable { mutableStateOf("") }
@@ -48,79 +50,67 @@ fun CustomerScreen(
         }
     }
 
-    Scaffold(
-        containerColor = MaterialTheme.colorScheme.background,
-        topBar = {
-            TopBar(
-                title = "Customers",
-                isDarkTheme = isDarkTheme,
-                onToggleTheme = themeViewModel::toggleTheme,
-                showBackButton = true,
-                onNavigateBack = onNavigateBack,
-                showBottomGradient = true,
-                modifier = Modifier.testTag("CustomerScreenTitle")
-            )
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = 24.dp, vertical = 16.dp)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            SearchBar(
-                query = searchQuery,
-                onQueryChange = { searchQuery = it }
-            )
+    CustomerTheme(darkTheme = isDarkTheme) {
+        Scaffold(
+            containerColor = MaterialTheme.colorScheme.onPrimary,
+            topBar = {
+                TopBar(
+                    title = "Customers",
+                    isDarkTheme = isDarkTheme,
+                    onToggleTheme = themeViewModel::toggleTheme,
+                    showBackButton = true,
+                    onNavigateBack = onNavigateBack,
+                    showBottomGradient = true,
+                    invertedColors = true,
+                    modifier = Modifier.testTag("CustomerScreenTitle")
+                )
+            }
+        ) { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = 24.dp, vertical = 16.dp)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                SearchBar(
+                    query = searchQuery,
+                    onQueryChange = { searchQuery = it }
+                )
 
-            when {
-                state.isLoading -> {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .testTag("LoadingIndicator")
-                    )
-                }
-                state.error != null -> {
-                    Text(
-                        text = state.error ?: "Error",
-                        color = Color.Red,
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .testTag("ErrorMessage")
-                    )
-                }
-                else -> {
-                    val filteredCustomers = state.customers.filter {
-                        "${it.firstName} ${it.lastName}"
-                            .contains(searchQuery, ignoreCase = true)
-                    }
-
-                    if (filteredCustomers.isEmpty()) {
-                        Text(
-                            text = "No customers available",
+                when {
+                    state.isLoading -> {
+                        CircularProgressIndicator(
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
-                                .testTag("NoCustomersMessage")
+                                .testTag("LoadingIndicator")
                         )
-                    } else {
-                        filteredCustomers.forEach { customer ->
-                            CustomerCard(
-                                name = "${customer.firstName} ${customer.lastName}",
-                                phoneNumber = customer.phoneNumber,
-                                profileImagePath = customer.profileImagePath,
-                                onImageClick = {
-                                    selectedCustomerId = customer.id
-                                    launcher.launch("image/*")
-                                }
-                            )
-                        }
                     }
-                }
-            }
+                    state.error != null -> {
+                        Text(
+                            text = state.error ?: "Error",
+                            color = Color.Red,
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .testTag("ErrorMessage")
+                        )
+                    }
+                    else -> {
+                        CustomerSection(
+                            customers = state.customers,
+                            searchQuery = searchQuery,
+                            onAddClick = onAddCustomerClick,
+                            onImageClick = { customer ->
+                                selectedCustomerId = customer.id
+                                launcher.launch("image/*")
+                            }
+                        )
+                    }
 
+                }
+
+            }
         }
     }
 }

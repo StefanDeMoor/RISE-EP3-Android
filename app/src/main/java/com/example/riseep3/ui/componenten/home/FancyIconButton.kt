@@ -53,7 +53,7 @@ fun FancyIconButton(
             }
         },
         shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.onBackground,
+        color = MaterialTheme.colorScheme.onPrimary,
         modifier = Modifier
             .size(85.dp)
             .scale(scale)
@@ -68,7 +68,7 @@ fun FancyIconButton(
             Icon(
                 painter = painterResource(id = icon),
                 contentDescription = contentDescription,
-                tint = MaterialTheme.colorScheme.onPrimary,
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .fillMaxSize(0.6f)
                     .semantics { this.contentDescription = contentDescription }

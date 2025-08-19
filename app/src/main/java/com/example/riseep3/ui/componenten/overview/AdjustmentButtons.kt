@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,16 +35,25 @@ fun AdjustmentButtons(
         Button(
             onClick = onSubtract,
             modifier = Modifier.weight(1f),
-            colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.light_red_substract))
-        ) { Text("-") }
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(R.color.light_red_substract)
+            )
+        ) {
+            Text("-", color = MaterialTheme.colorScheme.primary)
+        }
 
         Button(
             onClick = onAdd,
             modifier = Modifier.weight(1f),
-            colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.light_screen_add))
-        ) { Text("+") }
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(R.color.light_screen_add)
+            )
+        ) {
+            Text("+", color = MaterialTheme.colorScheme.primary)
+        }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable

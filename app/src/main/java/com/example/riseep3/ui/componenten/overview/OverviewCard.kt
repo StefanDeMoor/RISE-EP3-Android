@@ -52,7 +52,7 @@ fun OverviewCard(title: String, onClick: () -> Unit) {
             .scale(scale)
             .testTag("OverviewCard_$title"),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.onBackground
+            containerColor = MaterialTheme.colorScheme.onPrimary
         ),
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
@@ -68,14 +68,14 @@ fun OverviewCard(title: String, onClick: () -> Unit) {
                 text = title,
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.primary
                 )
             )
 
             Icon(
                 painter = painterResource(id = R.drawable.overview),
                 contentDescription = "Overview Icon",
-                tint = MaterialTheme.colorScheme.background
+                tint = MaterialTheme.colorScheme.primary
             )
         }
     }

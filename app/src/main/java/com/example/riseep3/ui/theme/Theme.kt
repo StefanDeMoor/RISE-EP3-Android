@@ -6,27 +6,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val LightColorScheme = lightColorScheme(
-    primary = Color(0xFF6200EE),     // purple_500
-    onPrimary = Color(0xFFFFFFFF),   // white
-    secondary = Color(0xFF018786),   // teal_700
-    onSecondary = Color(0xFF000000), // black
-    background = Color(0xFFFFFFFF),  // white
-    onBackground = Color(0xFF25466C), // fancy_blue
-    surface = Color(0xFFFFFFFF),     // white
-    onSurface = Color(0xFF25466C),   // fancy_blue
-    tertiary = Color(0xFF25466C), // fancy_blue
+    primary = Color(0xFFFFFFFF),   // white
+    onPrimary = Color(0xFF25466C), // fancy_blue
 )
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Color(0xFFBB86FC),     // purple_200
-    onPrimary = Color(0xFF000000),   // black
-    secondary = Color(0xFFFFFFFF), // white
-    onSecondary = Color(0xFF000000), // black
-    background = Color(0xFF25466C), // fancy_blue
-    onBackground = Color(0xFFFFFFFF), // white
-    surface = Color(0xFF25466C), // fancy_blue
-    onSurface = Color(0xFFFFFFFF),
-    tertiary = Color(0xFFFFFFFF), // white
+    primary = Color(0xFF25466C), // fancy_blue
+    onPrimary = Color(0xFFFFFFFF),   // white
 )
 
 @Composable

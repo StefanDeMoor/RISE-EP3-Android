@@ -1,26 +1,13 @@
 package com.example.riseep3.ui.componenten.overview
 
-
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import com.example.riseep3.data.overview.OverviewEntity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.ui.platform.testTag
+import com.example.riseep3.ui.componenten.SectionHeader
 import com.example.riseep3.ui.theme.RiseTheme
 
 @Composable
@@ -30,32 +17,10 @@ fun OverviewSection(
     onAddClick: () -> Unit,
     onCardClick: (String) -> Unit
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(
-            text = "Overviews",
-            fontWeight = FontWeight.Bold,
-            fontSize = MaterialTheme.typography.titleLarge.fontSize,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-
-        IconButton(
-            onClick = onAddClick,
-            modifier = Modifier
-                .size(24.dp)
-                .testTag("AddOverviewButton")
-        ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "Add Overview",
-                tint = MaterialTheme.colorScheme.onSurface
-            )
-        }
-
-    }
+    SectionHeader(
+        title = "Overviews",
+        onAddClick = onAddClick,
+    )
 
     overviews.forEach { overview ->
         OverviewCard(title = overview.title, onClick = { onCardClick(overview.id.toString()) })
