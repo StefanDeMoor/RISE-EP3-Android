@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
@@ -31,7 +32,9 @@ import com.example.riseep3.ui.theme.RiseTheme
 fun FancyIconButton(
     @DrawableRes icon: Int,
     contentDescription: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    buttonColor: Color = MaterialTheme.colorScheme.onPrimary,
+    iconTint: Color = MaterialTheme.colorScheme.primary
 ) {
     var clicked by remember { mutableStateOf(false) }
     val scale by animateFloatAsState(
@@ -53,7 +56,7 @@ fun FancyIconButton(
             }
         },
         shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.onPrimary,
+        color = buttonColor,
         modifier = Modifier
             .size(85.dp)
             .scale(scale)
@@ -68,7 +71,7 @@ fun FancyIconButton(
             Icon(
                 painter = painterResource(id = icon),
                 contentDescription = contentDescription,
-                tint = MaterialTheme.colorScheme.primary,
+                tint = iconTint,
                 modifier = Modifier
                     .fillMaxSize(0.6f)
                     .semantics { this.contentDescription = contentDescription }
