@@ -29,3 +29,8 @@ val viewModel: CategoryViewModel = viewModel(factory = CategoryViewModel.Factory
     -> Resultaat :
         -> CategoryScreen krijgt een correct geïnitialiseerde CategoryViewModel
         -> UI kan werken met repositories zonder zelf de ViewModel te moeten creëren
+
+° viewModelScope = Een CoroutineScope die specifiek gekoppeld is aan een ViewModel.
+    -> Functie: het uitvoeren van coroutines binnen een ViewModel, zodat achtergrondtaken automatisch worden
+    geannuleerd wanneer de ViewModel wordt vernietigd (bv. bij het sluiten van een scherm).
+    + Voordeel: voorkomt geheugenlekken en onnodige taken die doorgaan nadat de UI niet meer zichtbaar is.
