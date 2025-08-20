@@ -1,0 +1,28 @@
+° Network Error Handling = Technieken om fouten bij netwerkverzoeken af te vangen en te verwerken, zodat de app niet crasht en de UI altijd een geldige state ontvangt.
+
+De Werking in RemoteCategoryRepository :
+
+1) HTTP-statuscodes controleren
+    -> Na elke API-call wordt response.isSuccessful gecontroleerd
+    -> Als het response niet succesvol is (bv. 404, 500), wordt de fout gelogd en een fallback waarde teruggegeven
+if (response.isSuccessful) { emit(data) } else { emit(emptyList() / null) }
+
+2) Flow.catch gebruiken
+    -> Bij asynchrone calls met Flow kan er een exception optreden (bv. netwerkfout, timeout)
+    -> catch { e -> ... } vangt deze exception op, logt de fout en geeft een fallback waarde terug
+
+.catch { e -> Log.e("RemoteCategoryRepo", "Network error", e); emit(emptyList()) }
+
+3) Insert / Update / Delete
+    -> Controleert response.isSuccessful en logt success/failure
+    -> Exceptions worden nog niet volledig afgehandeld, kan met try-catch worden uitgebreid
+
+° Flow = Maakt het mogelijk om data-updates asynchroon te ontvangen
+° emit() = Stuurt een nieuwe waarde naar de UI via de Flow
+° catch = Vangt exceptions af in een Flow
+° fallback waarde = Een veilige default waarde die teruggegeven wordt als er een error optreedt (bv. leeg lijstje of null)
+
+Resultaat :
+
+    -> UI ontvangt altijd een geldige state, zelfs bij netwerkproblemen
+    -> Network errors worden gelogd, zodat ze traceerbaar zijn zonder dat de app crasht

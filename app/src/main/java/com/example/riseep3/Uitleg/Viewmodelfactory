@@ -1,0 +1,31 @@
+° ViewModelFactory = Een fabriekspatroon om ViewModels te maken met parameters.
+    -> Normaal kan viewModel() in Compose alleen ViewModels zonder constructor-argumenten aanmaken.
+    -> Als een ViewModel afhankelijkheden nodig heeft (bv. repositories), gebruik je een factory.
+
+* Werking in CategoryViewModel :
+
+1) companion object maakt een Factory aan:
+------------------------------------------------------------------------------------------------
+val Factory: ViewModelProvider.Factory = viewModelFactory {
+    initializer {
+        val app = this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as MainApplication
+        CategoryViewModel(app.container.categoryRepository, app.container.overviewRepository)
+    }
+}
+------------------------------------------------------------------------------------------------
+    -> Haalt de repositories op uit de Application container
+    -> Creëert een nieuwe CategoryViewModel met deze dependencies
+
+2) Gebruik in Compose:
+------------------------------------------------------------------------------------------------
+val viewModel: CategoryViewModel = viewModel(factory = CategoryViewModel.Factory)
+------------------------------------------------------------------------------------------------
+    -> Compose weet nu hoe het de ViewModel moet instantiëren met de juiste constructor-argumenten
+
+° Belangrijk :
+    -> Zonder Factory kan je geen constructor-argumenten doorgeven aan ViewModel
+    -> Zorgt voor dependency injection van repositories naar de ViewModel
+    -> Maakt testing makkelijker, want je kunt fake repositories doorgeven bij previews of tests
+    -> Resultaat :
+        -> CategoryScreen krijgt een correct geïnitialiseerde CategoryViewModel
+        -> UI kan werken met repositories zonder zelf de ViewModel te moeten creëren
