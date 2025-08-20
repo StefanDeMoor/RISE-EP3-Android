@@ -6,5 +6,6 @@ data class CustomerDto(
     val lastName: String,
     val email: String,
     val phoneNumber: String,
-    val profileImagePath: String?
+    val profileImagePath: String?,
+    val btwNumber: String?
 )

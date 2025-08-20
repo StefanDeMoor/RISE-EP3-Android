@@ -78,7 +78,7 @@ fun AddCustomerScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Button(
-                        onClick = { /*addCustomerViewModel.saveCustomer { onNavigateBack() } */},
+                        onClick = { addCustomerViewModel.saveCustomer { onNavigateBack() } },
                         shape = RoundedCornerShape(45),
                         modifier = Modifier
                             .padding(bottom = 20.dp)

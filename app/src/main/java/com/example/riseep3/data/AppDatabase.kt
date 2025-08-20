@@ -15,7 +15,7 @@ import com.example.riseep3.data.overview.OverviewEntity
 
 @Database(
     entities = [CategoryEntity::class, OverviewEntity::class, AmountItemEntity::class, CustomerEntity::class],
-    version = 8,
+    version = 9,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

@@ -17,6 +17,9 @@ interface CustomerDao {
     fun getCustomerById(id: Int): Flow<CustomerEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(customer: CustomerEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(customers: List<CustomerEntity>)
 
     @Update

@@ -14,6 +14,10 @@ open class FakeCustomerRepository : CustomerRepository {
     override fun getCustomerById(id: Int): Flow<CustomerEntity> =
         MutableStateFlow(customersFlow.value.first { it.id == id })
 
+    override suspend fun insert(customer: CustomerEntity) {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun insertAll(customers: Flow<List<CustomerEntity>>) {
         customers.collect { list -> customersFlow.value = list }
     }
