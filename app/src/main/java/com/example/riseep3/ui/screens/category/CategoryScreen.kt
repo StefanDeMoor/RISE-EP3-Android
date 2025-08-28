@@ -88,7 +88,7 @@ fun CategoryScreen(
                         Image(
                             painter = painterResource(id = R.drawable.dropdown),
                             contentDescription = "Dropdown illustration",
-                            modifier = Modifier.size(80.dp),
+                            modifier = Modifier.size(96.dp),
                             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary)
                         )
 

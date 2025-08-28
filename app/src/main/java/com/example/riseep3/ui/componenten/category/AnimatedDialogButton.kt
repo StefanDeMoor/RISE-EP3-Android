@@ -16,14 +16,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.riseep3.R
 import com.example.riseep3.ui.theme.RiseTheme
 
 @Composable
 fun AnimatedDialogButton(
     text: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    color: Color,
+    textColor: Color,
+    borderColor: Color
 ) {
     var clicked by remember { mutableStateOf(false) }
     val scale by animateFloatAsState(
@@ -39,10 +45,12 @@ fun AnimatedDialogButton(
     )
 
     Surface(
-        modifier = Modifier.scale(scale),
+        modifier = Modifier
+            .scale(scale),
         shape = MaterialTheme.shapes.medium,
-        color = MaterialTheme.colorScheme.surface,
+        color = color,
         shadowElevation = 4.dp,
+        border = androidx.compose.foundation.BorderStroke(1.dp, borderColor),
         onClick = {
             if (!clicked) clicked = true
         }
@@ -50,10 +58,11 @@ fun AnimatedDialogButton(
         Text(
             text = text,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            color = MaterialTheme.colorScheme.onSurface
+            color = textColor
         )
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
@@ -67,26 +76,29 @@ fun AnimatedDialogButtonPreview_Light() {
         ) {
             AnimatedDialogButton(
                 text = "Confirm",
-                onClick = {}
+                onClick = {},
+                color = colorResource(R.color.light_screen_add),
+                textColor = Color.White,
+                borderColor = Color.White
             )
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun AnimatedDialogButtonPreview_Dark() {
-    RiseTheme(darkTheme = true) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(24.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            AnimatedDialogButton(
-                text = "Confirm",
-                onClick = {}
-            )
-        }
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun AnimatedDialogButtonPreview_Dark() {
+//    RiseTheme(darkTheme = true) {
+//        Box(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .padding(24.dp),
+//            contentAlignment = Alignment.Center
+//        ) {
+//            AnimatedDialogButton(
+//                text = "Confirm",
+//                onClick = {}
+//            )
+//        }
+//    }
+//}
