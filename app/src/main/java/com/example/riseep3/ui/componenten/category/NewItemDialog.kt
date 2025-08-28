@@ -1,5 +1,6 @@
 package com.example.riseep3.ui.componenten.category
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,9 +32,11 @@ fun NewItemDialog(
 ) {
     Dialog(onDismissRequest = onDismiss) {
         Surface(
+            modifier = Modifier,
             shape = MaterialTheme.shapes.medium,
             color = MaterialTheme.colorScheme.onPrimary,
-            tonalElevation = 8.dp
+            tonalElevation = 8.dp,
+            border = BorderStroke(2.dp, MaterialTheme.colorScheme.secondary)
         ) {
             Column(modifier = Modifier.padding(24.dp)) {
 
