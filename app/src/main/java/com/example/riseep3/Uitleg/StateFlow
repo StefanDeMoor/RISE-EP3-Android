@@ -1,0 +1,65 @@
+StateFlow & MutableStateFlow in CategoryViewModel
+
+° StateFlow = Een speciale Flow die altijd een huidige waarde heeft en automatisch updates doorgeeft aan de UI.
+    → De UI kan zich abonneren en ziet altijd de laatste toestand (state).
+
+° MutableStateFlow = De veranderbare versie van StateFlow.
+    → Alleen de ViewModel kan de waarde aanpassen.
+    → Dit geeft controle: de UI kan enkel luisteren, niet aanpassen.
+
+° Encapsulatie = In de CategoryViewModel is _uiState (MutableStateFlow) privé en wordt uiState (StateFlow) publiek gemaakt.
+    → Zo kan de ViewModel de data beheren, en de UI enkel lezen.
+
+De Werking in CategoryViewModel :
+
+Aanmaken van de state
+-------------------------------------------------------------------------------------------
+private val _uiState = MutableStateFlow(CategoryState())
+open val uiState: StateFlow<CategoryState> = _uiState.asStateFlow()
+-------------------------------------------------------------------------------------------
+
+_uiState = MutableStateFlow → ViewModel kan aanpassen
+uiState = StateFlow → UI kan alleen observeren
+
+° CategoryState = een data class die alle velden voor de UI bevat (categorieën, overviews, dialogflags enz.).
+
+Updaten van de state
+Voorbeeld: wanneer categorieën geladen worden uit de repository:
+
+_uiState.update { it.copy(categories = categories) }
+
+
+° update { ... } → maakt een nieuwe kopie van de state met de gewijzigde waarden (immutabiliteit).
+° Hierdoor krijgt de UI meteen een signaal dat de categorieën veranderd zijn.
+
+UI luisteren naar de state
+In de UI (Compose bijvoorbeeld):
+
+val state by viewModel.uiState.collectAsState()
+
+
+De UI ontvangt altijd de actuele waarde van uiState.
+
+Bij elke wijziging (bv. een nieuwe categorie toegevoegd) herbouwt de UI automatisch de nodige schermdelen.
+
+° Waarom toepassen?
+
+Consistente manier om de UI-status bij te houden.
+
+UI hoeft niet manueel te vragen naar nieuwe data → krijgt automatisch updates.
+
+Werkt heel goed met het Repository Pattern:
+
+Repository levert data (Flow)
+
+ViewModel zet dit om in een StateFlow voor de UI
+
+UI toont steeds de laatste versie zonder extra logica.
+
+✅ Kort samengevat in jouw symbolenstijl:
+
+° StateFlow = radiozender → altijd de laatste hit (huidige state)
+
+° MutableStateFlow = DJ-booth → ViewModel bepaalt de muziek (updates)
+
+° Encapsulatie = alleen de ViewModel mag zenden, de UI mag alleen luisteren

@@ -18,8 +18,11 @@ import com.example.riseep3.R
 import com.example.riseep3.ui.componenten.TopBar
 import com.example.riseep3.ui.componenten.home.FancyIconButton
 import com.example.riseep3.ui.screens.rememberWindowInfo
+import com.example.riseep3.ui.theme.CustomerTheme
 import com.example.riseep3.ui.theme.Montagu
+import com.example.riseep3.ui.theme.ProductTheme
 import com.example.riseep3.ui.theme.RiseTheme
+import com.example.riseep3.ui.theme.SalesTheme
 import com.example.riseep3.ui.theme.ThemeViewModel
 
 @Composable
@@ -81,20 +84,41 @@ fun HomeScreen(
                 )
             )
 
-            val buttons = listOf(
-                Triple(R.drawable.plus, "Create") { onCreateClick() },
-                Triple(R.drawable.profile, "Customer") { onCustomerClick() },
-                Triple(R.drawable.sales, "Sales") { onSalesClick() },
-                Triple(R.drawable.product, "Products") { onProductsClick() }
-            )
-
             if (isLandscape) {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(rowSpacing),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    buttons.forEach { (icon, desc, action) ->
-                        FancyIconButton(icon = icon, contentDescription = desc, onClick = action)
+                    RiseTheme {
+                        FancyIconButton(
+                            icon = R.drawable.plus,
+                            contentDescription = "Create",
+                            onClick = onCreateClick
+                        )
+                    }
+
+                    CustomerTheme {
+                        FancyIconButton(
+                            icon = R.drawable.customer,
+                            contentDescription = "Customer",
+                            onClick = onCustomerClick
+                        )
+                    }
+
+                    SalesTheme {
+                        FancyIconButton(
+                            icon = R.drawable.sales,
+                            contentDescription = "Sales",
+                            onClick = onSalesClick
+                        )
+                    }
+
+                    ProductTheme {
+                        FancyIconButton(
+                            icon = R.drawable.product,
+                            contentDescription = "Products",
+                            onClick = onProductsClick
+                        )
                     }
                 }
             } else {
@@ -102,14 +126,44 @@ fun HomeScreen(
                     verticalArrangement = Arrangement.spacedBy(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    buttons.chunked(2).forEach { rowItems ->
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(rowSpacing),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            rowItems.forEach { (icon, desc, action) ->
-                                FancyIconButton(icon = icon, contentDescription = desc, onClick = action)
-                            }
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(rowSpacing),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RiseTheme {
+                            FancyIconButton(
+                                icon = R.drawable.plus,
+                                contentDescription = "Create",
+                                onClick = onCreateClick
+                            )
+                        }
+                        CustomerTheme {
+                            FancyIconButton(
+                                icon = R.drawable.customer,
+                                contentDescription = "Customer",
+                                onClick = onCustomerClick,
+                                buttonColor = MaterialTheme.colorScheme.primary,
+                                iconTint = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
+                    }
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(rowSpacing),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        SalesTheme {
+                            FancyIconButton(
+                                icon = R.drawable.sales,
+                                contentDescription = "Sales",
+                                onClick = onSalesClick
+                            )
+                        }
+                        ProductTheme {
+                            FancyIconButton(
+                                icon = R.drawable.product,
+                                contentDescription = "Products",
+                                onClick = onProductsClick
+                            )
                         }
                     }
                 }

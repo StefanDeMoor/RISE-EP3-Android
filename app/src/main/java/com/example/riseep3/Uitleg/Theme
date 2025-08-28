@@ -1,0 +1,27 @@
+* De Werking :
+
+1) ThemeViewModel
+-> Bevat _isDarkTheme: MutableStateFlow<Boolean> intern
+-> Exposeert isDarkTheme: StateFlow<Boolean> naar UI
+-> toggleTheme() keert de boolean om
+
+2) HomeScreen / andere Composables
+-> Observeren isDarkTheme.collectAsState()
+-> Bij verandering: Compose recomposet automatisch alle Composables die MaterialTheme gebruiken
+-> MaterialTheme kleuren worden bijgewerkt (bv. primary, onPrimary)
+
+3) RiseTheme
+-> Kijkt naar darkTheme boolean
+-> Kiest LightColorScheme of DarkColorScheme
+-> Past deze kleuren toe via MaterialTheme(colorScheme = colors)
+-> Alle Composables binnen RiseTheme krijgen automatisch de juiste kleuren
+
+4) Nested Themes
+-> Je kan meerdere thema’s tegelijk gebruiken voor specifieke secties:
+-> Bv. CustomerTheme, SalesTheme wrappen individuele buttons of UI-blokken
+-> Zo kunnen verschillende onderdelen een eigen kleurenschema hebben onafhankelijk van het globale thema
+
+5) ThemeToggleButton
+-> Gebruiker klikt → onToggle() → ThemeViewModel.toggleTheme()
+-> _isDarkTheme verandert → collectAsState() merkt dit → Compose recomposet → UI verandert van kleur
+-> Animatie en iconen passen automatisch aan (zon ↔ maan)

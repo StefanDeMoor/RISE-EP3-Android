@@ -121,3 +121,44 @@
         * .fallbackToDestructiveMigration(false)
             - Als de databaseversie verandert en je geen migratie opgeeft, dan mag Room NIET automatisch de database wissen en opnieuw aanmaken.
             - Als je true zou instellen, wordt de database vernietigd en opnieuw opgebouwd bij een versieconflict. (Handig tijdens ontwikkeling, riskant in productie!)
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Vraag 1:
+
+* Waarom gebruiken we by lazy in de AppContainer voor het initialiseren van de repositories?
+
+Antwoord:
+=> by lazy zorgt ervoor dat de repository pas wordt aangemaakt wanneer hij effectief voor de eerste keer wordt opgevraagd. Dat heeft drie voordelen:
+    Efficiëntie → Als een repository nooit gebruikt wordt, wordt hij ook nooit in geheugen geladen.
+    Performance → De app start sneller omdat objecten niet allemaal onmiddellijk worden opgebouwd.
+    Singleton-achtig gedrag → Je krijgt telkens dezelfde instantie terug, maar enkel wanneer nodig.
+
+
+
+Vraag 5:
+
+Waarom is het belangrijk dat een Dao vaak functies als Flow teruggeeft i.p.v. gewone lijsten?
+
+Antwoord:
+Met Flow krijg je reactieve updates. Dat wil zeggen:
+Als er iets verandert in de database (bv. een nieuwe categorie wordt toegevoegd), wordt dat automatisch doorgestuurd naar de UI.
+Je hoeft dus geen manuele refresh te doen.
+Samen met coroutines maakt dit de app heel responsief en efficiënt.
+
+Vraag 6:
+
+Stel: de API geeft tijdelijk een fout terug. Hoe zorgt jouw repository ervoor dat de app toch bruikbaar blijft?
+
+Antwoord:
+De HybridCategoryRepository vangt fouten op met een try-catch. Als de API faalt, logt hij de fout en blijft de app data uit de lokale Room-database gebruiken.
+Daardoor heeft de gebruiker altijd toegang tot de laatst bekende data, ook zonder internet.
+
+Vraag 7:
+
+Waarom is het nuttig om de repositories in een AppContainer te bundelen in plaats van ze overal apart aan te maken?
+
+Antwoord:
+Centrale plaats voor dependency management → makkelijker om overzicht te houden.
+Herbruikbaarheid → dezelfde repository kan door meerdere ViewModels of use cases gebruikt worden.
+Losse koppeling → de UI hoeft niet te weten hoe een repository precies gebouwd wordt (bv. met Room of Retrofit).
+Testbaarheid → in tests kan je makkelijk een andere implementatie van een repository (bv. een fake) in de container stoppen.

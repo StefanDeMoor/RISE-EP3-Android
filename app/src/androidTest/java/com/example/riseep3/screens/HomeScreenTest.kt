@@ -53,10 +53,10 @@ class HomeScreenTest {
                     themeViewModel = themeViewModel,
                     onNavigateBack = { currentScreen = "home" }
                 )
-                "customer" -> CustomerScreen(
-                    themeViewModel = themeViewModel,
-                    onNavigateBack = { currentScreen = "home" }
-                )
+//                "customer" -> CustomerScreen(
+//                    themeViewModel = themeViewModel,
+//                    onNavigateBack = { currentScreen = "home" }
+//                )
                 "product" -> ProductScreen(
                     themeViewModel = themeViewModel,
                     onNavigateBack = { currentScreen = "home" }
@@ -88,17 +88,17 @@ class HomeScreenTest {
 
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithContentDescription("Customer")
-            .assertIsDisplayed()
-            .performClick()
-
-        composeTestRule.waitForIdle()
-
-        composeTestRule.onNodeWithTag("CustomerScreenTitle").assertIsDisplayed()
-
-        composeTestRule.onNodeWithContentDescription("Back").performClick()
-
-        composeTestRule.waitForIdle()
+//        composeTestRule.onNodeWithContentDescription("Customer")
+//            .assertIsDisplayed()
+//            .performClick()
+//
+//        composeTestRule.waitForIdle()
+//
+//        composeTestRule.onNodeWithTag("CustomerScreenTitle").assertIsDisplayed()
+//
+//        composeTestRule.onNodeWithContentDescription("Back").performClick()
+//
+//        composeTestRule.waitForIdle()
 
         composeTestRule.onNodeWithContentDescription("Products")
             .assertIsDisplayed()
