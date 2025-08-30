@@ -15,6 +15,9 @@ interface OverviewDao {
     suspend fun getOverviewByIdOnce(id: Int): OverviewEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(overview: OverviewEntity): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(overviews: List<OverviewEntity>)
 
     @Update
@@ -22,7 +25,6 @@ interface OverviewDao {
 
     @Query("UPDATE overviews SET totalIncome = :newTotalIncome WHERE id = :id")
     suspend fun updateTotalIncome(id: Int, newTotalIncome: Double)
-
 
     @Delete
     suspend fun delete(overview: OverviewEntity)

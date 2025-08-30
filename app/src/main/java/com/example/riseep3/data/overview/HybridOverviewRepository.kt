@@ -32,6 +32,11 @@ class HybridOverviewRepository(
 
     override fun getOverviewById(id: Int): Flow<OverviewEntity?> = local.getOverviewById(id)
 
+    override suspend fun insert(overview: OverviewEntity) {
+        remote.insert(overview)
+        //locaal niet want dan hebben we duplicates en bij een reload word locaal toch aangevuld
+    }
+
     override suspend fun insertAll(overviews: Flow<List<OverviewEntity>>) {
         remote.insertAll(overviews)
         local.insertAll(overviews)

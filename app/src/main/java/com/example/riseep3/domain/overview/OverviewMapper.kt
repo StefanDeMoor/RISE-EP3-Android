@@ -12,6 +12,17 @@ fun OverviewDto.toEntity(): OverviewEntity = OverviewEntity(
     result = result
 )
 
+fun OverviewEntity.toDto(): OverviewDto {
+    return OverviewDto(
+        id = this.id,
+        title = this.title,
+        categoryId = this.categoryId,
+        totalIncome = this.totalIncome ?: 0.0,
+        result = this.result,
+        amounts = emptyList()
+    )
+}
+
 fun AmountItemDto.toEntity(): AmountItemEntity = AmountItemEntity(
     id = id,
     name = name ?: "",
@@ -21,6 +32,9 @@ fun AmountItemDto.toEntity(): AmountItemEntity = AmountItemEntity(
 )
 
 fun AmountItemDto.flatten(): List<AmountItemDto> {
-    return listOf(this) + (subAmounts.flatMap { it.flatten() } )
+    return listOf(this) + (subAmounts.flatMap { it.flatten() })
 }
 
+fun List<AmountItemDto>.flattenItems(): List<AmountItemDto> {
+    return this.flatMap { it.flatten() }
+}

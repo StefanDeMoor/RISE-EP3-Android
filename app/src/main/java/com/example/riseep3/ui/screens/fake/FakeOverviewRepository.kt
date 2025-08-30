@@ -17,6 +17,10 @@ class FakeOverviewRepository : OverviewRepository {
         emit(fakeData.find { it.id == id })
     }
 
+    override suspend fun insert(overview: OverviewEntity) {
+        fakeData.add(overview)
+    }
+
     override suspend fun insertAll(overviews: Flow<List<OverviewEntity>>) {
         overviews.collect { list ->
             list.forEach { newOverview ->

@@ -133,15 +133,19 @@ fun CategoryScreen(
                 NewItemDialog(
                     itemName = state.newItemName,
                     onNameChange = viewModel::updateNewItemName,
+                    amount = state.amount,
+                    onAmountChange = viewModel::updateNewItemAmount,
                     onConfirm = {
                         val selectedCategory = state.selectedCategory ?: return@NewItemDialog
                         val itemName = state.newItemName
+                        val itemAmount = state.amount
                         if (itemName.isNotBlank()) {
                             if (selectedCategory.equals("Overview", ignoreCase = true)) {
-                                viewModel.addOverview(itemName, selectedCategory)
+                                viewModel.addOverview(itemName, itemAmount, selectedCategory)
                             }
                             viewModel.addCreatedItem(itemName, selectedCategory)
                             viewModel.clearNewItemName()
+                            viewModel.clearNewItemAmount()
                             viewModel.setShowNewItemDialog(false)
                             viewModel.setShowSuccessDialog(true)
                         }

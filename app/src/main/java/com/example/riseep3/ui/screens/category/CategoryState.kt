@@ -12,5 +12,6 @@ data class CategoryState(
     val createdItems: List<Pair<String, String>> = emptyList(),
     val showNewItemDialog: Boolean = false,
     val newItemName: String = "",
+    val amount: String = "",
     val showSuccessDialog: Boolean = false
 )

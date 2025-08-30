@@ -3,12 +3,14 @@ package com.example.riseep3.data.overview
 import android.util.Log
 import com.example.riseep3.data.amount.AmountItemDao
 import com.example.riseep3.domain.overview.OverviewDto
-import com.example.riseep3.domain.overview.toEntity
 import com.example.riseep3.network.RetrofitInstance
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import com.example.riseep3.domain.overview.flatten
+import com.example.riseep3.domain.overview.toDto
+import com.example.riseep3.domain.overview.toEntity
+
 
 class RemoteOverviewRepository(
     private val overviewDao: OverviewDao,
@@ -42,6 +44,23 @@ class RemoteOverviewRepository(
     }
 
     override fun getOverviewById(id: Int): Flow<OverviewEntity?> = overviewDao.getOverviewById(id)
+
+    override suspend fun insert(overview: OverviewEntity) {
+        val overviewDto = OverviewDto(
+            id = overview.id,
+            title = overview.title,
+            categoryId = overview.categoryId,
+            totalIncome = overview.totalIncome,
+            result = overview.result,
+            amounts = emptyList()
+        )
+        try {
+            val response = api.addOverview(overviewDto)
+            Log.d("RemoteOverviewRepo", "Insert success: Response code = ${response.code()}")
+        } catch (e: Exception) {
+            Log.e("RemoteOverviewRepo", "Insert failed with exception", e)
+        }
+    }
 
     override suspend fun insertAll(overviews: Flow<List<OverviewEntity>>) {
         overviews.collect { list ->

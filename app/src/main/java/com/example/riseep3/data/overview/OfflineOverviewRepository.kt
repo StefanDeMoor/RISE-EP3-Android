@@ -7,6 +7,10 @@ class OfflineOverviewRepository(private val dao: OverviewDao) : OverviewReposito
 
     override fun getOverviewById(id: Int): Flow<OverviewEntity?> = dao.getOverviewById(id)
 
+    override suspend fun insert(overview: OverviewEntity) {
+        dao.insert(overview)
+    }
+
     override suspend fun insertAll(overviews: Flow<List<OverviewEntity>>) {
         overviews.collect { dao.insertAll(it) }
     }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -15,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -26,7 +28,9 @@ import com.example.riseep3.ui.theme.RiseTheme
 @Composable
 fun NewItemDialog(
     itemName: String,
+    amount: String,
     onNameChange: (String) -> Unit,
+    onAmountChange: (String) -> Unit,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -81,6 +85,32 @@ fun NewItemDialog(
                     )
                 )
 
+                TextField(
+                    value = amount,
+                    onValueChange = onAmountChange,
+                    label = { Text("Amount") },
+                    singleLine = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 24.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Decimal
+                    ),
+                    colors = TextFieldDefaults.colors(
+                        focusedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                        focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                        focusedContainerColor = MaterialTheme.colorScheme.primary,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.primary,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent,
+                        errorIndicatorColor = Color.Transparent
+                    )
+                )
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -110,11 +140,15 @@ fun NewItemDialog(
 @Preview(showBackground = true)
 @Composable
 fun NewItemDialogPreview() {
-    var name by remember { mutableStateOf("Preview Item") }
+    var name by remember { mutableStateOf("September Overview") }
+    var amount by remember { mutableStateOf("123.45") }
+
     RiseTheme {
         NewItemDialog(
             itemName = name,
+            amount = amount,
             onNameChange = { name = it },
+            onAmountChange = { amount = it },
             onConfirm = {},
             onDismiss = {}
         )
